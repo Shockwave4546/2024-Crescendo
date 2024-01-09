@@ -1,14 +1,14 @@
 plugins {
-    id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
-    id "idea"
+  id "java"
+  id "edu.wpi.first.GradleRIO" version "2024.1.1"
+  id "idea"
 }
 
 def javaVersion = JavaVersion.VERSION_17
 
 java {
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -16,30 +16,30 @@ def ROBOT_MAIN_CLASS = "frc.robot.Main"
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
-    targets {
-        roborio(getTargetTypeClass('RoboRIO')) {
-            // Team number is loaded either from the .wpilib/wpilib_preferences.json
-            // or from command line. If not found an exception will be thrown.
-            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
-            // want to store a team number in this file.
-            team = project.frc.getTeamNumber()
-            debug = project.frc.getDebugOrDefault(false)
+  targets {
+    roborio(getTargetTypeClass('RoboRIO')) {
+      // Team number is loaded either from the .wpilib/wpilib_preferences.json
+      // or from command line. If not found an exception will be thrown.
+      // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+      // want to store a team number in this file.
+      team = project.frc.getTeamNumber()
+      debug = project.frc.getDebugOrDefault(false)
 
-            artifacts {
-                // First part is artifact name, 2nd is artifact type
-                // getTargetTypeClass is a shortcut to get the class type using a string
+      artifacts {
+        // First part is artifact name, 2nd is artifact type
+        // getTargetTypeClass is a shortcut to get the class type using a string
 
-                frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
-                }
-
-                // Static files artifact
-                frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
-                    files = project.fileTree('src/main/deploy')
-                    directory = '/home/lvuser/deploy'
-                }
-            }
+        frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
         }
+
+        // Static files artifact
+        frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
+          files = project.fileTree('src/main/deploy')
+          directory = '/home/lvuser/deploy'
+        }
+      }
     }
+  }
 }
 
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
@@ -51,22 +51,22 @@ wpi.java.debugJni = false
 def includeDesktopSupport = false
 
 dependencies {
-    implementation wpi.java.deps.wpilib()
-    implementation wpi.java.vendor.java()
+  implementation wpi.java.deps.wpilib()
+  implementation wpi.java.vendor.java()
 
-    roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
-    roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
+  roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
+  roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
 
-    roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
-    roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
+  roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
+  roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
 
-    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
-    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
-    simulationDebug wpi.sim.enableDebug()
+  nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+  nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
+  simulationDebug wpi.sim.enableDebug()
 
-    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
-    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
-    simulationRelease wpi.sim.enableRelease()
+  nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+  nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+  simulationRelease wpi.sim.enableRelease()
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -77,10 +77,10 @@ wpi.sim.addDriverstation()
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
 jar {
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    from sourceSets.main.allSource
-    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+  from sourceSets.main.allSource
+  manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 // Configure jar and deploy tasks
@@ -89,20 +89,20 @@ wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 
 tasks.withType(JavaCompile) {
-    // Configure string concat to always inline compile
-    options.compilerArgs.add '-XDstringConcat=inline'
+  // Configure string concat to always inline compile
+  options.compilerArgs.add '-XDstringConcat=inline'
 }
 
 idea {
-    project {
-        // The project.sourceCompatibility setting is not always picked up, so we set explicitly
-        languageLevel = javaVersion
-    }
-    module {
-        // Improve development & (especially) debugging experience (and IDEA's capabilities) by having libraries' source & javadoc attached
-        downloadJavadoc = true
-        downloadSources = true
-        // Exclude the .vscode directory from indexing and search
-        excludeDirs+=file(".vscode" )
-    }
+  project {
+    // The project.sourceCompatibility setting is not always picked up, so we set explicitly
+    languageLevel = javaVersion
+  }
+  module {
+    // Improve development & (especially) debugging experience (and IDEA's capabilities) by having libraries' source & javadoc attached
+    downloadJavadoc = true
+    downloadSources = true
+    // Exclude the .vscode directory from indexing and search
+    excludeDirs += file(".vscode")
+  }
 }

@@ -22,9 +22,9 @@ public final class Constants {
     public static final double MAX_ANGULAR_SPEED = 2 * Math.PI; // radians per second
 
     // Distance between centers of right and left wheels on robot
-    public static final double TRACK_WIDTH = Units.inchesToMeters(32);
+    public static final double TRACK_WIDTH = Units.inchesToMeters(24);
     // Distance between front and back wheels on robot
-    public static final double WHEEL_BASE = Units.inchesToMeters(32);
+    public static final double WHEEL_BASE = Units.inchesToMeters(24);
 
     public static final Map<ModulePosition, Translation2d> MODULE_TRANSLATIONS = Map.of(
             ModulePosition.FRONT_LEFT, new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
