@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,8 +13,6 @@ import frc.robot.swerve.ModulePosition;
 
 import java.util.Map;
 
-import static com.revrobotics.CANSparkBase.IdleMode;
-
 public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -22,9 +21,9 @@ public final class Constants {
     public static final double MAX_ANGULAR_SPEED = 2 * Math.PI; // radians per second
 
     // Distance between centers of right and left wheels on robot
-    public static final double TRACK_WIDTH = Units.inchesToMeters(24);
+    public static final double TRACK_WIDTH = Units.inchesToMeters(32);
     // Distance between front and back wheels on robot
-    public static final double WHEEL_BASE = Units.inchesToMeters(24);
+    public static final double WHEEL_BASE = Units.inchesToMeters(32);
 
     public static final Map<ModulePosition, Translation2d> MODULE_TRANSLATIONS = Map.of(
             ModulePosition.FRONT_LEFT, new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
@@ -60,10 +59,16 @@ public final class Constants {
 
     public static final boolean GYRO_REVERSED = true;
 
+    public static final double DEFAULT_DRIVE_SPEED_MULTIPLIER = 0.8;
+    public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 1.0;
+  }
+
+  public static final class VisionConstants {
     /**
      * Physical location of the camera on the robot, relative to the center of the robot.
      */
-    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d());
+    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d());
+    public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
   }
 
   public static final class ModuleConstants {

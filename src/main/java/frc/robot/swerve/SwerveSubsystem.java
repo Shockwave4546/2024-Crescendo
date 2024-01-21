@@ -1,30 +1,16 @@
 package frc.robot.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.shuffleboard.ShuffleboardBoolean;
 import frc.robot.shuffleboard.ShuffleboardSpeed;
-import org.photonvision.PhotonCamera;
 
 import static frc.robot.Constants.Tabs.MATCH;
 
@@ -34,7 +20,7 @@ public class SwerveSubsystem extends SubsystemBase {
           DriveConstants.FRONT_LEFT_TURNING_CAN_ID,
           DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
           false,
-          Shuffleboard.getTab("Front Left Motors")
+          "FL"
   );
 
   private final MAXSwerveModule frontRight = new MAXSwerveModule(
@@ -42,7 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
           DriveConstants.FRONT_RIGHT_TURNING_CAN_ID,
           DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
           false,
-          Shuffleboard.getTab("Front Right Motors")
+          "FR"
   );
 
   private final MAXSwerveModule backLeft = new MAXSwerveModule(
@@ -50,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
           DriveConstants.BACK_LEFT_TURNING_CAN_ID,
           DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
           false,
-          Shuffleboard.getTab("Back Left Motors")
+          "BL"
   );
 
   private final MAXSwerveModule backRight = new MAXSwerveModule(
@@ -58,105 +44,21 @@ public class SwerveSubsystem extends SubsystemBase {
           DriveConstants.BACK_RIGHT_TURNING_CAN_ID,
           DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
           false,
-          Shuffleboard.getTab("Back Right Motors")
+          "BR"
   );
 
   private final AHRS gyro = new AHRS();
-  private final ShuffleboardSpeed driveSpeedMultiplier = new ShuffleboardSpeed(MATCH, "Drive Speed Multiplier", 0.8);
-  private final ShuffleboardSpeed rotSpeedMultiplier = new ShuffleboardSpeed(MATCH, "Rot Speed Multiplier", 1.0);
-  private final ShuffleboardBoolean isFieldRelative = new ShuffleboardBoolean(MATCH, "Is Field Relative?", true);
-
-  /**
-   * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
-   * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
-   * Source: <a href="https://github.com/STMARobotics/frc-7028-2023/blob/5916bb426b97f10e17d9dfd5ec6c3b6fda49a7ce/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java">...</a>
-   */
-  private static final Vector<N3> STATE_STD_DEVS = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
-
-  /**
-   * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
-   * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
-   * Source: <a href="https://github.com/STMARobotics/frc-7028-2023/blob/5916bb426b97f10e17d9dfd5ec6c3b6fda49a7ce/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java">...</a>
-   */
-  private static final Vector<N3> VISION_MEASUREMENT_STD_DEVS = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
-  private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-          DriveConstants.DRIVE_KINEMATICS,
-          getHeadingRotation2d(),
-          new SwerveModulePosition[] {
-                  frontLeft.getPosition(),
-                  frontRight.getPosition(),
-                  backLeft.getPosition(),
-                  backRight.getPosition()
-          },
-          new Pose2d(),
-          STATE_STD_DEVS,
-          VISION_MEASUREMENT_STD_DEVS
-  );
-
-  private final PhotonCamera camera;
-  private final AprilTagFieldLayout layout;
-  private double previousPipelineTimestamp = 0.0;
+  private final ShuffleboardSpeed driveSpeedMultiplier = new ShuffleboardSpeed(MATCH, "Drive Speed Multiplier", DriveConstants.DEFAULT_DRIVE_SPEED_MULTIPLIER)
+          .withSize(5, 2).withPosition(0, 4);
+  private final ShuffleboardSpeed rotSpeedMultiplier = new ShuffleboardSpeed(MATCH, "Rot Speed Multiplier", DriveConstants.DEFAULT_ROT_SPEED_MULTIPLIER)
+          .withSize(5, 2).withPosition(5, 4);
+  private final ShuffleboardBoolean isFieldRelative = new ShuffleboardBoolean(MATCH, "Is Field Relative?", true)
+          .withSize(3, 2).withPosition(6, 0);
   private boolean isX = false;
 
-  public SwerveSubsystem(PhotonCamera camera, AprilTagFieldLayout layout) {
-    this.camera = camera;
-    this.layout = layout;
-    MATCH.add("Gyro", gyro);
-    // The "forward" direction will always be relative to the starting position of the Robot.
-    zeroHeading();
+  public SwerveSubsystem() {
+    MATCH.add("Gyro", gyro).withSize(3, 3).withPosition(0, 0);
     resetEncoders();
-
-    // Ensure this is called after all initialization is complete.
-    AutoBuilder.configureHolonomic(
-            this::getPose,
-            this::resetOdometry,
-            this::getRelativeChassisSpeed,
-            this::drive,
-            new HolonomicPathFollowerConfig(
-                    new PIDConstants(AutoConstants.DRIVING_P, AutoConstants.DRIVING_I, AutoConstants.DRIVING_D),
-                    new PIDConstants(AutoConstants.TURNING_P, AutoConstants.TURNING_I, AutoConstants.TURNING_D),
-                    DriveConstants.MAX_SPEED_METERS_PER_SECOND,
-                    DriveConstants.WHEEL_BASE / 2,
-                    new ReplanningConfig()
-            ),
-            this::shouldFlipPath,
-            this
-    );
-  }
-
-  @Override public void periodic() {
-    poseEstimator.update(
-            getHeadingRotation2d(),
-            new SwerveModulePosition[] {
-                    frontLeft.getPosition(),
-                    frontRight.getPosition(),
-                    backLeft.getPosition(),
-                    backRight.getPosition()
-            });
-
-    final var pipelineResult = camera.getLatestResult();
-    final var resultTimestamp = pipelineResult.getTimestampSeconds();
-    if (resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
-      previousPipelineTimestamp = resultTimestamp;
-      final var target = pipelineResult.getBestTarget();
-      final var fiducialId = target.getFiducialId();
-      final var targetPose = layout.getTagPose(fiducialId);
-      if (target.getPoseAmbiguity() <= 0.2 && fiducialId >= 0 && targetPose.isPresent()) {
-        final var camToTarget = target.getBestCameraToTarget();
-        final var camPose = targetPose.get().transformBy(camToTarget.inverse());
-        final var visioMeasurement = camPose.transformBy(DriveConstants.CAMERA_TO_ROBOT);
-        poseEstimator.addVisionMeasurement(visioMeasurement.toPose2d(), resultTimestamp);
-      }
-    }
-  }
-
-  /**
-   * Red = flip, since PathPlanner uses blue as the default wall.
-   *
-   * @return whether the autonomous path should be flipped dependent on the alliance color.
-   */
-  private boolean shouldFlipPath() {
-    return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
   }
 
   /**
@@ -191,32 +93,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getPose() {
-    return poseEstimator.getEstimatedPosition();
-  }
-
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  public void resetOdometry(Pose2d pose) {
-    poseEstimator.resetPosition(
-            new Rotation2d(),
-            new SwerveModulePosition[] {
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition()
-            },
-            pose);
-  }
-
-  /**
    * Method to drive the robot using joystick info.
    *
    * @param xSpeed        Speed of the robot in the x direction (forward).
@@ -225,15 +101,16 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */
-  public void drive(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative) {
+  public void drive(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative, boolean useDefaultSpeeds) {
     if (isX) {
       setX();
       return;
     }
+
     // Convert the commanded speeds into the correct units for the drivetrain
-    final double xSpeedDelivered = xSpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND * driveSpeedMultiplier.get();
-    final double ySpeedDelivered = ySpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND * driveSpeedMultiplier.get();
-    final double rotDelivered = rotSpeed * DriveConstants.MAX_ANGULAR_SPEED * rotSpeedMultiplier.get();
+    final double xSpeedDelivered = xSpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND * (useDefaultSpeeds ? DriveConstants.DEFAULT_DRIVE_SPEED_MULTIPLIER : driveSpeedMultiplier.get());
+    final double ySpeedDelivered = ySpeed * DriveConstants.MAX_SPEED_METERS_PER_SECOND * (useDefaultSpeeds ? DriveConstants.DEFAULT_DRIVE_SPEED_MULTIPLIER : driveSpeedMultiplier.get());
+    final double rotDelivered = rotSpeed * DriveConstants.MAX_ANGULAR_SPEED * (useDefaultSpeeds ? DriveConstants.DEFAULT_ROT_SPEED_MULTIPLIER : rotSpeedMultiplier.get());
 
     final var swerveModuleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
             fieldRelative
@@ -243,12 +120,19 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Stops the robot.
+   */
+  public void stop() {
+    drive(0.0, 0.0, 0.0, false, false);
+  }
+
+  /**
    * Overridden drive function for PathPlanner autonomous. It's also important to note that autonomous drives
    * given robot relative ChassisSpeeds (not field relative).
    *
    * @param speeds Speed to drive.
    */
-  private void drive(ChassisSpeeds speeds) {
+  public void driveAutonomous(ChassisSpeeds speeds) {
     // For some reason, PathPlanner is giving me opposite directions, so use this temporary fix.
     final var swerveModuleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds.times(-1.0));
     setModuleStates(swerveModuleStates);
@@ -266,6 +150,15 @@ public class SwerveSubsystem extends SubsystemBase {
       case BACK_RIGHT ->  { return backRight; }
       default -> throw new RuntimeException("I don't even know what you put in here...");
     }
+  }
+
+  public SwerveModulePosition[] getEstimatedPositions() {
+    return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+    };
   }
 
   /**
@@ -292,9 +185,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   *  Zeroes the heading of the robot.
+   *  Zeroes the gyro of the robot.
    */
-  public void zeroHeading() {
+  public void zeroGyro() {
     gyro.reset();
   }
 
