@@ -14,6 +14,11 @@ import frc.robot.swerve.ModulePosition;
 import java.util.Map;
 
 public final class Constants {
+  public static final class ShooterConstants {
+    public static final int LEFT_CAN_ID = 30;
+    public static final int RIGHT_CAN_ID = 31;
+  }
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
