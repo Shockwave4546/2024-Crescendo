@@ -14,9 +14,18 @@ import frc.robot.swerve.ModulePosition;
 import java.util.Map;
 
 public final class Constants {
+  public static final class IntakeConstants {
+    public static final int LIMIT_SWITCH_DIO_PORT = 0;
+    public static final int MOTOR_CAN_ID = 32;
+  }
+
   public static final class ShooterConstants {
     public static final int LEFT_CAN_ID = 30;
     public static final int RIGHT_CAN_ID = 31;
+    public static final int SERVO_PWM_ID = 0;
+
+    public static final double SERVO_STARTING_ANGLE = 0.0;
+    public static final double SERVO_SUBWOOFER_ANGLE = 0.0;
   }
 
   public static final class DriveConstants {
