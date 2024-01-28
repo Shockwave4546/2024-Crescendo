@@ -8,6 +8,7 @@ import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intake.ReverseIntakeCommand;
 import frc.robot.intakepivot.IntakePivotSubsystem;
+import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
 import frc.robot.shooter.ShootCloseCommand;
@@ -24,6 +25,7 @@ public class RobotContainer {
   protected final IntakeSubsystem intake = new IntakeSubsystem();
   protected final ShooterSubsystem shooter = new ShooterSubsystem();
   protected final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
+  protected final LEDSubsystem led = new LEDSubsystem();
   protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
   protected final AutoManager auto = new AutoManager(swerve, poseEstimator);

@@ -16,6 +16,11 @@ import frc.robot.utils.PIDGains;
 import java.util.Map;
 
 public final class Constants {
+  public static final class LED {
+    public static final int PWM_ID = 1;
+    public static final int BUFFER_LENGTH = 120;
+  }
+
   public static final class Intake {
     public static final int LIMIT_SWITCH_DIO_PORT = 0;
     public static final int MOTOR_CAN_ID = 32;
