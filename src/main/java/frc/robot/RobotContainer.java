@@ -12,6 +12,8 @@ import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
 import frc.robot.shooter.ShootCloseCommand;
+import frc.robot.shooter.ShootFarCommand;
+import frc.robot.shooter.ShootInterpolatedCommand;
 import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 import frc.robot.swerve.commands.ChaseTagCommand;
@@ -23,7 +25,7 @@ public class RobotContainer {
   protected final SwerveSubsystem swerve = new SwerveSubsystem();
   protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
   protected final IntakeSubsystem intake = new IntakeSubsystem();
-  protected final ShooterSubsystem shooter = new ShooterSubsystem();
+  protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
   protected final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
   protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
@@ -50,5 +52,7 @@ public class RobotContainer {
     operatorController.x().whileTrue(new ReverseIntakeCommand(intake));
 
     operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+    operatorController.b().whileTrue(new ShootFarCommand(shooter));
+    operatorController.povDown().whileTrue(new ShootInterpolatedCommand(shooter, vision));
   }
 }

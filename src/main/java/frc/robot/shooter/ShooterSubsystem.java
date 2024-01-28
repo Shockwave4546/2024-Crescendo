@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
+import frc.robot.pose.VisionSubsystem;
 import frc.robot.shuffleboard.ShuffleboardDouble;
+import frc.robot.utils.LinearInterpolator;
 
 import java.util.Map;
 
@@ -27,12 +29,19 @@ public class ShooterSubsystem extends SubsystemBase {
   private final PIDController leftPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
   private final PIDController rightPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
 
-  private final ShuffleboardDouble desiredLeftVelocity = new ShuffleboardDouble(tab, "Desired Left Velocity", 0.0);
-  private final ShuffleboardDouble desiredRightVelocity = new ShuffleboardDouble(tab, "Desired Right Velocity", 0.0);
+  private final ShuffleboardDouble desiredLeftRPM = new ShuffleboardDouble(tab, "Desired Left RPM", 0.0);
+  private final ShuffleboardDouble desiredRightRPM = new ShuffleboardDouble(tab, "Desired Right RPM", 0.0);
 
-  public ShooterSubsystem() {
-    Shooter.MPS_CONVERSION_FACTOR.applyTo(leftEncoder, false);
-    Shooter.MPS_CONVERSION_FACTOR.applyTo(rightEncoder, false);
+  private final LinearInterpolator RPMInterpolator = new LinearInterpolator(
+
+  );
+
+  private final VisionSubsystem vision;
+
+  public ShooterSubsystem(VisionSubsystem vision) {
+    this.vision = vision;
+    Shooter.RPM_CONVERSION_FACTOR.applyTo(leftEncoder, false);
+    Shooter.RPM_CONVERSION_FACTOR.applyTo(rightEncoder, false);
     leftPIDController.setTolerance(2.0, 2.0);
     rightPIDController.setTolerance(2.0, 2.0);
 
@@ -47,18 +56,30 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   @Override public void periodic() {
-    leftMotor.set(leftPIDController.calculate(leftEncoder.getRate(), desiredLeftVelocity.get()));
-    desiredRightVelocity.set(rightPIDController.calculate(rightEncoder.getRate(), rightEncoder.get()));
+    leftMotor.set(leftPIDController.calculate(leftEncoder.getRate(), desiredLeftRPM.get()));
+    rightMotor.set(rightPIDController.calculate(rightEncoder.getRate(), desiredRightRPM.get()));
   }
 
-  public void setVelocity(double velocity) {
-    desiredLeftVelocity.set(velocity);
-    desiredRightVelocity.set(velocity);
+  private void setRPM(double rpm) {
+    desiredLeftRPM.set(rpm);
+    desiredRightRPM.set(rpm);
+  }
+
+  public void shootClose() {
+    setRPM(Shooter.CLOSE_RPM);
+  }
+
+  public void shootFar() {
+    setRPM(Shooter.FAR_RPM);
+  }
+
+  public void shootInterpolated() {
+    setRPM(RPMInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
   }
 
   public void stopMotors() {
-    desiredLeftVelocity.set(0.0);
-    desiredRightVelocity.set(0.0);
+    desiredLeftRPM.set(0.0);
+    desiredRightRPM.set(0.0);
 
     leftMotor.stopMotor();
     rightMotor.stopMotor();

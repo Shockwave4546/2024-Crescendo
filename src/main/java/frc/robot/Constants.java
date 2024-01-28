@@ -38,11 +38,12 @@ public final class Constants {
 
     public static final int[] LEFT_ENCODER = new int[] { 0, 1 };
     public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
-    public static final EncoderConversionFactor MPS_CONVERSION_FACTOR = new EncoderConversionFactor(Math.PI * Units.inchesToMeters(4));
+    public static final EncoderConversionFactor RPM_CONVERSION_FACTOR = new EncoderConversionFactor(1);
 
     public static final PIDGains GAINS = new PIDGains(1.0);
 
-    public static final double CLOSE_VELOCITY = 50.0; // m/s
+    public static final double CLOSE_RPM = 10000;
+    public static final double FAR_RPM = 10000;
   }
 
   public static final class Swerve {
