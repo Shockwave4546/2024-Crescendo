@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Intake;
 import frc.robot.Constants.Module;
+import frc.robot.Constants.Tabs;
 
 public class IntakeSubsystem extends SubsystemBase {
   private final DigitalInput limitSwitch = new DigitalInput(Intake.LIMIT_SWITCH_DIO_PORT);
@@ -15,6 +16,8 @@ public class IntakeSubsystem extends SubsystemBase {
     motor.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkBase.IdleMode.kBrake);
     motor.burnFlash();
+
+    Tabs.MATCH.addBoolean("Has Note", this::hasNote);
   }
 
   public void runIntake(boolean reversed) {

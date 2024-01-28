@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Shooter;
+import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.ShuffleboardDouble;
 
 import java.util.Map;
@@ -37,10 +38,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     tab.add("Left Velocity", leftEncoder);
     tab.add("Right Velocity", rightEncoder);
-    Constants.Tabs.MATCH.addNumber("Servo", servo::getAngle)
+    Tabs.MATCH.addNumber("Servo", servo::getAngle)
             .withSize(3, 3)
             .withWidget(BuiltInWidgets.kDial)
             .withProperties(Map.of("Min", 0.0, "Max", 270.0));
+
+    Tabs.MATCH.addBoolean("Shooter At Speed", () -> leftPIDController.atSetpoint() && rightPIDController.atSetpoint());
   }
 
   @Override public void periodic() {
@@ -54,6 +57,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void stopMotors() {
+    desiredLeftVelocity.set(0.0);
+    desiredRightVelocity.set(0.0);
+
     leftMotor.stopMotor();
     rightMotor.stopMotor();
   }
