@@ -7,10 +7,11 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.Auto;
+import frc.robot.Constants.Swerve;
+import frc.robot.Constants.Tabs;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
-
-import static frc.robot.Constants.*;
 
 public class AutoManager {
   /**
@@ -28,10 +29,10 @@ public class AutoManager {
             swerve::getRelativeChassisSpeed,
             swerve::driveAutonomous,
             new HolonomicPathFollowerConfig(
-                    new PIDConstants(AutoConstants.DRIVING_P, AutoConstants.DRIVING_I, AutoConstants.DRIVING_D),
-                    new PIDConstants(AutoConstants.TURNING_P, AutoConstants.TURNING_I, AutoConstants.TURNING_D),
-                    DriveConstants.MAX_SPEED_METERS_PER_SECOND,
-                    DriveConstants.WHEEL_BASE / 2,
+                    new PIDConstants(Auto.DRIVING_GAINS.P, Auto.DRIVING_GAINS.I, Auto.DRIVING_GAINS.D),
+                    new PIDConstants(Auto.TURNING_GAINS.P, Auto.TURNING_GAINS.I, Auto.TURNING_GAINS.D),
+                    Swerve.MAX_SPEED_METERS_PER_SECOND,
+                    Swerve.WHEEL_BASE / 2,
                     new ReplanningConfig()
             ),
             this::shouldFlipPath,

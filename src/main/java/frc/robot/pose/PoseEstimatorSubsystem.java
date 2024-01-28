@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.Vision;
 import frc.robot.shuffleboard.ShuffleboardBoolean;
 import frc.robot.shuffleboard.ShuffleboardDouble;
 import frc.robot.swerve.SwerveSubsystem;
@@ -26,7 +26,7 @@ import org.photonvision.estimation.TargetModel;
 
 import java.io.UncheckedIOException;
 
-import static frc.robot.Constants.DriveConstants;
+import static frc.robot.Constants.Swerve;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Odometry");
@@ -44,7 +44,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
    */
   private static final Vector<N3> VISION_MEASUREMENT_STD_DEVS = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
   private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-          DriveConstants.DRIVE_KINEMATICS,
+          Swerve.DRIVE_KINEMATICS,
           new Rotation2d(),
           new SwerveModulePosition[] {
                   new SwerveModulePosition(0.0, new Rotation2d()),
@@ -82,7 +82,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
               layout,
               PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_RIO,
               vision.getPhotonCamera(),
-              VisionConstants.ROBOT_TO_CAMERA
+              Vision.ROBOT_TO_CAMERA
       );
 
       this.cameraPoseEstimator.setTagModel(TargetModel.kAprilTag36h11);

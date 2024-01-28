@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.Vision;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -12,7 +12,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import java.util.function.Function;
 
 public class VisionSubsystem extends SubsystemBase {
-  private final PhotonCamera camera = new PhotonCamera(VisionConstants.FRONT_CAMERA_NAME);
+  private final PhotonCamera camera = new PhotonCamera(Vision.FRONT_CAMERA_NAME);
   private PoseEstimatorSubsystem poseEstimator;
 
   public VisionSubsystem() {
@@ -66,7 +66,7 @@ public class VisionSubsystem extends SubsystemBase {
    */
   public Pose3d getCameraRelativeToCenterPose() {
     if (poseEstimator == null) throw new NullPointerException("Initialize the poseEstimator before calling this method.");
-    return poseEstimator.getPose3d().transformBy(VisionConstants.ROBOT_TO_CAMERA);
+    return poseEstimator.getPose3d().transformBy(Vision.ROBOT_TO_CAMERA);
   }
 
   /**
@@ -91,7 +91,7 @@ public class VisionSubsystem extends SubsystemBase {
    */
   public boolean hasViableTarget() {
     final var pipeline = camera.getLatestResult();
-    return pipeline.hasTargets() && pipeline.getBestTarget().getPoseAmbiguity() < VisionConstants.MAXIMUM_AMBIGUITY;
+    return pipeline.hasTargets() && pipeline.getBestTarget().getPoseAmbiguity() < Vision.MAXIMUM_AMBIGUITY;
   }
 
   /**
