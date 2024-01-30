@@ -1,5 +1,6 @@
 package frc.robot.led;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DefaultLEDCommand extends Command {
@@ -12,5 +13,6 @@ public class DefaultLEDCommand extends Command {
 
   @Override public void execute() {
     led.rainbow();
+    // led.setStaticColor(new Color(255, 0, 0));
   }
 }

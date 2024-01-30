@@ -18,7 +18,7 @@ import java.util.Map;
 public final class Constants {
   public static final class LED {
     public static final int PWM_ID = 1;
-    public static final int BUFFER_LENGTH = 120;
+    public static final int BUFFER_LENGTH = 125;
   }
 
   public static final class Intake {
@@ -78,16 +78,16 @@ public final class Constants {
     public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = 0.0;
 
     // Driving Motor Prefix = 1x
-    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 10;
-    public static final int BACK_RIGHT_DRIVING_CAN_ID = 11;
-    public static final int BACK_LEFT_DRIVING_CAN_ID = 12;
-    public static final int FRONT_LEFT_DRIVING_CAN_ID = 13;
+    public static final int FRONT_LEFT_DRIVING_CAN_ID = 10;
+    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 11;
+    public static final int BACK_LEFT_DRIVING_CAN_ID = 13;
+    public static final int BACK_RIGHT_DRIVING_CAN_ID = 14;
 
     // Turning Motor Prefix = 2x
-    public static final int FRONT_RIGHT_TURNING_CAN_ID = 20;
-    public static final int BACK_RIGHT_TURNING_CAN_ID = 21;
-    public static final int BACK_LEFT_TURNING_CAN_ID = 22;
-    public static final int FRONT_LEFT_TURNING_CAN_ID = 23;
+    public static final int FRONT_LEFT_TURNING_CAN_ID = 20;
+    public static final int FRONT_RIGHT_TURNING_CAN_ID = 21;
+     public static final int BACK_LEFT_TURNING_CAN_ID = 23;
+    public static final int BACK_RIGHT_TURNING_CAN_ID = 24; 
 
     public static final boolean GYRO_REVERSED = true;
 
