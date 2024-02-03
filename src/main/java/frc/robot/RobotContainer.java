@@ -23,31 +23,32 @@ import frc.robot.swerve.commands.ResetPoseCommand;
 import frc.robot.swerve.commands.SetXCommand;
 
 public class RobotContainer {
-  // protected final VisionSubsystem vision = new VisionSubsystem();
+  protected final VisionSubsystem vision = new VisionSubsystem();
   protected final SwerveSubsystem swerve = new SwerveSubsystem();
-  // protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
+  protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
   // protected final IntakeSubsystem intake = new IntakeSubsystem();
   // protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
   // protected final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
   protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
   // protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
-  // protected final AutoManager auto = new AutoManager(swerve, poseEstimator);
+   protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led);
 
   public RobotContainer() {
-    // vision.setPoseEstimator(poseEstimator);
+    Tabs.MATCH.add("PDP", new PowerDistribution());
+    vision.setPoseEstimator(poseEstimator);
 
     configureButtonBindings();
 
-    // if (DriverStation.getMatchType() != DriverStation.MatchType.None) {
-    //   PPLibTelemetry.enableCompetitionMode();
-    // }
+     if (DriverStation.getMatchType() != DriverStation.MatchType.None) {
+       PPLibTelemetry.enableCompetitionMode();
+     }
   }
 
   private void configureButtonBindings() {
     // driverController.a().whileTrue(new ChaseTagCommand(vision, poseEstimator, swerve));
 
-    // driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
+    driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
     driverController.x().onTrue(new SetXCommand(swerve));
 
     // operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));

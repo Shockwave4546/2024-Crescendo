@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.swerve.ModulePosition;
 import frc.robot.utils.EncoderConversionFactor;
 import frc.robot.utils.PIDGains;
@@ -19,6 +20,10 @@ public final class Constants {
   public static final class LED {
     public static final int PWM_ID = 1;
     public static final int BUFFER_LENGTH = 125;
+
+    public static final Color PINK = new Color(232, 115, 123);
+    public static final Color OFF = new Color(0, 0, 0);
+    public static final Color WHITE = new Color(255, 255, 255);
   }
 
   public static final class Intake {

@@ -18,8 +18,8 @@ public class Robot extends TimedRobot {
 
   @Override public void autonomousInit() {
     container.swerve.resetEncoders();
-    // container.poseEstimator.resetPose();
-    // container.auto.executeRoutine();
+    container.poseEstimator.resetPose();
+    container.auto.executeRoutine();
   }
 
   @Override public void autonomousPeriodic() {
@@ -28,8 +28,6 @@ public class Robot extends TimedRobot {
 
   @Override public void disabledPeriodic() {
     container.led.rainbow();
-    // container.led.shockwave();
-    // container.led.setStaticColor(new Color(255, 0, 0));
   }
 
   @Override public void teleopInit() {

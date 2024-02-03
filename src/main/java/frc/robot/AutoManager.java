@@ -1,15 +1,18 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
+import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 
@@ -22,7 +25,7 @@ public class AutoManager {
   /**
    * Registers all Commands into NamedCommands.
    */
-  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator) {
+  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator, LEDSubsystem led) {
     AutoBuilder.configureHolonomic(
             poseEstimator::getPose2d,
             poseEstimator::resetOdometry,
@@ -38,6 +41,11 @@ public class AutoManager {
             this::shouldFlipPath,
             swerve
     );
+
+    // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
+    NamedCommands.registerCommand("DisableLED", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.OFF), led));
+    NamedCommands.registerCommand("Rainbow", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.RAINBOW), led));
+    // ShootClose ShootInterpolated
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);
