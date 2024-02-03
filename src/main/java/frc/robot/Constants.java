@@ -72,9 +72,9 @@ public final class Constants {
     );
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double FRONT_LEFT_CHASSIS_ANGULAR_OFFSET = -Math.PI / 2 - Math.PI / 2;
+    public static final double FRONT_LEFT_CHASSIS_ANGULAR_OFFSET = -Math.PI;
     public static final double FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET = -Math.PI / 2;
-    public static final double BACK_LEFT_CHASSIS_ANGULAR_OFFSET = Math.PI - Math.PI / 2;
+    public static final double BACK_LEFT_CHASSIS_ANGULAR_OFFSET = Math.PI / 2;
     public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = 0.0;
 
     // Driving Motor Prefix = 1x
