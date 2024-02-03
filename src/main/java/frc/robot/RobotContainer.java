@@ -2,8 +2,10 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IO;
+import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intake.ReverseIntakeCommand;

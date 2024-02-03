@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LED;
 
 public class LEDSubsystem extends SubsystemBase {
+  // private static final Color DISABLED = new Color()
   private final AddressableLED led = new AddressableLED(LED.PWM_ID);
   private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(LED.BUFFER_LENGTH);
   private int rainbowFirstPixelHue;
@@ -32,6 +33,15 @@ public class LEDSubsystem extends SubsystemBase {
 
     rainbowFirstPixelHue += 3;
     rainbowFirstPixelHue %= 180;
+  }
+
+  private boolean toggle;
+  public void epilipsy(Color color) {
+    this.toggle = !this.toggle;
+
+    setStaticColor(new Color(0, 0, 0));
+    if (toggle) return;
+    setStaticColor(new Color(255, 0, 0));
   }
 
   public void stopLEDs() {
