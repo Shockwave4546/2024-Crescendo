@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "PivotIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootClose"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeArmFloor"
+                }
+              }
+            ]
           }
         },
         {
@@ -24,7 +37,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "IntakeNote"
                 }
               },
               {
@@ -39,43 +52,69 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootInterpolated"
+            "name": "PivotAndShoot"
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Quad 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootInterpolated"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Quad 3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeArmFloor"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Quad 2"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootInterpolated"
+            "name": "PivotAndShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeArmFloor"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Quad 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotAndShoot"
           }
         }
       ]

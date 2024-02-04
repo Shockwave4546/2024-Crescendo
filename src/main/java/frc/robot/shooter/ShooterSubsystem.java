@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
 import frc.robot.pose.VisionSubsystem;
@@ -40,24 +39,24 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem(VisionSubsystem vision) {
     this.vision = vision;
-    Shooter.RPM_CONVERSION_FACTOR.applyTo(leftEncoder, false);
-    Shooter.RPM_CONVERSION_FACTOR.applyTo(rightEncoder, false);
+    Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, false);
+    Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
     leftPIDController.setTolerance(2.0, 2.0);
     rightPIDController.setTolerance(2.0, 2.0);
 
-    tab.add("Left Velocity", leftEncoder);
-    tab.add("Right Velocity", rightEncoder);
+    tab.addNumber("Left RPM", () -> leftEncoder.getRate() * 60.0);
+    tab.addNumber("Right RPM", () -> rightEncoder.getRate() * 60.0);
     Tabs.MATCH.addNumber("Servo", servo::getAngle)
             .withSize(3, 3)
             .withWidget(BuiltInWidgets.kDial)
             .withProperties(Map.of("Min", 0.0, "Max", 270.0));
 
-    Tabs.MATCH.addBoolean("Shooter At Speed", () -> leftPIDController.atSetpoint() && rightPIDController.atSetpoint());
+    Tabs.MATCH.addBoolean("At Desired RPM", this::atDesiredRPM);
   }
 
   @Override public void periodic() {
-    leftMotor.set(leftPIDController.calculate(leftEncoder.getRate(), desiredLeftRPM.get()));
-    rightMotor.set(rightPIDController.calculate(rightEncoder.getRate(), desiredRightRPM.get()));
+    leftMotor.set(leftPIDController.calculate(leftEncoder.getRate() * 60.0, desiredLeftRPM.get()));
+    rightMotor.set(rightPIDController.calculate(rightEncoder.getRate() * 60.0, desiredRightRPM.get()));
   }
 
   private void setRPM(double rpm) {
@@ -65,12 +64,12 @@ public class ShooterSubsystem extends SubsystemBase {
     desiredRightRPM.set(rpm);
   }
 
-  public void shootClose() {
-    setRPM(Shooter.CLOSE_RPM);
+  public boolean atDesiredRPM() {
+    return leftPIDController.atSetpoint() && rightPIDController.atSetpoint();
   }
 
-  public void shootFar() {
-    setRPM(Shooter.FAR_RPM);
+  public void shootClose() {
+    setRPM(Shooter.CLOSE_RPM);
   }
 
   public void shootInterpolated() {

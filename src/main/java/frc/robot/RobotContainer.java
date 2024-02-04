@@ -6,33 +6,31 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
+import frc.robot.intake.FeedShooterCommand;
 import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
-import frc.robot.intake.ReverseIntakeCommand;
-import frc.robot.intakepivot.IntakePivotSubsystem;
+import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
 import frc.robot.shooter.ShootCloseCommand;
-import frc.robot.shooter.ShootFarCommand;
 import frc.robot.shooter.ShootInterpolatedCommand;
 import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
-import frc.robot.swerve.commands.ChaseTagCommand;
 import frc.robot.swerve.commands.ResetPoseCommand;
-import frc.robot.swerve.commands.SetXCommand;
+import frc.robot.swerve.commands.ToggleXCommand;
 
 public class RobotContainer {
   protected final VisionSubsystem vision = new VisionSubsystem();
   protected final SwerveSubsystem swerve = new SwerveSubsystem();
   protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
-  // protected final IntakeSubsystem intake = new IntakeSubsystem();
-  // protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
-  // protected final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
+  protected final IntakeSubsystem intake = new IntakeSubsystem();
+  protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
+  protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
   protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
-  // protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
-   protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led);
+  protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
+  protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
   public RobotContainer() {
     Tabs.MATCH.add("PDP", new PowerDistribution());
@@ -46,16 +44,13 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // driverController.a().whileTrue(new ChaseTagCommand(vision, poseEstimator, swerve));
-
     driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
-    driverController.x().onTrue(new SetXCommand(swerve));
+    driverController.x().onTrue(new ToggleXCommand(swerve));
 
-    // operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
-    // operatorController.x().whileTrue(new ReverseIntakeCommand(intake));
+    operatorController.x().whileTrue(new FeedShooterCommand(intake));
+    operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
 
-    // operatorController.a().whileTrue(new ShootCloseCommand(shooter));
-    // operatorController.b().whileTrue(new ShootFarCommand(shooter));
-    // operatorController.povDown().whileTrue(new ShootInterpolatedCommand(shooter, vision));
+    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+    operatorController.b().whileTrue(new ShootInterpolatedCommand(shooter, vision));
   }
 }

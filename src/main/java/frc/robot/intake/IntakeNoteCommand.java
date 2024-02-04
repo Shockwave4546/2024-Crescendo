@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.function.BooleanSupplier;
 
 public class IntakeNoteCommand extends Command {
-  private static final Duration POST_INTAKE_TIME = Duration.ofSeconds(2);
+  public static final Duration POST_INTAKE_TIME = Duration.ofMillis(500);
   private final BooleanSupplier cancelCondition;
   private final IntakeSubsystem intake;
   private Instant complete;

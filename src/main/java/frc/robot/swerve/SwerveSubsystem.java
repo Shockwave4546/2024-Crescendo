@@ -53,7 +53,8 @@ public class SwerveSubsystem extends SubsystemBase {
           .withSize(5, 2).withPosition(5, 4);
   private final ShuffleboardBoolean isFieldRelative = new ShuffleboardBoolean(MATCH, "Is Field Relative?", true)
           .withSize(3, 2).withPosition(6, 0);
-  private boolean isX = false;
+  private final ShuffleboardBoolean isX = new ShuffleboardBoolean(MATCH, "Is X?", false)
+          .withSize(3, 2).withPosition(6, 2);
 
   public SwerveSubsystem() {
     MATCH.add("Gyro", gyro).withSize(3, 3).withPosition(0, 0);
@@ -84,7 +85,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void toggleX() {
-    this.isX = !this.isX;
+    isX.set(!isX.get());
   }
 
   public boolean isFieldRelative() {
@@ -101,7 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rotSpeed, boolean fieldRelative, boolean useDefaultSpeeds) {
-    if (isX) {
+    if (isX.get()) {
       setX();
       return;
     }
@@ -135,20 +136,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // For some reason, PathPlanner is giving me opposite directions, so use this temporary fix.
     final var swerveModuleStates = Swerve.DRIVE_KINEMATICS.toSwerveModuleStates(speeds.times(-1.0));
     setModuleStates(swerveModuleStates);
-  }
-
-  /**
-   * @param position The relative position of the SwerveModule.
-   * @return the MAXSwerveModule associated with the ModulePosition.
-   */
-  public MAXSwerveModule getModule(ModulePosition position) {
-    switch (position) {
-      case FRONT_LEFT -> { return frontLeft; }
-      case FRONT_RIGHT -> { return frontRight; }
-      case BACK_LEFT -> { return backLeft; }
-      case BACK_RIGHT ->  { return backRight; }
-      default -> throw new RuntimeException("I don't even know what you put in here...");
-    }
   }
 
   /**

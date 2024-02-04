@@ -2,10 +2,10 @@ package frc.robot.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ReverseIntakeCommand extends Command {
+public class FeedShooterCommand extends Command {
   private final IntakeSubsystem intake;
 
-  public ReverseIntakeCommand(IntakeSubsystem intake) {
+  public FeedShooterCommand(IntakeSubsystem intake) {
     this.intake = intake;
     addRequirements(intake);
   }

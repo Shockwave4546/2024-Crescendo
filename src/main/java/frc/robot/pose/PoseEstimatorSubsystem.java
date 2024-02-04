@@ -1,5 +1,6 @@
 package frc.robot.pose;
 
+import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Vision;
 import frc.robot.shuffleboard.ShuffleboardBoolean;
@@ -65,9 +67,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final ShuffleboardDouble tagX = new ShuffleboardDouble(tab, "Tag X (m)", 0.0).withSize(3, 2).withPosition(0, 4);
   private final ShuffleboardDouble tagY = new ShuffleboardDouble(tab, "Tag Y (m)", 0.0).withSize(3, 2).withPosition(3, 4);
   private final ShuffleboardDouble tagDegrees = new ShuffleboardDouble(tab, "Tag Degrees", 0.0).withSize(3, 2).withPosition(6, 4);
+  private final Field2d field = new Field2d();
 
   private double previousPipelineTimestamp = 0.0;
 
+  @SuppressWarnings("resource")
   public PoseEstimatorSubsystem(SwerveSubsystem swerve, VisionSubsystem vision) {
     this.swerve = swerve;
     this.vision = vision;
@@ -93,6 +97,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     tab.addNumber("Estimated Pose X (m)", () -> getPose2d().getX()).withSize(3, 2).withPosition(0, 2);
     tab.addNumber("Estimated Pose Y (m)", () -> getPose2d().getY()).withSize(3, 2).withPosition(3, 2);
     tab.addNumber("Estimated Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
+
+    PathPlannerLogging.setLogCurrentPoseCallback(field::setRobotPose);
+    PathPlannerLogging.setLogTargetPoseCallback(pose -> field.getObject("target pose").setPose(pose));
+    PathPlannerLogging.setLogActivePathCallback(poses -> field.getObject("path").setPoses(poses));
   }
 
 

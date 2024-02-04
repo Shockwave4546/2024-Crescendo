@@ -12,8 +12,16 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
+import frc.robot.intake.AutoIntakeNoteCommand;
+import frc.robot.intake.IntakeSubsystem;
+import frc.robot.intakearm.IntakeArmSubsystem;
+import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
+import frc.robot.pose.VisionSubsystem;
+import frc.robot.shooter.AutoShootCloseCommand;
+import frc.robot.shooter.PivotAndShootCommand;
+import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 
 public class AutoManager {
@@ -25,7 +33,7 @@ public class AutoManager {
   /**
    * Registers all Commands into NamedCommands.
    */
-  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator, LEDSubsystem led) {
+  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator, LEDSubsystem led, ShooterSubsystem shooter, VisionSubsystem vision, IntakeSubsystem intake, IntakeArmSubsystem arm) {
     AutoBuilder.configureHolonomic(
             poseEstimator::getPose2d,
             poseEstimator::resetOdometry,
@@ -45,7 +53,11 @@ public class AutoManager {
     // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("DisableLED", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.OFF), led));
     NamedCommands.registerCommand("Rainbow", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.RAINBOW), led));
-    // ShootClose ShootInterpolated
+
+    NamedCommands.registerCommand("IntakeNote", new AutoIntakeNoteCommand(intake));
+    NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(shooter, intake));
+    NamedCommands.registerCommand("PivotAndShoot", new PivotAndShootCommand(shooter, vision, intake, arm));
+    NamedCommands.registerCommand("IntakeArmFloor", new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);

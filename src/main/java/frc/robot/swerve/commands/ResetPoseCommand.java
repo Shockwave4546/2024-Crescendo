@@ -1,21 +1,10 @@
 package frc.robot.swerve.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.pose.PoseEstimatorSubsystem;
 
-public class ResetPoseCommand extends Command {
-  private final PoseEstimatorSubsystem poseEstimator;
-  
+public class ResetPoseCommand extends InstantCommand {
   public ResetPoseCommand(PoseEstimatorSubsystem poseEstimator) {
-    this.poseEstimator = poseEstimator;
-    addRequirements(poseEstimator);
-  }
-
-  @Override public void initialize() {
-    poseEstimator.resetPose();
-  }
-
-  @Override public boolean isFinished() {
-    return true;
+    super(poseEstimator::resetPose, poseEstimator);
   }
 }

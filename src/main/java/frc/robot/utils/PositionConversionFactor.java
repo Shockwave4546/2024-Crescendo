@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj.Encoder;
 /**
  * Represents a universal conversion factor for Encoders throughout a SparkMaxRelativeEncoder vs a Quadrature Encoder.
  */
-public final class EncoderConversionFactor {
+public final class PositionConversionFactor {
   private static final double QUAD_PULSES_PER_REV = 2048.0;
-  private final double gearRatio;
   private final double oneRev;
 
   /**
@@ -19,36 +18,30 @@ public final class EncoderConversionFactor {
   public static final class ConversionType {
     public static final double DEGREES = 360.0;
     public static final double RADIANS = 2 * Math.PI;
-    public static final double SIX_IN_WHEELS_POS = Units.inchesToMeters(6) * Math.PI;
   }
 
-  public EncoderConversionFactor(double oneRev, double gearRatio) {
+  public PositionConversionFactor(double oneRev) {
     this.oneRev = oneRev;
-    this.gearRatio = gearRatio;
-  }
-
-  public EncoderConversionFactor(double oneRev) {
-    this(oneRev, 1.0);
   }
 
   /**
    * @param encoder the SparkMaxRelativeEncoder to perform the transformation.
    */
-  public void applyTo(RelativeEncoder encoder, boolean inverted) {
+  public void apply(RelativeEncoder encoder, boolean inverted) {
     encoder.setPositionConversionFactor((inverted ? -1.0 : 1.0) * toSparkMaxRelativeEncoder());
   }
 
     /**
    * @param encoder the SparkMaxAbsoluteEncoder to perform the transformation.
    */
-  public void applyTo(AbsoluteEncoder encoder, boolean inverted) {
+  public void apply(AbsoluteEncoder encoder, boolean inverted) {
     encoder.setPositionConversionFactor((inverted ? -1.0 : 1.0) * toSparkMaxRelativeEncoder());
   }
 
   /**
    * @param encoder the Encoder to perform the transformation.
    */
-  public void applyTo(Encoder encoder, boolean inverted) {
+  public void apply(Encoder encoder, boolean inverted) {
     encoder.setDistancePerPulse(toQuadEncoder());
     encoder.setReverseDirection(inverted);
   }
@@ -59,13 +52,13 @@ public final class EncoderConversionFactor {
    * @return the conversion factor for a SparkMaxRelativeEncoder.
    */
   private double toSparkMaxRelativeEncoder() {
-    return oneRev * gearRatio;
+    return oneRev;
   }
 
   /**
    * @return the conversion factor for a Quadrature Encoder.
    */
   private double toQuadEncoder() {
-    return (oneRev * gearRatio) / QUAD_PULSES_PER_REV;
+    return oneRev / QUAD_PULSES_PER_REV;
   }
 }
