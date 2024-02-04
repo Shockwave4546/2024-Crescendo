@@ -2,19 +2,80 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.3168783499556795,
-      "y": 7.0
+      "x": 0.6394675876600069,
+      "y": 6.611513894168728
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "PivotIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Quad 1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootInterpolated"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Quad"
+            "pathName": "Quad 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootInterpolated"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Quad 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootInterpolated"
           }
         }
       ]
