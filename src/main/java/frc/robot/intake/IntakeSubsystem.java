@@ -13,6 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final DigitalInput rightSwitch = new DigitalInput(Intake.RIGHT_SWITCH_DIO_PORT);
   private final CANSparkMax motor = new CANSparkMax(Intake.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
 
+  @SuppressWarnings("resource")
   public IntakeSubsystem() {
     motor.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkBase.IdleMode.kBrake);

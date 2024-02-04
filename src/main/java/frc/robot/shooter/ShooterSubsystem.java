@@ -37,6 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final VisionSubsystem vision;
 
+  @SuppressWarnings("resource")
   public ShooterSubsystem(VisionSubsystem vision) {
     this.vision = vision;
     Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, false);

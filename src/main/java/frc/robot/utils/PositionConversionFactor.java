@@ -2,7 +2,6 @@ package frc.robot.utils;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 
 /**
