@@ -33,6 +33,7 @@ public class RobotContainer {
   protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
   public RobotContainer() {
+    DriverStation.silenceJoystickConnectionWarning(true);
     Tabs.MATCH.add("PDP", new PowerDistribution());
     vision.setPoseEstimator(poseEstimator);
 
