@@ -1,9 +1,11 @@
 package frc.robot.shooter;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,25 +27,31 @@ public class ShooterSubsystem extends SubsystemBase {
   private final Encoder leftEncoder = new Encoder(Shooter.LEFT_ENCODER[0], Shooter.LEFT_ENCODER[1]);
   private final Encoder rightEncoder = new Encoder(Shooter.RIGHT_ENCODER[0], Shooter.RIGHT_ENCODER[1]);
 
-  private final PIDController leftPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
-  private final PIDController rightPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
+  private final PIDController leftPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D, 100);
+  private final PIDController rightPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D, 100);
 
   private final ShuffleboardDouble desiredLeftRPM = new ShuffleboardDouble(tab, "Desired Left RPM", 0.0);
   private final ShuffleboardDouble desiredRightRPM = new ShuffleboardDouble(tab, "Desired Right RPM", 0.0);
 
-  private final LinearInterpolator RPMInterpolator = new LinearInterpolator(
+  private final ShuffleboardDouble servoAngle = new ShuffleboardDouble(tab, "Servo Angle", 0.0);
 
-  );
+  // private final LinearInterpolator RPMInterpolator = new LinearInterpolator(
 
-  private final VisionSubsystem vision;
+  // );
+
+  // private final VisionSubsystem vision;
 
   @SuppressWarnings("resource")
-  public ShooterSubsystem(VisionSubsystem vision) {
-    this.vision = vision;
-    Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, false);
-    Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
-    leftPIDController.setTolerance(2.0, 2.0);
-    rightPIDController.setTolerance(2.0, 2.0);
+  public ShooterSubsystem() {
+    leftMotor.configPeakOutputForward(0.75);
+    leftMotor.configPeakOutputReverse(-0.75);
+    rightMotor.configPeakOutputForward(0.75);
+    rightMotor.configPeakOutputReverse(-0.75);
+    // this.vision = vision;
+    Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
+    Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, true);
+    leftPIDController.setTolerance(250.0, 250.0);
+    rightPIDController.setTolerance(250.0, 250.0);
 
     tab.addNumber("Left RPM", () -> leftEncoder.getRate() * 60.0);
     tab.addNumber("Right RPM", () -> rightEncoder.getRate() * 60.0);
@@ -53,9 +61,14 @@ public class ShooterSubsystem extends SubsystemBase {
             .withProperties(Map.of("Min", 0.0, "Max", 270.0));
 
     Tabs.MATCH.addBoolean("At Desired RPM", this::atDesiredRPM);
+
+    tab.add("lEFT PID", leftPIDController);
+    tab.add("rIGHT PID", rightPIDController);
   }
 
   @Override public void periodic() {
+    servo.setAngle(servoAngle.get());
+
     leftMotor.set(leftPIDController.calculate(leftEncoder.getRate() * 60.0, desiredLeftRPM.get()));
     rightMotor.set(rightPIDController.calculate(rightEncoder.getRate() * 60.0, desiredRightRPM.get()));
   }
@@ -74,7 +87,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootInterpolated() {
-    setRPM(RPMInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
+    // setRPM(RPMInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
   }
 
   public void stopMotors() {

@@ -16,9 +16,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void autonomousInit() {
-    container.swerve.resetEncoders();
-    container.poseEstimator.resetPose();
-    container.auto.executeRoutine();
+    // container.swerve.resetEncoders();
+    // container.poseEstimator.resetPose();
+    // container.auto.executeRoutine();
   }
 
   @Override public void autonomousPeriodic() {
@@ -26,11 +26,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void disabledPeriodic() {
-    container.led.rainbow();
+    // container.led.rainbow();
   }
 
   @Override public void teleopInit() {
-    container.swerve.setDefaultCommand(new SwerveDriveCommand(container.driverController, container.swerve));
+    // container.swerve.setDefaultCommand(new SwerveDriveCommand(container.driverController, container.swerve));
   }
 
   @Override public void teleopPeriodic() {

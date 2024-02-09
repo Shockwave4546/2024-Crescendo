@@ -20,7 +20,7 @@ public final class Constants {
   public static final class IntakeArm {
     public static final int MOTOR_CAN_ID = 33;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.25);
+    public static final PIDGains GAINS = new PIDGains(0.01);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 1.0; // degrees
@@ -47,7 +47,7 @@ public final class Constants {
   public static final class Shooter {
     public static final int LEFT_CAN_ID = 30;
     public static final int RIGHT_CAN_ID = 31;
-    public static final int SERVO_PWM_ID = 0;
+    public static final int SERVO_PWM_ID = 3;
 
     public static final double SERVO_STARTING_ANGLE = 0.0;
     public static final double SERVO_SUBWOOFER_ANGLE = 0.0;
@@ -56,7 +56,7 @@ public final class Constants {
     public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
 
-    public static final PIDGains GAINS = new PIDGains(1.0);
+    public static final PIDGains GAINS = new PIDGains(0.01);
 
     public static final double CLOSE_RPM = 10000;
   }
