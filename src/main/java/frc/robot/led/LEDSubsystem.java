@@ -83,6 +83,8 @@ public class LEDSubsystem extends SubsystemBase {
     MANUAL(LEDSubsystem::useManualColor),
     WHITE((led) -> led.setStaticColor(LED.WHITE)),
     RAINBOW(LEDSubsystem::rainbow),
+    RED((led) -> led.setStaticColor(LED.RED)),
+    GREEN((led) -> led.setStaticColor(LED.GREEN)),
     OFF(LEDSubsystem::stopLEDs);
 
     private final Consumer<LEDSubsystem> action;

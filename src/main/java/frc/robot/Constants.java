@@ -30,7 +30,8 @@ public final class Constants {
     public static final int PWM_ID = 2;
     public static final int BUFFER_LENGTH = 125;
 
-    public static final Color PINK = new Color(232, 115, 123);
+    public static final Color RED = new Color(255, 0, 0);
+    public static final Color GREEN = new Color(0, 255, 0);
     public static final Color OFF = new Color(0, 0, 0);
     public static final Color WHITE = new Color(255, 255, 255);
   }
