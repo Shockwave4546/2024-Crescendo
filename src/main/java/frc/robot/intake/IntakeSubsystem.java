@@ -15,6 +15,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @SuppressWarnings("resource")
   public IntakeSubsystem() {
+    motor.restoreFactoryDefaults();
+
     motor.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkBase.IdleMode.kBrake);
     motor.burnFlash();

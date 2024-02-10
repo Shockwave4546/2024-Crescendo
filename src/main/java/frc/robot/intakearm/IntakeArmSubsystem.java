@@ -15,6 +15,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
   private State desiredState;
 
   public IntakeArmSubsystem() {
+    motor.restoreFactoryDefaults();
+
     motor.setSmartCurrentLimit(Constants.Module.DRIVING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder, false);
