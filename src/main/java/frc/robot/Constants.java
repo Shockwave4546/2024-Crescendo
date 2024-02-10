@@ -49,9 +49,6 @@ public final class Constants {
     public static final int RIGHT_CAN_ID = 30;
     public static final int SERVO_PWM_ID = 3;
 
-    public static final double SERVO_STARTING_ANGLE = 0.0;
-    public static final double SERVO_SUBWOOFER_ANGLE = 125.0;
-
     public static final int[] LEFT_ENCODER = new int[] { 0, 1 };
     public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);

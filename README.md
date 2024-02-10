@@ -4,6 +4,7 @@
 - Left Intake Limit Switch: 0
 - Left Intake Limit Switch: 1
 - LED: 2
+- Shooter Flap: 3
 
 ### DIO Ports
 - Left Shooter Encoder A: 0
@@ -20,7 +21,7 @@
 - FR Drive: 21
 - BL Drive: 23
 - BR Drive: 24
-- Left Shooter: 30
-- Right Shooter: 31
+- Right Shooter: 30
+- Left Shooter: 31
 - Intake: 32
 - Intake Arm: 33
