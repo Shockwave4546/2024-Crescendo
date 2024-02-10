@@ -1,6 +1,8 @@
 package frc.robot.shooter;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Encoder;
@@ -8,17 +10,13 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.ShuffleboardDouble;
 import frc.robot.utils.LinearInterpolator;
 
 import java.util.Map;
-
-import static edu.wpi.first.units.Units.*;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -35,11 +33,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardDouble desiredLeftRPS = new ShuffleboardDouble(tab, "Desired Left RPS", 0.0);
   private final ShuffleboardDouble desiredRightRPS = new ShuffleboardDouble(tab, "Desired Right RPS", 0.0);
 
-  private final ShuffleboardDouble servoAngle = new ShuffleboardDouble(tab, "Servo Angle", 0.0);
+  private final ShuffleboardDouble flapAngle = new ShuffleboardDouble(tab, "Flap Angle", FlapState.HOME.angle);
 
-//   private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
+//  private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
 //
-//   );
+//  );
 
   // private final VisionSubsystem vision;
 
@@ -47,8 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
     Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
-    leftPIDController.setTolerance(40.0, 10.0);
-    rightPIDController.setTolerance(40.0, 10.0);
+    leftPIDController.setTolerance(Shooter.REV_TOLERANCE, Shooter.RPS_TOLERANCE);
+    rightPIDController.setTolerance(Shooter.REV_TOLERANCE, Shooter.RPS_TOLERANCE);
 
     tab.addNumber("Left RPS", leftEncoder::getRate);
     tab.addNumber("Right RPS", rightEncoder::getRate);
@@ -68,7 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   @Override public void periodic() {
-    servo.setAngle(servoAngle.get());
+    servo.setAngle(flapAngle.get());
 
     leftMotor.set(leftPIDController.calculate(leftEncoder.getRate(), desiredLeftRPS.get()));
     rightMotor.set(rightPIDController.calculate(rightEncoder.getRate(), desiredRightRPS.get()));
@@ -84,7 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootClose() {
-    setRPS(Shooter.CLOSE_RPM);
+    setRPS(Shooter.CLOSE_RPS);
   }
 
   public void shootInterpolated() {
@@ -100,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setFlapState(FlapState state) {
-    servoAngle.set(state.angle);
+    flapAngle.set(state.angle);
   }
 
   public enum FlapState {

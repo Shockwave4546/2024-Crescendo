@@ -53,7 +53,7 @@ public class RobotContainer {
     // operatorController.x().whileTrue(new FeedShooterCommand(intake));
     // operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
 
-//    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
-    // operatorController.b().whileTrue(new ShootInterpolatedCommand(shooter, vision));
+    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+    operatorController.b().whileTrue(new ShootInterpolatedCommand(shooter, vision));
   }
 }
