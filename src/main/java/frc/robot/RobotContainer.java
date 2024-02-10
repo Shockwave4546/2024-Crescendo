@@ -3,7 +3,9 @@ package frc.robot;
 import com.pathplanner.lib.util.PPLibTelemetry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
 import frc.robot.intake.FeedShooterCommand;
@@ -45,13 +47,17 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    operatorController.a().toggleOnTrue(shooter.runRightDynamicTest(SysIdRoutine.Direction.kForward));
+    operatorController.b().toggleOnTrue(shooter.runRightDynamicTest(SysIdRoutine.Direction.kReverse));
+    operatorController.x().toggleOnTrue(shooter.runRightQuasiTest(SysIdRoutine.Direction.kForward));
+    operatorController.y().toggleOnTrue(shooter.runRightQuasiTest(SysIdRoutine.Direction.kReverse));
     // driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
     // driverController.x().onTrue(new ToggleXCommand(swerve));
 
     // operatorController.x().whileTrue(new FeedShooterCommand(intake));
     // operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
 
-    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+//    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
     // operatorController.b().whileTrue(new ShootInterpolatedCommand(shooter, vision));
   }
 }

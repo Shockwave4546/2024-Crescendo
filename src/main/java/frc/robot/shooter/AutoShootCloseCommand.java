@@ -7,7 +7,7 @@ import frc.robot.intake.IntakeSubsystem;
 public class AutoShootCloseCommand extends SequentialCommandGroup {
   public AutoShootCloseCommand(ShooterSubsystem shooter, IntakeSubsystem intake) {
     addCommands(
-            new ShootCloseCommand(shooter).until(shooter::atDesiredRPM),
+            new ShootCloseCommand(shooter).until(shooter::atDesiredRPS),
             new FeedShooterCommand(intake).withTimeout(0.25)
     );
 
