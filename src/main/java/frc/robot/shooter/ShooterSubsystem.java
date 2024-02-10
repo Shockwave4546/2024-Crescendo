@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.ShuffleboardDouble;
+import frc.robot.utils.LinearInterpolator;
 
 import java.util.Map;
 
@@ -36,19 +37,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final ShuffleboardDouble servoAngle = new ShuffleboardDouble(tab, "Servo Angle", 0.0);
 
-  // private final LinearInterpolator RPMInterpolator = new LinearInterpolator(
-
-  // );
+//   private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
+//
+//   );
 
   // private final VisionSubsystem vision;
 
   @SuppressWarnings("resource")
   public ShooterSubsystem() {
-//    leftMotor.configPeakOutputForward(0.85);
-//    leftMotor.configPeakOutputReverse(-0.85);
-//    rightMotor.configPeakOutputForward(0.85);
-//    rightMotor.configPeakOutputReverse(-0.85);
-    // this.vision = vision;
     Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
     Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
     leftPIDController.setTolerance(40.0, 10.0);
@@ -78,9 +74,9 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.set(rightPIDController.calculate(rightEncoder.getRate(), desiredRightRPS.get()));
   }
 
-  private void setRPM(double rpm) {
-    desiredLeftRPS.set(rpm);
-    desiredRightRPS.set(rpm);
+  private void setRPS(double rps) {
+    desiredLeftRPS.set(rps);
+    desiredRightRPS.set(rps);
   }
 
   public boolean atDesiredRPS() {
@@ -88,11 +84,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootClose() {
-    setRPM(Shooter.CLOSE_RPM);
+    setRPS(Shooter.CLOSE_RPM);
   }
 
   public void shootInterpolated() {
-    // setRPM(RPMInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
+//     setRPS(RPSInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
   }
 
   public void stopMotors() {
@@ -103,32 +99,18 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.stopMotor();
   }
 
-  public void engageServo() {
-    servo.setAngle(Shooter.SERVO_SUBWOOFER_ANGLE);
+  public void setFlapState(FlapState state) {
+    servoAngle.set(state.angle);
   }
 
-  public void disengageServo() {
-    servo.setAngle(Shooter.SERVO_STARTING_ANGLE);
-  }
+  public enum FlapState {
+    HOME(0.0),
+    SUBWOOFER(125);
 
-    private final SysIdRoutine rightRoutine = new SysIdRoutine(
-          new SysIdRoutine.Config(),
-          new SysIdRoutine.Mechanism(
-                  (volt) -> rightMotor.setVoltage(volt.in(Units.Volts)),
-                  (log) -> { log.motor("Right Shooter Motor")
-                          .angularPosition(Revolutions.of(rightEncoder.get()))
-                          .angularVelocity(RevolutionsPerSecond.of(rightEncoder.getRate()))
-                          .voltage(Volts.of(rightMotor.getMotorOutputVoltage()));
-                    },
+    public final double angle;
 
-                  this)
-  );
-
-  public Command runRightQuasiTest(SysIdRoutine.Direction direction) {
-    return rightRoutine.quasistatic(direction);
-  }
-
-  public Command runRightDynamicTest(SysIdRoutine.Direction direction) {
-    return rightRoutine.dynamic(direction);
+    FlapState(double angle) {
+      this.angle = angle;
+    }
   }
 }

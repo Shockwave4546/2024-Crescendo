@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.auto;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -12,14 +12,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
-import frc.robot.intake.AutoIntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
-import frc.robot.shooter.AutoShootCloseCommand;
 import frc.robot.shooter.PivotAndShootCommand;
 import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;

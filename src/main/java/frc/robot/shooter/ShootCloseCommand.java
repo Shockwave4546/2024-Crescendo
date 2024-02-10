@@ -11,12 +11,12 @@ public class ShootCloseCommand extends Command {
   }
 
   @Override public void execute() {
-    shooter.engageServo();
+    shooter.setFlapState(ShooterSubsystem.FlapState.SUBWOOFER);
     shooter.shootClose();
   }
 
   @Override public void end(boolean interrupted) {
-    shooter.disengageServo();
+    shooter.setFlapState(ShooterSubsystem.FlapState.HOME);
     shooter.stopMotors();
   }
 }

@@ -15,7 +15,7 @@ public class ShootInterpolatedCommand extends Command {
 
   @Override public void execute() {
     if (!vision.hasViableTarget()) {
-      shooter.engageServo();
+      shooter.setFlapState(ShooterSubsystem.FlapState.SUBWOOFER);
       shooter.shootClose();
       return;
     }
@@ -24,7 +24,7 @@ public class ShootInterpolatedCommand extends Command {
   }
 
   @Override public void end(boolean interrupted) {
-    shooter.disengageServo();
+    shooter.setFlapState(ShooterSubsystem.FlapState.HOME);
     shooter.stopMotors();
   }
 }

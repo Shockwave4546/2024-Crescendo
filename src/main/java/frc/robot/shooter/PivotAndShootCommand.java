@@ -12,7 +12,7 @@ public class PivotAndShootCommand extends SequentialCommandGroup {
   public PivotAndShootCommand(ShooterSubsystem shooter, VisionSubsystem vision, IntakeSubsystem intake, IntakeArmSubsystem arm) {
     addCommands(
             new ParallelCommandGroup(
-                    new PivotIntakeCommand(IntakeArmSubsystem.State.IN, arm).until(arm::atDesiredState),
+                    new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm).until(arm::atDesiredState),
                     new ShootInterpolatedCommand(shooter, vision).until(shooter::atDesiredRPS)
             ),
             new FeedShooterCommand(intake).withTimeout(0.25)

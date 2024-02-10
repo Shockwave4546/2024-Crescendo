@@ -47,10 +47,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    operatorController.a().toggleOnTrue(shooter.runRightDynamicTest(SysIdRoutine.Direction.kForward));
-    operatorController.b().toggleOnTrue(shooter.runRightDynamicTest(SysIdRoutine.Direction.kReverse));
-    operatorController.x().toggleOnTrue(shooter.runRightQuasiTest(SysIdRoutine.Direction.kForward));
-    operatorController.y().toggleOnTrue(shooter.runRightQuasiTest(SysIdRoutine.Direction.kReverse));
     // driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
     // driverController.x().onTrue(new ToggleXCommand(swerve));
 
