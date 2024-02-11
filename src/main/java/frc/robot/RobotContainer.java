@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -11,7 +12,9 @@ import frc.robot.Constants.Tabs;
 import frc.robot.intake.FeedShooterCommand;
 import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
+import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
+import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
@@ -26,9 +29,9 @@ public class RobotContainer {
   // protected final VisionSubsystem vision = new VisionSubsystem();
   // protected final SwerveSubsystem swerve = new SwerveSubsystem();
   // protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
-  // protected final IntakeSubsystem intake = new IntakeSubsystem();
+   protected final IntakeSubsystem intake = new IntakeSubsystem();
   protected final ShooterSubsystem shooter = new ShooterSubsystem();
-  // protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
+   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
   // protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
@@ -36,7 +39,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
-    Tabs.MATCH.add("PDP", new PowerDistribution());
+//    Tabs.MATCH.add("PDP", new PowerDistribution());
+    CameraServer.startAutomaticCapture();
     // vision.setPoseEstimator(poseEstimator);
 
     configureButtonBindings();
@@ -50,10 +54,16 @@ public class RobotContainer {
     // driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
     // driverController.x().onTrue(new ToggleXCommand(swerve));
 
-    // operatorController.x().whileTrue(new FeedShooterCommand(intake));
-    // operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
+     operatorController.x().whileTrue(new FeedShooterCommand(intake));
+     operatorController.y().whileTrue(new IntakeNoteCommand(() -> operatorController.getRightTriggerAxis() > 0.25, intake));
 
-    operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
+     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
+     operatorController.povRight().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.MIDDLE, arm));
+
+     operatorController.a().whileTrue(new ShootCloseCommand(shooter));
+
+     operatorController.povLeft().toggleOnTrue(new FullIntakeSequenceCommand(arm, intake));
 //    operatorController.b().whileTrue(new ShootInterpolatedCommand(shooter, vision));
   }
 }

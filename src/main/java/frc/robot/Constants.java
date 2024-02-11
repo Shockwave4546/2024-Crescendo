@@ -20,10 +20,10 @@ public final class Constants {
   public static final class IntakeArm {
     public static final int MOTOR_CAN_ID = 33;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.01);
+    public static final PIDGains GAINS = new PIDGains(0.005);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final double ANGLE_TOLERANCE = 1.0; // degrees
+    public static final double ANGLE_TOLERANCE = 5.0; // degrees
   }
 
   public static final class LED {
@@ -37,12 +37,12 @@ public final class Constants {
   }
 
   public static final class Intake {
-    public static final int LEFT_SWITCH_DIO_PORT = 0;
-    public static final int RIGHT_SWITCH_DIO_PORT = 1;
+    public static final int LEFT_SWITCH_DIO_PORT = 4;
+    public static final int RIGHT_SWITCH_DIO_PORT = 5;
     public static final int MOTOR_CAN_ID = 32;
 
-    public static final double FORWARD_INTAKE_SPEED = 1.0;
-    public static final double REVERSE_INTAKE_SPEED = -0.5;
+    public static final double FORWARD_INTAKE_SPEED = -1.0;
+    public static final double REVERSE_INTAKE_SPEED = 1.0;
   }
 
   public static final class Shooter {

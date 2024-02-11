@@ -1,5 +1,6 @@
 package frc.robot.shooter;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
@@ -43,6 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @SuppressWarnings("resource")
   public ShooterSubsystem() {
+    leftMotor.setNeutralMode(NeutralMode.Coast);
+    rightMotor.setNeutralMode(NeutralMode.Coast);
     Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
     Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
     leftPIDController.setTolerance(Shooter.REV_TOLERANCE, Shooter.RPS_TOLERANCE);
