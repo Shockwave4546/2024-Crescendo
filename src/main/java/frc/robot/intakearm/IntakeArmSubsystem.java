@@ -6,11 +6,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeArm;
-import frc.robot.shuffleboard.ShuffleboardDouble;
 import frc.robot.shuffleboard.TunableSparkPIDController;
 
 public class IntakeArmSubsystem extends SubsystemBase {
-  private final ShuffleboardTab tab = Shuffleboard.getTab("Intake Arm");
   private final CANSparkMax motor = new CANSparkMax(IntakeArm.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
   private final SparkPIDController pidController = motor.getPIDController();
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -21,8 +19,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     motor.setSmartCurrentLimit(Constants.Module.DRIVING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder, false);
-
+    IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
     encoder.setInverted(true);
 
     pidController.setP(IntakeArm.GAINS.P);
@@ -33,13 +30,11 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     motor.burnFlash();
 
+    final var tab = Shuffleboard.getTab("Intake Arm");
     tab.addNumber("Duty Cycle", motor::getAppliedOutput);
-    tab.addNumber("Curr Angle", encoder::getPosition);
+    tab.addNumber("Current Angle", encoder::getPosition);
     tab.add("PID Controller", new TunableSparkPIDController(pidController));
-    tab.addString("State", () -> desiredState.name());
-  }
-
-  @Override public void periodic() {
+    tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle + "°)");
   }
 
   public void setDesiredState(State desiredState) {

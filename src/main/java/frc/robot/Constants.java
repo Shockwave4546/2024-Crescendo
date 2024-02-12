@@ -37,8 +37,7 @@ public final class Constants {
   }
 
   public static final class Intake {
-    public static final int LEFT_SWITCH_DIO_PORT = 4;
-    public static final int RIGHT_SWITCH_DIO_PORT = 5;
+    public static final int LIMIT_SWITCH_DIO_PORT = 4;
     public static final int MOTOR_CAN_ID = 32;
 
     public static final double FORWARD_INTAKE_SPEED = -1.0;

@@ -55,13 +55,13 @@ public class MAXSwerveModule {
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
     // but we want meters and meters per second to use with WPILib's swerve APIs.
-    Module.DRIVING_ENCODER_POSITION_FACTOR.apply(drivingEncoder, false);
+    Module.DRIVING_ENCODER_POSITION_FACTOR.apply(drivingEncoder);
     drivingEncoder.setVelocityConversionFactor(Module.DRIVING_ENCODER_VELOCITY_FACTOR);
 
     // Apply position and velocity conversion factors for the turning encoder. We
     // want these in radians and radians per second to use with WPILib's swerve
     // APIs.
-    Module.TURNING_ENCODER_POSITION_FACTOR.apply(turningEncoder, false);
+    Module.TURNING_ENCODER_POSITION_FACTOR.apply(turningEncoder);
     turningEncoder.setVelocityConversionFactor(Module.TURNING_ENCODER_VELOCITY_FACTOR);
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of

@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.swerve.commands.SwerveDriveCommand;
 
 public class Robot extends TimedRobot {
   private RobotContainer container;
@@ -26,7 +25,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void disabledPeriodic() {
-    // container.led.rainbow();
+     container.led.rainbow();
   }
 
   @Override public void teleopInit() {

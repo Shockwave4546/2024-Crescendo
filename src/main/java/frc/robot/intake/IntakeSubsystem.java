@@ -9,8 +9,7 @@ import frc.robot.Constants.Module;
 import frc.robot.Constants.Tabs;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private final DigitalInput leftSwitch = new DigitalInput(Intake.LEFT_SWITCH_DIO_PORT);
-//  private final DigitalInput rightSwitch = new DigitalInput(Intake.RIGHT_SWITCH_DIO_PORT);
+  private final DigitalInput limitSwitch = new DigitalInput(Intake.LIMIT_SWITCH_DIO_PORT);
   private final CANSparkMax motor = new CANSparkMax(Intake.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
 
   @SuppressWarnings("resource")
@@ -33,6 +32,6 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean hasNote() {
-    return !leftSwitch.get();
+    return !limitSwitch.get();
   }
 }

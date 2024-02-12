@@ -1,4 +1,4 @@
-package frc.robot.shooter;
+package frc.robot.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -7,6 +7,8 @@ import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.pose.VisionSubsystem;
+import frc.robot.shooter.ShootInterpolatedCommand;
+import frc.robot.shooter.ShooterSubsystem;
 
 public class PivotAndShootCommand extends SequentialCommandGroup {
   public PivotAndShootCommand(ShooterSubsystem shooter, VisionSubsystem vision, IntakeSubsystem intake, IntakeArmSubsystem arm) {
