@@ -54,7 +54,7 @@ public class RobotContainer {
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
 
     operatorController.a().toggleOnTrue(new FullShootCloseSequenceCommand(intake, shooter));
-    operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter));
+    // operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter));
     operatorController.x().toggleOnTrue(new FullIntakeSequenceCommand(arm, intake));
   }
 }

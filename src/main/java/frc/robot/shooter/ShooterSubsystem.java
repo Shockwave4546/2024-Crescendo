@@ -40,6 +40,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @SuppressWarnings("resource")
   public ShooterSubsystem() {
+    leftMotor.configPeakOutputReverse(-0.5);
+    rightMotor.configPeakOutputReverse(-0.5);
+
     leftMotor.setNeutralMode(NeutralMode.Coast);
     rightMotor.setNeutralMode(NeutralMode.Coast);
     Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
