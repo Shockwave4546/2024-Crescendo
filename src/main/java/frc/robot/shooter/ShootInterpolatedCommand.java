@@ -16,11 +16,11 @@ public class ShootInterpolatedCommand extends Command {
   @Override public void execute() {
     if (!vision.hasViableTarget()) {
       shooter.setFlapState(ShooterSubsystem.FlapState.SUBWOOFER);
-      shooter.shootClose();
+      shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER);
       return;
     }
 
-    shooter.shootInterpolated();
+    shooter.rampUp(ShooterSubsystem.ShotType.INTERPOLATED);
   }
 
   @Override public void end(boolean interrupted) {

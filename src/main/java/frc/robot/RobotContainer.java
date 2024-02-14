@@ -7,19 +7,15 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
-import frc.robot.intake.FeedShooterCommand;
-import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
-import frc.robot.pose.PoseEstimatorSubsystem;
-import frc.robot.pose.VisionSubsystem;
-import frc.robot.shooter.*;
-import frc.robot.swerve.SwerveSubsystem;
-import frc.robot.swerve.commands.ResetPoseCommand;
-import frc.robot.swerve.commands.ToggleXCommand;
+import frc.robot.shooter.FullShootAmpSequenceCommand;
+import frc.robot.shooter.FullShootCloseSequenceCommand;
+import frc.robot.shooter.FullShootInterpolatedSequenceCommand;
+import frc.robot.shooter.ShooterSubsystem;
 
 public class RobotContainer {
   // protected final VisionSubsystem vision = new VisionSubsystem();
@@ -53,8 +49,9 @@ public class RobotContainer {
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
 
-    operatorController.a().toggleOnTrue(new FullShootCloseSequenceCommand(intake, shooter));
-    // operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter));
-    operatorController.x().toggleOnTrue(new FullIntakeSequenceCommand(arm, intake));
+    operatorController.a().toggleOnTrue(new FullShootCloseSequenceCommand(intake, shooter, arm));
+    operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter, arm));
+    operatorController.x().toggleOnTrue(new FullShootAmpSequenceCommand(intake, shooter, arm));
+    operatorController.y().toggleOnTrue(new FullIntakeSequenceCommand(arm, intake));
   }
 }

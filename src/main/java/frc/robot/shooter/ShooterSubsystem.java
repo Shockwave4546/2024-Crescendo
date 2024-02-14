@@ -83,12 +83,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return leftPIDController.atSetpoint() && rightPIDController.atSetpoint();
   }
 
-  public void shootClose() {
-    setRPS(Shooter.CLOSE_RPS);
-  }
-
-  public void shootInterpolated() {
-//     setRPS(RPSInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
+  public void rampUp(ShotType type) {
+    if (type == ShotType.INTERPOLATED) {
+//      setRPS(RPSInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
+    } else {
+      setRPS(type.rps);
+    }
   }
 
   public void stopMotors() {
@@ -101,6 +101,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setFlapState(FlapState state) {
     flapAngle.set(state.angle);
+  }
+
+  public enum ShotType {
+    AMP(50.0),
+    SUBWOOFER(166.66),
+    INTERPOLATED(-1.0);
+
+    public final double rps;
+
+    ShotType(double rps) {
+      this.rps = rps;
+    }
   }
 
   public enum FlapState {

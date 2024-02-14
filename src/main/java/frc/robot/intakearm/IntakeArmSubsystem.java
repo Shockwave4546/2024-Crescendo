@@ -2,10 +2,10 @@ package frc.robot.intakearm;
 
 import com.revrobotics.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeArm;
+import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.TunableSparkPIDController;
 
 public class IntakeArmSubsystem extends SubsystemBase {
@@ -35,6 +35,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
     tab.addNumber("Current Angle", encoder::getPosition);
     tab.add("PID Controller", new TunableSparkPIDController(pidController));
     tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle + "°)");
+    Tabs.MATCH.addBoolean("Arm At Desired State", this::atDesiredState);
+    Tabs.MATCH.addString("Arm State", () -> desiredState.name() + " (" + desiredState.angle + "°)");
+    Tabs.MATCH.addBoolean("Arm Valid Encoder", () -> !shouldStopArm());
+  }
+
+  @Override public void periodic() {
+    if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
   }
 
   public void setDesiredState(State desiredState) {
@@ -46,8 +53,14 @@ public class IntakeArmSubsystem extends SubsystemBase {
     return Math.abs(encoder.getPosition() - desiredState.angle) < IntakeArm.ANGLE_TOLERANCE;
   }
 
-  public boolean atDesiredState(State state) {
-    return state == desiredState && atDesiredState();
+  /**
+   * If the Encoder is reading an angle that causes the arm to go into the robot, it should stop.
+   * These angles include [0, 180].
+   *
+   * @return whether the arm should stop operating as to not break it.
+   */
+  private boolean shouldStopArm() {
+    return encoder.getPosition() <= 180.0;
   }
 
   public enum State {

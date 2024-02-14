@@ -56,9 +56,6 @@ public final class Constants {
     public static final PIDGains GAINS = new PIDGains(0.02847);
     public static final double REV_TOLERANCE = 40.0;
     public static final double RPS_TOLERANCE = 10.0;
-
-    public static final double CLOSE_RPS = 166.66;
-    public static final double AMP_RPS = 50;
   }
 
   public static final class Swerve {

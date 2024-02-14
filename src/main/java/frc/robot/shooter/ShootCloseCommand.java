@@ -12,7 +12,7 @@ public class ShootCloseCommand extends Command {
 
   @Override public void execute() {
     shooter.setFlapState(ShooterSubsystem.FlapState.SUBWOOFER);
-    shooter.shootClose();
+    shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER);
   }
 
   @Override public void end(boolean interrupted) {
