@@ -27,7 +27,7 @@ public final class Constants {
   }
 
   public static final class LED {
-    public static final int PWM_ID = 2;
+    public static final int PWM_ID = 0;
     public static final int BUFFER_LENGTH = 125;
 
     public static final Color RED = new Color(255, 0, 0);
@@ -47,7 +47,7 @@ public final class Constants {
   public static final class Shooter {
     public static final int LEFT_CAN_ID = 31;
     public static final int RIGHT_CAN_ID = 30;
-    public static final int SERVO_PWM_ID = 3;
+    public static final int SERVO_PWM_ID = 1;
 
     public static final int[] LEFT_ENCODER = new int[] { 0, 1 };
     public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
