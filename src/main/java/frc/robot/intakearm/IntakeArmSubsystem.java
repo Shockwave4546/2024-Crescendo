@@ -20,7 +20,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     motor.setSmartCurrentLimit(Constants.Module.DRIVING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
-    encoder.setInverted(true);
+    encoder.setInverted(false);
 
     pidController.setP(IntakeArm.GAINS.P);
     pidController.setI(IntakeArm.GAINS.I);
@@ -41,12 +41,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
   }
 
   @Override public void periodic() {
-    if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
+    // if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
   }
 
   public void setDesiredState(State desiredState) {
     this.desiredState = desiredState;
-    pidController.setReference(360.0 - desiredState.angle, CANSparkBase.ControlType.kPosition);
+    pidController.setReference(desiredState.angle, CANSparkBase.ControlType.kPosition);
   }
 
   public boolean atDesiredState() {

@@ -2,6 +2,10 @@ package frc.robot.shooter;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
@@ -17,8 +21,8 @@ import java.util.Map;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-  private final WPI_VictorSPX leftMotor = new WPI_VictorSPX(Shooter.LEFT_CAN_ID);
-  private final WPI_VictorSPX rightMotor = new WPI_VictorSPX(Shooter.RIGHT_CAN_ID);
+  private final CANSparkMax leftMotor = new CANSparkMax(Shooter.LEFT_CAN_ID, MotorType.kBrushed);
+  private final CANSparkMax rightMotor = new CANSparkMax(Shooter.RIGHT_CAN_ID, MotorType.kBrushed);
   private final Servo servo = new Servo(Shooter.SERVO_PWM_ID);
 
   private final Encoder leftEncoder = new Encoder(Shooter.LEFT_ENCODER[0], Shooter.LEFT_ENCODER[1]);
@@ -40,13 +44,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @SuppressWarnings("resource")
   public ShooterSubsystem() {
-    leftMotor.configPeakOutputReverse(-0.5);
-    rightMotor.configPeakOutputReverse(-0.5);
-
-    leftMotor.setNeutralMode(NeutralMode.Coast);
-    rightMotor.setNeutralMode(NeutralMode.Coast);
-    Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, true);
-    Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, false);
+    leftMotor.setIdleMode(IdleMode.kCoast);
+    rightMotor.setIdleMode(IdleMode.kCoast);
+    Shooter.REV_CONVERSION_FACTOR.apply(leftEncoder, false);
+    Shooter.REV_CONVERSION_FACTOR.apply(rightEncoder, true);
     leftPIDController.setTolerance(Shooter.REV_TOLERANCE, Shooter.RPS_TOLERANCE);
     rightPIDController.setTolerance(Shooter.REV_TOLERANCE, Shooter.RPS_TOLERANCE);
 
