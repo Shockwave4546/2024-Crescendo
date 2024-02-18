@@ -41,7 +41,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   }
 
   @Override public void periodic() {
-    // if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
+     if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
   }
 
   public void setDesiredState(State desiredState) {
@@ -55,12 +55,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   /**
    * If the Encoder is reading an angle that causes the arm to go into the robot, it should stop.
-   * These angles include [0, 180].
+   * These angles include [190, 360].
    *
    * @return whether the arm should stop operating as to not break it.
    */
   private boolean shouldStopArm() {
-    return encoder.getPosition() <= 180.0;
+    return encoder.getPosition() > 190.0;
   }
 
   public enum State {

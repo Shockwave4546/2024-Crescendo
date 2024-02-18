@@ -16,10 +16,13 @@ import frc.robot.shooter.FullShootAmpSequenceCommand;
 import frc.robot.shooter.FullShootCloseSequenceCommand;
 import frc.robot.shooter.FullShootInterpolatedSequenceCommand;
 import frc.robot.shooter.ShooterSubsystem;
+import frc.robot.swerve.SwerveSubsystem;
+import frc.robot.swerve.commands.ResetPoseCommand;
+import frc.robot.swerve.commands.ToggleXCommand;
 
 public class RobotContainer {
   // protected final VisionSubsystem vision = new VisionSubsystem();
-  // protected final SwerveSubsystem swerve = new SwerveSubsystem();
+   protected final SwerveSubsystem swerve = new SwerveSubsystem();
   // protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
   protected final IntakeSubsystem intake = new IntakeSubsystem();
   protected final ShooterSubsystem shooter = new ShooterSubsystem();
@@ -32,7 +35,6 @@ public class RobotContainer {
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
     Tabs.MATCH.add("PDP", new PowerDistribution());
-    CameraServer.startAutomaticCapture();
     // vision.setPoseEstimator(poseEstimator);
 
     configureButtonBindings();
@@ -43,8 +45,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
-    // driverController.x().onTrue(new ToggleXCommand(swerve));
+//     driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
+    driverController.x().onTrue(new ToggleXCommand(swerve));
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
