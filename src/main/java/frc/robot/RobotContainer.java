@@ -12,10 +12,7 @@ import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
-import frc.robot.shooter.FullShootAmpSequenceCommand;
-import frc.robot.shooter.FullShootCloseSequenceCommand;
-import frc.robot.shooter.FullShootInterpolatedSequenceCommand;
-import frc.robot.shooter.ShooterSubsystem;
+import frc.robot.shooter.*;
 import frc.robot.swerve.SwerveSubsystem;
 import frc.robot.swerve.commands.ResetPoseCommand;
 import frc.robot.swerve.commands.ToggleXCommand;
@@ -50,6 +47,8 @@ public class RobotContainer {
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
+
+    operatorController.leftBumper().onTrue(new ResetRobotStateSequenceCommand(shooter, intake, arm));
 
     operatorController.a().toggleOnTrue(new FullShootCloseSequenceCommand(intake, shooter, arm));
     operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter, arm));
