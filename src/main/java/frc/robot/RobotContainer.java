@@ -12,15 +12,17 @@ import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
+import frc.robot.pose.PoseEstimatorSubsystem;
+import frc.robot.pose.VisionSubsystem;
 import frc.robot.shooter.*;
 import frc.robot.swerve.SwerveSubsystem;
 import frc.robot.swerve.commands.ResetPoseCommand;
 import frc.robot.swerve.commands.ToggleXCommand;
 
 public class RobotContainer {
-  // protected final VisionSubsystem vision = new VisionSubsystem();
-   protected final SwerveSubsystem swerve = new SwerveSubsystem();
-  // protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
+  protected final VisionSubsystem vision = new VisionSubsystem();
+  protected final SwerveSubsystem swerve = new SwerveSubsystem();
+  protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
   protected final IntakeSubsystem intake = new IntakeSubsystem();
   protected final ShooterSubsystem shooter = new ShooterSubsystem();
   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
@@ -32,7 +34,7 @@ public class RobotContainer {
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
     Tabs.MATCH.add("PDP", new PowerDistribution());
-    // vision.setPoseEstimator(poseEstimator);
+    vision.setPoseEstimator(poseEstimator);
 
     configureButtonBindings();
 
@@ -42,7 +44,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-//     driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
+    driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
     driverController.x().onTrue(new ToggleXCommand(swerve));
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
