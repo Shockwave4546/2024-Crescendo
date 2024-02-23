@@ -21,10 +21,16 @@ public class IntakeSubsystem extends SubsystemBase {
     motor.burnFlash();
 
     Tabs.MATCH.addBoolean("Has Note", this::hasNote);
+
+    // setDefaultCommand(new IdleIntakeCommand(this));
   }
 
   public void runIntake(boolean reversed) {
     motor.set(reversed ? Intake.REVERSE_INTAKE_SPEED : Intake.FORWARD_INTAKE_SPEED);
+  }
+
+  public void runIdle() {
+    motor.set(-0.15);
   }
 
   public void stopIntake() {

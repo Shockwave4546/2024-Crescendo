@@ -1,0 +1,248 @@
+{
+  "tabPane": [
+    {
+      "title": "Live",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 50.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              5,
+              8
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Ungrouped",
+              "_title": "Ungrouped",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Differential Drivebase",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
+                  "_title": "DifferentialDrive[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Wheels/Number of wheels": 4,
+                  "Wheels/Wheel diameter": 80.0,
+                  "Visuals/Show velocity vectors": true
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[2]/Value",
+                  "_title": "DigitalInput[2]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[3]/Value",
+                  "_title": "DigitalInput[3]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Gyro",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
+                  "_title": "navX-Sensor[4]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Major tick spacing": 45.0,
+                  "Visuals/Starting angle": 180.0,
+                  "Visuals/Show tick mark ring": true,
+                  "Visuals/Counter clockwise": false
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[1]",
+                  "_title": "LiveWindow/Ungrouped/Encoder[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Gyro",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/ADXRS450_Gyro[0]",
+                  "_title": "LiveWindow/Ungrouped/ADXRS450_Gyro[0]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Major tick spacing": 45.0,
+                  "Visuals/Starting angle": 180.0,
+                  "Visuals/Show tick mark ring": true,
+                  "Visuals/Counter clockwise": false
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[0]",
+                  "_title": "LiveWindow/Ungrouped/Encoder[0]",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "PID Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
+                  "_title": "PIDController[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [1]/Value",
+                  "_title": "Victor SPX [1]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [2]/Value",
+                  "_title": "Victor SPX [2]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [3]/Value",
+                  "_title": "Victor SPX [3]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Motor Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [2]",
+                  "_title": "Victor SPX [2]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Motor Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [3]",
+                  "_title": "Victor SPX [3]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Motor Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [1]",
+                  "_title": "Victor SPX [1]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Subsystem Layout",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Scheduler/Ids",
+                  "_title": "LiveWindow/Ungrouped/Scheduler/Ids",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": []
+                }
+              ]
+            }
+          },
+          "5,0": {
+            "size": [
+              5,
+              8
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Flywheel",
+              "_title": "Flywheel",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
+          },
+          "10,0": {
+            "size": [
+              5,
+              8
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Feeder",
+              "_title": "Feeder",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
+          },
+          "15,0": {
+            "size": [
+              5,
+              8
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Intake",
+              "_title": "Intake",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Subsystem Layout",
+                  "_source0": "network_table:///LiveWindow/IntakePivot",
+                  "_title": "LiveWindow/IntakePivot",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": []
+                }
+              ]
+            }
+          },
+          "20,0": {
+            "size": [
+              5,
+              8
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Drivetrain",
+              "_title": "Drivetrain",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 9",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 50.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": 3.0,
+    "y": 15.0,
+    "width": 1918.0,
+    "height": 780.0
+  }
+}

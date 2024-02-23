@@ -53,8 +53,7 @@ public final class Constants {
     public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
 
-    public static final PIDGains GAINS = new PIDGains(0.02847);
-    public static final double REV_TOLERANCE = 40.0;
+    public static final PIDGains GAINS = new PIDGains(0.03);
     public static final double RPS_TOLERANCE = 10.0;
   }
 

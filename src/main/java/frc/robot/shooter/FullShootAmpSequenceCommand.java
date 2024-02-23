@@ -16,7 +16,7 @@ public class FullShootAmpSequenceCommand extends EndActionSequentialCommandGroup
             new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.AMP), shooter),
             new WaitUntilCommand(shooter::atDesiredRPS),
             new WaitCommand(1.0),
-            new FeedShooterCommand(intake).withTimeout(1.0),
+            new FeedShooterCommand(intake).withTimeout(2.0),
             new WaitCommand(0.5),
             new InstantCommand(shooter::stopMotors, shooter)
     );
