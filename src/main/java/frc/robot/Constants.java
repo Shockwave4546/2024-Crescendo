@@ -45,12 +45,9 @@ public final class Constants {
   }
 
   public static final class Shooter {
-    public static final int LEFT_CAN_ID = 31;
-    public static final int RIGHT_CAN_ID = 30;
-    public static final int SERVO_PWM_ID = 1;
+    public static final int BOTTOM_CAN_ID = 31;
+    public static final int TOP_CAN_ID = 30;
 
-    public static final int[] LEFT_ENCODER = new int[] { 0, 1 };
-    public static final int[] RIGHT_ENCODER = new int[] { 2, 3 };
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
 
     public static final PIDGains GAINS = new PIDGains(0.03);

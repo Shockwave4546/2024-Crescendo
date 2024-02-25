@@ -98,6 +98,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     tab.addNumber("Estimated Pose Y (m)", () -> getPose2d().getY()).withSize(3, 2).withPosition(3, 2);
     tab.addNumber("Estimated Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
 
+    tab.add("Field", field);
     PathPlannerLogging.setLogCurrentPoseCallback(field::setRobotPose);
     PathPlannerLogging.setLogTargetPoseCallback(pose -> field.getObject("target pose").setPose(pose));
     PathPlannerLogging.setLogActivePathCallback(poses -> field.getObject("path").setPoses(poses));
@@ -111,14 +112,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     if (currentTimestamp == previousPipelineTimestamp || !vision.hasViableTarget()) return;
     previousPipelineTimestamp = currentTimestamp;
 
+    final var pose = vision.getCameraToTagTransform();
+    tagX.set(pose.getX());
+    tagY.set(pose.getY());
+    tagDegrees.set(pose.getRotation().toRotation2d().getDegrees());
+
     cameraPoseEstimator.update().ifPresentOrElse(estimatedPose -> {
-      final var pose = estimatedPose.estimatedPose.toPose2d();
-      tagX.set(pose.getX());
-      tagY.set(pose.getY());
-      tagDegrees.set(pose.getRotation().getDegrees());
+      // final var pose = estimatedPose.estimatedPose.toPose2d();
 
       if (!useVisionMeasurement.get()) return;
-      poseEstimator.addVisionMeasurement(pose, currentTimestamp);
+      // poseEstimator.addVisionMeasurement(pose, currentTimestamp);
     }, () -> {
       tagX.set(0.0);
       tagY.set(0.0);

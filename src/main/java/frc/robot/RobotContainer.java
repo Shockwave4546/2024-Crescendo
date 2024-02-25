@@ -19,15 +19,15 @@ import frc.robot.swerve.commands.ResetPoseCommand;
 import frc.robot.swerve.commands.ToggleXCommand;
 
 public class RobotContainer {
+  protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
+  protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
   protected final VisionSubsystem vision = new VisionSubsystem();
   protected final SwerveSubsystem swerve = new SwerveSubsystem();
   protected final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(swerve, vision);
   protected final IntakeSubsystem intake = new IntakeSubsystem();
-  protected final ShooterSubsystem shooter = new ShooterSubsystem();
+  protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
-  protected final CommandXboxController driverController = new CommandXboxController(IO.DRIVER_CONTROLLER_PORT);
-  protected final CommandXboxController operatorController = new CommandXboxController(IO.OPERATOR_CONTROLLER_PORT);
   // protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
   public RobotContainer() {

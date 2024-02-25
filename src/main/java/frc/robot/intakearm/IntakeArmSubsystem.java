@@ -21,7 +21,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
     encoder.setInverted(false);
-    encoder.setZeroOffset(encoder.getZeroOffset() - 2.0);
+    encoder.setZeroOffset(192.0);
 
     pidController.setP(IntakeArm.GAINS.P);
     pidController.setI(IntakeArm.GAINS.I);

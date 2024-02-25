@@ -13,11 +13,11 @@ public class FullShootInterpolatedSequenceCommand extends EndActionSequentialCom
     super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
-            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),
+            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.INTERPOLATED), shooter),
             new WaitUntilCommand(shooter::atDesiredRPS),
             new WaitCommand(1.0),
             new FeedShooterCommand(intake).withTimeout(2.0),
-            new WaitCommand(0.5),
+            new WaitCommand(1.0),
             new InstantCommand(shooter::stopMotors, shooter)
     );
 

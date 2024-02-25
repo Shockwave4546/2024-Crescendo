@@ -7,147 +7,146 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
+import frc.robot.pose.VisionSubsystem;
 import frc.robot.shuffleboard.ShuffleboardDouble;
 import frc.robot.shuffleboard.TunableSparkPIDController;
-
-import java.util.Map;
+import frc.robot.utils.LinearInterpolator;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-  private final CANSparkMax leftMotor = new CANSparkMax(Shooter.LEFT_CAN_ID, MotorType.kBrushless);
-  private final CANSparkMax rightMotor = new CANSparkMax(Shooter.RIGHT_CAN_ID, MotorType.kBrushless);
-  private final Servo servo = new Servo(Shooter.SERVO_PWM_ID);
+  private final CANSparkMax bottomMotor = new CANSparkMax(Shooter.BOTTOM_CAN_ID, MotorType.kBrushless); 
+  private final CANSparkMax topMotor = new CANSparkMax(Shooter.TOP_CAN_ID, MotorType.kBrushless); 
 
-  private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
-  private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
+  private final RelativeEncoder bottomEncoder = bottomMotor.getEncoder();
+  private final RelativeEncoder topEncoder = topMotor.getEncoder();
 
-  private final SparkPIDController leftPIDController = leftMotor.getPIDController();
-  private final SparkPIDController rightPIDController = rightMotor.getPIDController();
+  private final SparkPIDController bottomPID = bottomMotor.getPIDController();
+  private final SparkPIDController topPID = topMotor.getPIDController();
 
-  private final ShuffleboardDouble desiredLeftRPS = new ShuffleboardDouble(tab, "Desired Left RPS", 0.0);
-  private final ShuffleboardDouble desiredRightRPS = new ShuffleboardDouble(tab, "Desired Right RPS", 0.0);
+  private final ShuffleboardDouble desiredBottomRPS = new ShuffleboardDouble(tab, "Desired Bottom RPS", 0.0);
+  private final ShuffleboardDouble desiredTopRPS = new ShuffleboardDouble(tab, "Desired Top RPS", 0.0);
 
-  private final ShuffleboardDouble flapAngle = new ShuffleboardDouble(tab, "Flap Angle", FlapState.HOME.angle);
   private ShotType type = ShotType.NONE;
 
-//  private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
-//
-//  );
+ private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
+  new LinearInterpolator.LinearPair(2.5, 28.0),
+  new LinearInterpolator.LinearPair(2.3, 28.0),
+  new LinearInterpolator.LinearPair(2.1, 29.0),
+  new LinearInterpolator.LinearPair(2.0, 33.0),
+  new LinearInterpolator.LinearPair(1.6, 45.0),
+  new LinearInterpolator.LinearPair(1.55, 50.0)
+ );
 
-  // private final VisionSubsystem vision;
+  private final VisionSubsystem vision;
 
   @SuppressWarnings("resource")
-  public ShooterSubsystem() {
-    leftMotor.restoreFactoryDefaults();
-    rightMotor.restoreFactoryDefaults();
+  public ShooterSubsystem(VisionSubsystem vision) {
+    this.vision = vision;
 
-    leftMotor.setSmartCurrentLimit(50);
-    rightMotor.setSmartCurrentLimit(50);
-    leftMotor.setInverted(false);
-    rightMotor.setInverted(true);
-    leftMotor.setIdleMode(IdleMode.kCoast);
-    rightMotor.setIdleMode(IdleMode.kCoast);
+    // bottomMotor.restoreFactoryDefaults();
+    bottomMotor.setSmartCurrentLimit(50);
+    bottomMotor.setInverted(true);
+    bottomMotor.setIdleMode(IdleMode.kCoast);
+    bottomEncoder.setPositionConversionFactor(1);
+    bottomEncoder.setVelocityConversionFactor((float) 1/60F);
+    bottomPID.setP((float) Shooter.GAINS.P);
+    bottomPID.setP(Shooter.GAINS.I);
+    bottomPID.setP(Shooter.GAINS.D);
+    bottomPID.setFF((float) 0.013);
+    bottomPID.setOutputRange(-1.0, 1.0);
+    bottomPID.setFeedbackDevice(bottomEncoder);
+    bottomMotor.burnFlash();
 
-    leftEncoder.setPositionConversionFactor(1);
-    leftEncoder.setVelocityConversionFactor((float) 1/60);
-    leftPIDController.setP(Shooter.GAINS.P);
-    leftPIDController.setP(Shooter.GAINS.I);
-    leftPIDController.setP(Shooter.GAINS.D);
-    leftPIDController.setOutputRange(-1.0, 1.0);
-    leftPIDController.setFeedbackDevice(leftEncoder);
+    Timer.delay(1);
 
-    rightEncoder.setPositionConversionFactor(1);
-    rightEncoder.setVelocityConversionFactor((float) 1/60);
-    rightPIDController.setP(Shooter.GAINS.P);
-    rightPIDController.setP(Shooter.GAINS.I);
-    rightPIDController.setP(Shooter.GAINS.D);
-    rightPIDController.setFeedbackDevice(rightEncoder);
-    rightPIDController.setOutputRange(-1.0, 1.0);
-    tab.addNumber("Left RPS", leftEncoder::getVelocity);
-    tab.addNumber("Right RPS", rightEncoder::getVelocity);
-
-    leftMotor.burnFlash();
-    rightMotor.burnFlash();
-
-    Tabs.MATCH.addNumber("Servo", servo::getAngle)
-            .withSize(3, 3)
-            .withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("Min", 0.0, "Max", 270.0));
+    // topMotor.restoreFactoryDefaults();
+    topMotor.setSmartCurrentLimit(50);
+    topMotor.setInverted(true);
+    topMotor.setIdleMode(IdleMode.kCoast);
+    topEncoder.setPositionConversionFactor(1);
+    topEncoder.setVelocityConversionFactor((float) 1/60F);
+    topPID.setP((float) Shooter.GAINS.P);
+    topPID.setP(Shooter.GAINS.I);
+    topPID.setP(Shooter.GAINS.D);
+    topPID.setFF((float) 0.013);
+    topPID.setFeedbackDevice(topEncoder);
+    topPID.setOutputRange(-1.0, 1.0);
+    topMotor.burnFlash();
 
     Tabs.MATCH.addBoolean("At Desired RPS", this::atDesiredRPS);
 
-    tab.add("Left PID", new TunableSparkPIDController(leftPIDController));
-    tab.add("Right PID", new TunableSparkPIDController(rightPIDController));
+    tab.addNumber("Bottom RPS", bottomEncoder::getVelocity);
+    tab.addNumber("Top RPS", topEncoder::getVelocity);
+    tab.add("Left PID", new TunableSparkPIDController(bottomPID));
+    tab.add("Right PID", new TunableSparkPIDController(topPID));
   }
 
   @Override public void periodic() {
-    servo.setAngle(flapAngle.get());
-    setRPS(desiredLeftRPS.get());
+    setRPS(desiredBottomRPS.get(), desiredTopRPS.get());
   }
 
-  private void setRPS(double rps) {
-    desiredLeftRPS.set(rps);
-    desiredRightRPS.set(rps);
+  private void setRPS(double bottomRPS, double topRPS) {
+    desiredBottomRPS.set(bottomRPS);
+    desiredTopRPS.set(topRPS);
 
-    leftPIDController.setReference(rps, ControlType.kVelocity);
-    rightPIDController.setReference(rps, ControlType.kVelocity);
+    bottomPID.setReference(bottomRPS, ControlType.kVelocity);
+    topPID.setReference(topRPS, ControlType.kVelocity);
   }
 
   public boolean atDesiredRPS() {
-    return Math.abs(leftEncoder.getVelocity() - type.realRPS) < Shooter.RPS_TOLERANCE && Math.abs(rightEncoder.getVelocity() - type.realRPS) < Shooter.RPS_TOLERANCE;
+    return (Math.abs(bottomEncoder.getVelocity() - desiredBottomRPS.get()) < Shooter.RPS_TOLERANCE) && (Math.abs(topEncoder.getVelocity() - desiredTopRPS.get()) < Shooter.RPS_TOLERANCE);
   }
 
   public void rampUp(ShotType type) {
     this.type = type;
     if (type == ShotType.INTERPOLATED) {
-//      setRPS(RPSInterpolator.interpolate(vision.getTagRelativeToCenterPose().getX()));
+      if (!vision.hasViableTarget()) return;
+      final var distance = vision.getCameraToTagTransform().getX();
+      if (distance <= 1.5) {
+        desiredBottomRPS.set(70.0);
+        desiredTopRPS.set(30.0);
+        setRPS(70.0, 30.0);
+        return;
+      }
+
+      final var rps = RPSInterpolator.interpolate(distance);
+      desiredBottomRPS.set(rps);
+      desiredTopRPS.set(rps);
+      setRPS(rps, rps);
     } else {
-      setRPS(type.inputRPS);
+      desiredBottomRPS.set(type.bottomRPS);
+      desiredTopRPS.set(type.topRPS);
+      setRPS(type.bottomRPS, type.topRPS);
     }
   }
 
   public void stopMotors() {
-    desiredLeftRPS.set(0.0);
-    desiredRightRPS.set(0.0);
+    desiredBottomRPS.set(0.0);
+    desiredTopRPS.set(0.0);
 
-    leftMotor.stopMotor();
-    rightMotor.stopMotor();
-  }
-
-  public void setFlapState(FlapState state) {
-    flapAngle.set(state.angle);
+    bottomMotor.stopMotor();
+    topMotor.stopMotor();
   }
 
   public enum ShotType {
     NONE(0.0, 0.0),
-    AMP(50.0, 50),
-    SUBWOOFER(120.00, 90.0),
+    AMP(30.0, 30.0),
+    SUBWOOFER(70.0, 30.0),
+    FAR(50.0, 50.0),
     INTERPOLATED(-1.0, -1.0);
 
-    public final double inputRPS;
-    public final double realRPS;
+    public final double bottomRPS;
+    public final double topRPS;
 
-    ShotType(double inputRPS, double realRPS) {
-      this.inputRPS = inputRPS;
-      this.realRPS = realRPS;
-    }
-  }
-
-  public enum FlapState {
-    HOME(0.0),
-    SUBWOOFER(125);
-
-    public final double angle;
-
-    FlapState(double angle) {
-      this.angle = angle;
+    ShotType(double bottomRPS, double topRPS) {
+      this.bottomRPS = bottomRPS;
+      this.topRPS = topRPS;
     }
   }
 }
