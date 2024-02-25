@@ -49,8 +49,12 @@ public final class Constants {
     public static final int TOP_CAN_ID = 30;
 
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
+    public static final float RPS_CONVERSION_FACTOR = 1 / 60F;
 
     public static final PIDGains GAINS = new PIDGains(0.03);
+    public static final double MIN_OUTPUT = -1.0;
+    public static final double MAX_OUTPUT = 1.0;
+    public static final float FF = 0.013F;
     public static final double RPS_TOLERANCE = 5.0;
   }
 

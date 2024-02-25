@@ -1,12 +1,11 @@
 package frc.robot.shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -32,16 +31,14 @@ public class ShooterSubsystem extends SubsystemBase {
   private final ShuffleboardDouble desiredBottomRPS = new ShuffleboardDouble(tab, "Desired Bottom RPS", 0.0);
   private final ShuffleboardDouble desiredTopRPS = new ShuffleboardDouble(tab, "Desired Top RPS", 0.0);
 
-  private ShotType type = ShotType.NONE;
-
- private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
-  new LinearInterpolator.LinearPair(2.5, 28.0),
-  new LinearInterpolator.LinearPair(2.3, 28.0),
-  new LinearInterpolator.LinearPair(2.1, 29.0),
-  new LinearInterpolator.LinearPair(2.0, 33.0),
-  new LinearInterpolator.LinearPair(1.6, 45.0),
-  new LinearInterpolator.LinearPair(1.55, 50.0)
- );
+  private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
+    new LinearInterpolator.LinearPair(2.5, 28.0),
+    new LinearInterpolator.LinearPair(2.3, 28.0),
+    new LinearInterpolator.LinearPair(2.1, 29.0),
+    new LinearInterpolator.LinearPair(2.0, 33.0),
+    new LinearInterpolator.LinearPair(1.6, 45.0),
+    new LinearInterpolator.LinearPair(1.55, 50.0)
+  );
 
   private final VisionSubsystem vision;
 
@@ -53,13 +50,13 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomMotor.setSmartCurrentLimit(50);
     bottomMotor.setInverted(true);
     bottomMotor.setIdleMode(IdleMode.kCoast);
-    bottomEncoder.setPositionConversionFactor(1);
-    bottomEncoder.setVelocityConversionFactor((float) 1/60F);
+    Shooter.REV_CONVERSION_FACTOR.apply(bottomEncoder);
+    bottomEncoder.setVelocityConversionFactor(Shooter.RPS_CONVERSION_FACTOR);
     bottomPID.setP((float) Shooter.GAINS.P);
     bottomPID.setP(Shooter.GAINS.I);
     bottomPID.setP(Shooter.GAINS.D);
-    bottomPID.setFF((float) 0.013);
-    bottomPID.setOutputRange(-1.0, 1.0);
+    bottomPID.setFF(Shooter.FF);
+    bottomPID.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
     bottomPID.setFeedbackDevice(bottomEncoder);
     bottomMotor.burnFlash();
 
@@ -69,14 +66,14 @@ public class ShooterSubsystem extends SubsystemBase {
     topMotor.setSmartCurrentLimit(50);
     topMotor.setInverted(true);
     topMotor.setIdleMode(IdleMode.kCoast);
-    topEncoder.setPositionConversionFactor(1);
-    topEncoder.setVelocityConversionFactor((float) 1/60F);
+    Shooter.REV_CONVERSION_FACTOR.apply(topEncoder);
+    topEncoder.setVelocityConversionFactor(Shooter.RPS_CONVERSION_FACTOR);
     topPID.setP((float) Shooter.GAINS.P);
     topPID.setP(Shooter.GAINS.I);
     topPID.setP(Shooter.GAINS.D);
-    topPID.setFF((float) 0.013);
+    topPID.setFF(Shooter.FF);
     topPID.setFeedbackDevice(topEncoder);
-    topPID.setOutputRange(-1.0, 1.0);
+    topPID.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
     topMotor.burnFlash();
 
     Tabs.MATCH.addBoolean("At Desired RPS", this::atDesiredRPS);
@@ -104,7 +101,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void rampUp(ShotType type) {
-    this.type = type;
     if (type == ShotType.INTERPOLATED) {
       if (!vision.hasViableTarget()) return;
       final var distance = vision.getCameraToTagTransform().getX();
