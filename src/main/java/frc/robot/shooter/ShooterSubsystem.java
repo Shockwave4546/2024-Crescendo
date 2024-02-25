@@ -1,7 +1,5 @@
 package frc.robot.shooter;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -9,14 +7,11 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeArm;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.ShuffleboardDouble;
@@ -35,9 +30,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final SparkPIDController leftPIDController = leftMotor.getPIDController();
   private final SparkPIDController rightPIDController = rightMotor.getPIDController();
-
-  // private final PIDController leftPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
-  // private final PIDController rightPIDController = new PIDController(Shooter.GAINS.P, Shooter.GAINS.I, Shooter.GAINS.D);
 
   private final ShuffleboardDouble desiredLeftRPS = new ShuffleboardDouble(tab, "Desired Left RPS", 0.0);
   private final ShuffleboardDouble desiredRightRPS = new ShuffleboardDouble(tab, "Desired Right RPS", 0.0);
@@ -109,7 +101,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean atDesiredRPS() {
-    return Math.abs(leftEncoder.getVelocity() - type.realRPS) < 5.0 && Math.abs(leftEncoder.getVelocity() - type.realRPS) < 5.0;
+    return Math.abs(leftEncoder.getVelocity() - type.realRPS) < Shooter.RPS_TOLERANCE && Math.abs(rightEncoder.getVelocity() - type.realRPS) < Shooter.RPS_TOLERANCE;
   }
 
   public void rampUp(ShotType type) {

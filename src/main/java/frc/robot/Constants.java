@@ -54,7 +54,7 @@ public final class Constants {
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
 
     public static final PIDGains GAINS = new PIDGains(0.03);
-    public static final double RPS_TOLERANCE = 10.0;
+    public static final double RPS_TOLERANCE = 5.0;
   }
 
   public static final class Swerve {

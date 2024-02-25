@@ -12,8 +12,7 @@ public class IdleIntakeCommand extends Command {
   }
 
   @Override public void execute() {
-    // if (intake.hasNote()) {
-      intake.runIdle();
-    // }
+    if (!intake.isRunIdle()) return;
+    intake.runIdle();
   }
 }
