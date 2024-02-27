@@ -56,12 +56,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   /**
    * If the Encoder is reading an angle that causes the arm to go into the robot, it should stop.
-   * These angles include [190, 360].
+   * These angles include [195, 360].
    *
    * @return whether the arm should stop operating as to not break it.
    */
   private boolean shouldStopArm() {
-    return encoder.getPosition() > 190.0;
+    return encoder.getPosition() > 195.0;
   }
 
   public enum State {
