@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
+import frc.robot.auto.AutoManager;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
@@ -28,7 +29,7 @@ public class RobotContainer {
   protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
-  // protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
+  protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);

@@ -13,11 +13,13 @@ import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeSubsystem;
+import frc.robot.intakearm.FullIntakeSequenceCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
+import frc.robot.shooter.FullShootCloseSequenceCommand;
 import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 
@@ -51,8 +53,8 @@ public class AutoManager {
     NamedCommands.registerCommand("DisableLED", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.OFF), led));
     NamedCommands.registerCommand("Rainbow", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.RAINBOW), led));
 
-    NamedCommands.registerCommand("IntakeNote", new AutoIntakeNoteCommand(intake));
-    NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(shooter, intake));
+    NamedCommands.registerCommand("IntakeNote", new FullIntakeSequenceCommand(arm, intake));
+    NamedCommands.registerCommand("ShootClose", new FullShootCloseSequenceCommand(intake, shooter, arm));
     NamedCommands.registerCommand("PivotAndShoot", new PivotAndShootCommand(shooter, vision, intake, arm));
     NamedCommands.registerCommand("IntakeArmFloor", new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
 
