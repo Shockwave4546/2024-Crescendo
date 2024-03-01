@@ -6,10 +6,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -97,11 +94,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     tab.addNumber("Estimated Pose X (m)", () -> getPose2d().getX()).withSize(3, 2).withPosition(0, 2);
     tab.addNumber("Estimated Pose Y (m)", () -> getPose2d().getY()).withSize(3, 2).withPosition(3, 2);
     tab.addNumber("Estimated Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
-
-    tab.add("Field", field);
-    PathPlannerLogging.setLogCurrentPoseCallback(field::setRobotPose);
-    PathPlannerLogging.setLogTargetPoseCallback(pose -> field.getObject("target pose").setPose(pose));
-    PathPlannerLogging.setLogActivePathCallback(poses -> field.getObject("path").setPoses(poses));
   }
 
 
@@ -145,8 +137,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
    * Zeros the heading. This sets the direction for field-centric driving.
    */
   public void resetPose() {
-    swerve.zeroGyro();
-    resetOdometry(new Pose2d(poseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    resetOdometry(new Pose2d(new Translation2d(), new Rotation2d()));
   }
 
   /**

@@ -44,7 +44,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    driverController.b().onTrue(new ResetPoseCommand(poseEstimator));
+    driverController.b().onTrue(new ResetPoseCommand(swerve, poseEstimator));
     driverController.x().onTrue(new ToggleXCommand(swerve));
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));

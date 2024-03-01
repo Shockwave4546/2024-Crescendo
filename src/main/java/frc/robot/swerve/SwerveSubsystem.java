@@ -20,7 +20,7 @@ public class SwerveSubsystem extends SubsystemBase {
           Swerve.FRONT_LEFT_DRIVING_CAN_ID,
           Swerve.FRONT_LEFT_TURNING_CAN_ID,
           Swerve.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-          false,
+          true,
           "FL"
   );
 
@@ -28,7 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
           Swerve.FRONT_RIGHT_DRIVING_CAN_ID,
           Swerve.FRONT_RIGHT_TURNING_CAN_ID,
           Swerve.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-          false,
+          true,
           "FR"
   );
 
@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
           Swerve.BACK_LEFT_DRIVING_CAN_ID,
           Swerve.BACK_LEFT_TURNING_CAN_ID,
           Swerve.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-          false,
+          true,
           "RL"
   );
 
@@ -44,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase {
           Swerve.BACK_RIGHT_DRIVING_CAN_ID,
           Swerve.BACK_RIGHT_TURNING_CAN_ID,
           Swerve.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-          false,
+          true,
           "RR"
   );
 
@@ -136,7 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void driveAutonomous(ChassisSpeeds speeds) {
     // For some reason, PathPlanner is giving me opposite directions, so use this temporary fix.
-    final var swerveModuleStates = Swerve.DRIVE_KINEMATICS.toSwerveModuleStates(speeds.times(-1.0));
+    final var swerveModuleStates = Swerve.DRIVE_KINEMATICS.toSwerveModuleStates(speeds);
     setModuleStates(swerveModuleStates);
   }
 

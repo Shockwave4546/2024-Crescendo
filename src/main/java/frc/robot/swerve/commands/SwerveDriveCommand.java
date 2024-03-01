@@ -22,9 +22,9 @@ public class SwerveDriveCommand extends Command {
 
   @Override public void execute() {
     swerve.drive(
-            MathUtil.applyDeadband(yLimiter.calculate(controller.getLeftY()), IO.DRIVE_DEADBAND),
-            MathUtil.applyDeadband(xLimiter.calculate(controller.getLeftX()), IO.DRIVE_DEADBAND),
-            MathUtil.applyDeadband(rotLimiter.calculate(controller.getRightX()), IO.DRIVE_DEADBAND),
+            -MathUtil.applyDeadband(yLimiter.calculate(controller.getLeftY()), IO.DRIVE_DEADBAND),
+            -MathUtil.applyDeadband(xLimiter.calculate(controller.getLeftX()), IO.DRIVE_DEADBAND),
+            -MathUtil.applyDeadband(rotLimiter.calculate(controller.getRightX()), IO.DRIVE_DEADBAND),
             swerve.isFieldRelative(),
             false
     );

@@ -10,7 +10,8 @@ import frc.robot.utils.EndActionSequentialCommandGroup;
 
 public class FullShootCloseSequenceCommand extends EndActionSequentialCommandGroup {
   public FullShootCloseSequenceCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
-    super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
+    super(new InstantCommand());
+//    super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
             new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),
