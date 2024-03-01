@@ -33,6 +33,16 @@ public class LEDSubsystem extends SubsystemBase {
     led.setData(buffer);
   }
 
+  public void greenAndWhiteChase() {
+    for (var i = 0; i < buffer.getLength(); i++) {
+      if (i % 2 == 0) {
+        buffer.setHSV(i, 120, 255, 128); // Set green color for even-indexed LEDs
+      } else {
+        buffer.setHSV(i, 0, 255, 128); // Set white color for odd-indexed LEDs
+      }
+    }
+  }
+
   /**
    * Source: <a href="https://docs.wpilib.org/en/stable/docs/software/hardware-apis/misc/addressable-leds.html">...</a>
    */
@@ -45,15 +55,6 @@ public class LEDSubsystem extends SubsystemBase {
 
     rainbowFirstPixelHue += 3;
     rainbowFirstPixelHue %= 180;
-  }
-
-  private boolean toggle;
-  public void epilipsy(Color color) {
-    this.toggle = !this.toggle;
-
-    setStaticColor(new Color(0, 0, 0));
-    if (toggle) return;
-    setStaticColor(color);
   }
 
   public void stopLEDs() {
@@ -85,6 +86,7 @@ public class LEDSubsystem extends SubsystemBase {
     RAINBOW(LEDSubsystem::rainbow),
     RED((led) -> led.setStaticColor(LED.RED)),
     GREEN((led) -> led.setStaticColor(LED.GREEN)),
+    WHITE_GREEN_CHASE(LEDSubsystem::greenAndWhiteChase),
     OFF(LEDSubsystem::stopLEDs);
 
     private final Consumer<LEDSubsystem> action;

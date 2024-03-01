@@ -1,8 +1,7 @@
 package frc.robot.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -92,6 +91,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean isFieldRelative() {
     return isFieldRelative.get();
+  }
+
+  public void setMaxSpeed(double drive, double rot) {
+    driveSpeedMultiplier.set(MathUtil.clamp(drive, 0.0, 1.0));
+    rotSpeedMultiplier.set(MathUtil.clamp(rot, 0.0, 1.0));
   }
 
   /**

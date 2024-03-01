@@ -2,19 +2,18 @@ package frc.robot.pose;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Vision;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import java.util.function.Function;
 
 public class VisionSubsystem extends SubsystemBase {
   private final PhotonCamera camera = new PhotonCamera(Vision.FRONT_CAMERA_NAME);
   private PoseEstimatorSubsystem poseEstimator;
 
+  @SuppressWarnings("resource")
   public VisionSubsystem() {
     final var tab = Shuffleboard.getTab("Odometry");
     tab.addBoolean("Has Viable Target", this::hasViableTarget).withSize(3, 2).withPosition(0, 0);
@@ -26,7 +25,8 @@ public class VisionSubsystem extends SubsystemBase {
    */
   public void setPoseEstimator(PoseEstimatorSubsystem poseEstimator) {
     if (this.poseEstimator != null) {
-      throw new RuntimeException("You can only set the PoseEstimator once.");
+      DriverStation.reportError("The PoseEstimator can only be initialized once!", false);
+      return;
     }
 
     this.poseEstimator = poseEstimator;
@@ -43,10 +43,16 @@ public class VisionSubsystem extends SubsystemBase {
    * Note: please call #hasViableTarget() before calling this method.
    *
    * @return the best target found by the camera.
-   *         throws RuntimeException if no targets are found.
+   *         null if no targets are found.
    */
   public PhotonTrackedTarget getTag() {
-    return processTargets(PhotonPipelineResult::getBestTarget);
+    final var pipeline = camera.getLatestResult();
+    if (!hasViableTarget()) {
+      DriverStation.reportError("No targets found!", false);
+      return null;
+    }
+
+    return pipeline.getBestTarget();
   }
 
   /**
@@ -74,16 +80,10 @@ public class VisionSubsystem extends SubsystemBase {
    * Would later use by doing CameraPose.transformBy(#getCameraToTagTransform())
    *
    * @return the [Transform3d] to transform the Camera pose to the Tag pose.
-   * throws RuntimeException if no targets are found.
+   *         null if no targets are found.
    */
   public Transform3d getCameraToTagTransform() {
-    return processTargets(pipeline -> pipeline.getBestTarget().getBestCameraToTarget());
-  }
-
-  private <T> T processTargets(Function<PhotonPipelineResult, T> outPipeline) {
-    final var pipeline = camera.getLatestResult();
-    if (!hasViableTarget()) throw new MissingPhotonTargetException("Only call this method when targets are found!");
-    return outPipeline.apply(pipeline);
+    return getTag().getBestCameraToTarget();
   }
 
   /**

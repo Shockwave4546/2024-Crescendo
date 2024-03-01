@@ -17,6 +17,7 @@ import frc.robot.pose.VisionSubsystem;
 import frc.robot.shooter.*;
 import frc.robot.swerve.SwerveSubsystem;
 import frc.robot.swerve.commands.ResetPoseCommand;
+import frc.robot.swerve.commands.SetSpeedMaxCommand;
 import frc.robot.swerve.commands.ToggleXCommand;
 
 public class RobotContainer {
@@ -46,6 +47,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.b().onTrue(new ResetPoseCommand(swerve, poseEstimator));
     driverController.x().onTrue(new ToggleXCommand(swerve));
+    driverController.leftBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.4, 0.6));
+    driverController.rightBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.6, 0.8));
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));

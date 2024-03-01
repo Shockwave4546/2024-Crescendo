@@ -1,16 +1,16 @@
-package frc.robot.shooter;
+package frc.robot.auto;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.intake.FeedShooterCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
-import frc.robot.utils.EndActionSequentialCommandGroup;
+import frc.robot.shooter.ShooterSubsystem;
 
-public class FullShootCloseSequenceCommand extends EndActionSequentialCommandGroup {
-  public FullShootCloseSequenceCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
-    super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
+public class AutoFullShootCloseSequenceCommand extends SequentialCommandGroup {
+  public AutoFullShootCloseSequenceCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
             new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),

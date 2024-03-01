@@ -1,6 +1,5 @@
 package frc.robot.pose;
 
-import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
@@ -64,7 +63,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final ShuffleboardDouble tagX = new ShuffleboardDouble(tab, "Tag X (m)", 0.0).withSize(3, 2).withPosition(0, 4);
   private final ShuffleboardDouble tagY = new ShuffleboardDouble(tab, "Tag Y (m)", 0.0).withSize(3, 2).withPosition(3, 4);
   private final ShuffleboardDouble tagDegrees = new ShuffleboardDouble(tab, "Tag Degrees", 0.0).withSize(3, 2).withPosition(6, 4);
-  private final Field2d field = new Field2d();
+  private final ShuffleboardDouble tagID = new ShuffleboardDouble(tab, "Tag ID", -1.0).withSize(3, 2).withPosition(9, 4);
 
   private double previousPipelineTimestamp = 0.0;
 
@@ -91,9 +90,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
 
-    tab.addNumber("Estimated Pose X (m)", () -> getPose2d().getX()).withSize(3, 2).withPosition(0, 2);
-    tab.addNumber("Estimated Pose Y (m)", () -> getPose2d().getY()).withSize(3, 2).withPosition(3, 2);
-    tab.addNumber("Estimated Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
+    tab.addNumber("Pose X (m)", () -> getPose2d().getX()).withSize(3, 2).withPosition(0, 2);
+    tab.addNumber("Pose Y (m)", () -> getPose2d().getY()).withSize(3, 2).withPosition(3, 2);
+    tab.addNumber("Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
   }
 
 
@@ -101,23 +100,27 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     poseEstimator.update(swerve.getHeadingRotation2d(), swerve.getEstimatedPositions());
 
     final var currentTimestamp = vision.getLatestPipelineTimestamp();
-    if (currentTimestamp == previousPipelineTimestamp || !vision.hasViableTarget()) return;
-    previousPipelineTimestamp = currentTimestamp;
-
-    final var pose = vision.getCameraToTagTransform();
-    tagX.set(pose.getX());
-    tagY.set(pose.getY());
-    tagDegrees.set(pose.getRotation().toRotation2d().getDegrees());
-
-    cameraPoseEstimator.update().ifPresentOrElse(estimatedPose -> {
-      // final var pose = estimatedPose.estimatedPose.toPose2d();
-
-      if (!useVisionMeasurement.get()) return;
-      // poseEstimator.addVisionMeasurement(pose, currentTimestamp);
-    }, () -> {
+    if (currentTimestamp == previousPipelineTimestamp) return;
+    if (!vision.hasViableTarget()) {
       tagX.set(0.0);
       tagY.set(0.0);
       tagDegrees.set(0.0);
+      tagID.set(-1.0);
+      return;
+    }
+
+    previousPipelineTimestamp = currentTimestamp;
+
+    final var tag = vision.getTag();
+    final var transform = tag.getBestCameraToTarget();
+    tagX.set(transform.getX());
+    tagY.set(transform.getY());
+    tagDegrees.set(transform.getRotation().toRotation2d().getDegrees());
+    tagID.set(tag.getFiducialId());
+
+    cameraPoseEstimator.update().ifPresent(estimatedPose -> {
+      if (!useVisionMeasurement.get()) return;
+      poseEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), currentTimestamp);
     });
   }
 
