@@ -94,7 +94,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     tab.addNumber("Pose Degrees", () -> getPose2d().getRotation().getDegrees()).withSize(3, 2).withPosition(6, 2);
   }
 
-
   @Override public void periodic() {
     poseEstimator.update(swerve.getHeadingRotation2d(), swerve.getEstimatedPositions());
 
