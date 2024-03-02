@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.17,
+      "x": 1.2,
       "y": 5.57
     },
     "rotation": 0.0
@@ -14,17 +14,23 @@
         {
           "type": "named",
           "data": {
+            "name": "RampClose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ShootClose"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Close"
+                  "pathName": "Double"
                 }
               },
               {
@@ -39,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Close Back"
+            "pathName": "Double Back"
           }
         },
         {

@@ -8,14 +8,13 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeSubsystem;
-import frc.robot.intakearm.FullIntakeSequenceCommand;
+import frc.robot.intakearm.FullIntakeCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
-import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
@@ -49,13 +48,9 @@ public class AutoManager {
     );
 
     // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("DisableLED", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.OFF), led));
-    NamedCommands.registerCommand("Rainbow", Commands.runOnce(() -> led.setPattern(LEDSubsystem.Pattern.RAINBOW), led));
-
-    NamedCommands.registerCommand("IntakeNote", new FullIntakeSequenceCommand(arm, intake));
-    NamedCommands.registerCommand("ShootClose", new AutoFullShootCloseSequenceCommand(intake, shooter, arm));
-    NamedCommands.registerCommand("PivotAndShoot", new PivotAndShootCommand(shooter, vision, intake, arm));
-    NamedCommands.registerCommand("IntakeArmFloor", new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
+    NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER)));
+    NamedCommands.registerCommand("IntakeNote", new FullIntakeCommand(arm, intake));
+    NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);

@@ -8,7 +8,7 @@ import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
 import frc.robot.auto.AutoManager;
 import frc.robot.intake.IntakeSubsystem;
-import frc.robot.intakearm.FullIntakeSequenceCommand;
+import frc.robot.intakearm.FullIntakeCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
@@ -47,17 +47,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.b().onTrue(new ResetPoseCommand(swerve, poseEstimator));
     driverController.x().onTrue(new ToggleXCommand(swerve));
-    driverController.leftBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.4, 0.6));
-    driverController.rightBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.6, 0.8));
+    driverController.leftBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.2, 0.4));
+    driverController.rightBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.4, 0.6));
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
 
-    operatorController.leftBumper().onTrue(new ResetRobotStateSequenceCommand(shooter, intake, arm));
+    operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm));
 
-    operatorController.a().toggleOnTrue(new FullShootCloseSequenceCommand(intake, shooter, arm));
-    operatorController.b().toggleOnTrue(new FullShootInterpolatedSequenceCommand(intake, shooter, arm));
-    operatorController.x().toggleOnTrue(new FullShootAmpSequenceCommand(intake, shooter, arm));
-    operatorController.y().toggleOnTrue(new FullIntakeSequenceCommand(arm, intake));
+    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm));
+    operatorController.b().toggleOnTrue(new FullShootInterpolatedCommand(intake, shooter, arm));
+    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm));
+    operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake));
   }
 }

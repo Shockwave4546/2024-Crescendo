@@ -3,24 +3,24 @@
   "startingPose": {
     "position": {
       "x": 1.17,
-      "y": 5.567041069031117
+      "y": 5.57
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootClose"
+            "pathName": "Double"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Close"
+            "pathName": "Double Back"
           }
         }
       ]

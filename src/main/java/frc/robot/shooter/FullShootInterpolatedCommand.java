@@ -8,15 +8,15 @@ import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.utils.EndActionSequentialCommandGroup;
 
-public class FullShootCloseSequenceCommand extends EndActionSequentialCommandGroup {
-  public FullShootCloseSequenceCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
-    super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
+public class FullShootInterpolatedCommand extends EndActionSequentialCommandGroup {
+  public FullShootInterpolatedCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
+    super(new ResetRobotStateCommand(shooter, intake, arm));
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
-            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),
+            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.INTERPOLATED), shooter),
             new WaitUntilCommand(shooter::atDesiredRPS),
-            new WaitCommand(0.75),
-            new FeedShooterCommand(intake).withTimeout(0.5),
+            new WaitCommand(0.5),
+            new FeedShooterCommand(intake).withTimeout(0.25),
             new InstantCommand(shooter::stopMotors, shooter)
     );
 

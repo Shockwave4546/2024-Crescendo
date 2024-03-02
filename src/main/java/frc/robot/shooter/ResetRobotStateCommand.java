@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
 
-public class ResetRobotStateSequenceCommand extends SequentialCommandGroup {
-  public ResetRobotStateSequenceCommand(ShooterSubsystem shooter, IntakeSubsystem intake, IntakeArmSubsystem arm) {
+public class ResetRobotStateCommand extends SequentialCommandGroup {
+  public ResetRobotStateCommand(ShooterSubsystem shooter, IntakeSubsystem intake, IntakeArmSubsystem arm) {
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
             new InstantCommand(shooter::stopMotors, shooter),

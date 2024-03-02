@@ -139,7 +139,6 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param speeds Speed to drive.
    */
   public void driveAutonomous(ChassisSpeeds speeds) {
-    // For some reason, PathPlanner is giving me opposite directions, so use this temporary fix.
     final var swerveModuleStates = Swerve.DRIVE_KINEMATICS.toSwerveModuleStates(speeds);
     setModuleStates(swerveModuleStates);
   }

@@ -8,18 +8,18 @@ import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.utils.EndActionSequentialCommandGroup;
 
-public class FullShootAmpSequenceCommand extends EndActionSequentialCommandGroup {
-  public FullShootAmpSequenceCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
-    super(new ResetRobotStateSequenceCommand(shooter, intake, arm));
+public class FullShootCloseCommand extends EndActionSequentialCommandGroup {
+  public FullShootCloseCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
+    super(new ResetRobotStateCommand(shooter, intake, arm));
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
-            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.AMP), shooter),
+            new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),
             new WaitUntilCommand(shooter::atDesiredRPS),
-            new WaitCommand(1.0),
-            new FeedShooterCommand(intake).withTimeout(2.0),
             new WaitCommand(0.5),
+            new FeedShooterCommand(intake).withTimeout(0.25),
             new InstantCommand(shooter::stopMotors, shooter)
     );
 
     addRequirements(shooter, intake, arm);
-  }}
+  }
+}
