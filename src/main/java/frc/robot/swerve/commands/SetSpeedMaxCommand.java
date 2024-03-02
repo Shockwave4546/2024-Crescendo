@@ -13,8 +13,6 @@ public class SetSpeedMaxCommand extends Command {
     this.swerve = swerve;
     this.driveMax = driveMax;
     this.rotMax = rotMax;
-
-    addRequirements(swerve);
   }
 
   @Override public void execute() {

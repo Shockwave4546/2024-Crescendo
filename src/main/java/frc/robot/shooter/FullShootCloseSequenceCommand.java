@@ -15,7 +15,7 @@ public class FullShootCloseSequenceCommand extends EndActionSequentialCommandGro
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
             new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER), shooter),
             new WaitUntilCommand(shooter::atDesiredRPS),
-            new WaitCommand(0.5),
+            new WaitCommand(0.75),
             new FeedShooterCommand(intake).withTimeout(0.5),
             new InstantCommand(shooter::stopMotors, shooter)
     );

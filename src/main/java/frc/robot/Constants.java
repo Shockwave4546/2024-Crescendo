@@ -20,7 +20,7 @@ public final class Constants {
   public static final class IntakeArm {
     public static final int MOTOR_CAN_ID = 33;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.005);
+    public static final PIDGains GAINS = new PIDGains(0.01, 0.0, 0.005);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
@@ -169,7 +169,7 @@ public final class Constants {
   public static final class Auto {
     public static final PIDGains DRIVING_GAINS = new PIDGains(0.05);
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.08);
+    public static final PIDGains TURNING_GAINS = new PIDGains(0.0005);
   }
 
   public static final class IO {
