@@ -24,6 +24,7 @@ public final class Constants {
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
+    public static final double ANGLE_OFFSET = 192.0; // degrees
   }
 
   public static final class LED {

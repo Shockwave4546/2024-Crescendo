@@ -1,6 +1,7 @@
 package frc.robot.intakearm;
 
 import com.revrobotics.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -14,6 +15,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
   private State desiredState = State.HOME;
 
+  @SuppressWarnings("resource")
   public IntakeArmSubsystem() {
     motor.restoreFactoryDefaults();
 
@@ -21,7 +23,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
     encoder.setInverted(false);
-    encoder.setZeroOffset(192.0);
+    encoder.setZeroOffset(IntakeArm.ANGLE_OFFSET);
 
     pidController.setP(IntakeArm.GAINS.P);
     pidController.setI(IntakeArm.GAINS.I);
@@ -42,10 +44,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
   }
 
   @Override public void periodic() {
-     if (shouldStopArm()) throw new InvalidEncoderPositionException("The encoder is reporting an angle that will break the arm: " + encoder.getPosition());
+     if (shouldStopArm()) {
+       DriverStation.reportError("The encoder is reporting an angle that will break the arm: " + encoder.getPosition(), false);
+     }
   }
 
   public void setDesiredState(State desiredState) {
+    if (shouldStopArm()) return;
     this.desiredState = desiredState;
     pidController.setReference(desiredState.angle, CANSparkBase.ControlType.kPosition);
   }

@@ -7,7 +7,6 @@ public class IdleIntakeCommand extends Command {
   
   public IdleIntakeCommand(IntakeSubsystem intake) {
     this.intake = intake;
-
     addRequirements(intake);
   }
 

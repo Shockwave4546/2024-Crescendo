@@ -25,7 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     Tabs.MATCH.addBoolean("Has Note", this::hasNote);
 
-     setDefaultCommand(new IdleIntakeCommand(this));
+    setDefaultCommand(new IdleIntakeCommand(this));
   }
 
   public void runIntake(boolean reversed) {
