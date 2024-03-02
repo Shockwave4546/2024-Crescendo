@@ -10,20 +10,7 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Double"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Double Back"
-          }
-        }
-      ]
+      "commands": []
     }
   },
   "folder": null,

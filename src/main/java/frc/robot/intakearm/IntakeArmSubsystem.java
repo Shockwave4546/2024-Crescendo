@@ -72,7 +72,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public enum State {
     HOME(5.0),
     MIDDLE(50.0),
-    FLOOR(185.0);
+    FLOOR(190.0);
 
     public final double angle; // degrees
 

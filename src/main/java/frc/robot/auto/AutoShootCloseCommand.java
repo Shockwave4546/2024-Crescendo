@@ -13,7 +13,6 @@ public class AutoShootCloseCommand extends SequentialCommandGroup {
   public AutoShootCloseCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm) {
     addCommands(
             new InstantCommand(() -> arm.setDesiredState(IntakeArmSubsystem.State.HOME), arm),
-            new WaitUntilCommand(arm::atDesiredState),
             new WaitUntilCommand(shooter::atDesiredRPS),
             new WaitCommand(0.5),
             new FeedShooterCommand(intake).withTimeout(0.25)

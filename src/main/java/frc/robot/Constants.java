@@ -55,8 +55,8 @@ public final class Constants {
     public static final PIDGains GAINS = new PIDGains(0.03);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final float FF = 0.013F;
-    public static final double RPS_TOLERANCE = 5.0;
+    public static final float FF = 0.011F;
+    public static final double RPS_TOLERANCE = 7.5;
   }
 
   public static final class Swerve {
@@ -168,15 +168,16 @@ public final class Constants {
   }
 
   public static final class Auto {
-    public static final PIDGains DRIVING_GAINS = new PIDGains(0.05);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(0.05, 0.0, 0.08);
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.0005);
+    public static final PIDGains TURNING_GAINS = new PIDGains(7.5, 0.0, 0);
   }
 
   public static final class IO {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final double DRIVE_DEADBAND = 0.02;
+
   }
 
   public static final class NeoMotor {
