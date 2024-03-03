@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.swerve.commands.SwerveDriveCommand;
 
 public class Robot extends TimedRobot {
@@ -23,8 +22,8 @@ public class Robot extends TimedRobot {
     container.poseEstimator.resetPose();
     try {
       Thread.sleep(500);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+    } catch (InterruptedException ignored) {
+      
     }
     container.auto.executeRoutine();
   }

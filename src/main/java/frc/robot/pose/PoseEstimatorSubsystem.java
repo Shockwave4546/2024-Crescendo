@@ -79,7 +79,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
       this.cameraPoseEstimator = new PhotonPoseEstimator(
               layout,
-              PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_RIO,
+              PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
               vision.getPhotonCamera(),
               Vision.ROBOT_TO_CAMERA
       );
@@ -110,7 +110,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     previousPipelineTimestamp = currentTimestamp;
 
     final var tag = vision.getTag();
+    if (tag == null) return;
     final var transform = tag.getBestCameraToTarget();
+    if (transform == null) return;
     tagX.set(transform.getX());
     tagY.set(transform.getY());
     tagDegrees.set(transform.getRotation().toRotation2d().getDegrees());

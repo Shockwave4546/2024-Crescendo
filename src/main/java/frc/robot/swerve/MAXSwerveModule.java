@@ -15,6 +15,8 @@ import frc.robot.shuffleboard.TunableSparkPIDController;
 
 import static com.revrobotics.CANSparkLowLevel.MotorType;
 
+import java.io.IOException;
+
 public class MAXSwerveModule {
   private static final ShuffleboardTab TAB = Shuffleboard.getTab("Swerve");
   private static int COUNT = 0;
@@ -39,8 +41,8 @@ public class MAXSwerveModule {
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
-    drivingSparkMax.restoreFactoryDefaults();
-    turningSparkMax.restoreFactoryDefaults();
+    // drivingSparkMax.restoreFactoryDefaults();
+    // turningSparkMax.restoreFactoryDefaults();
 
     drivingSparkMax.setInverted(invertDrivingDirection);
 
@@ -96,6 +98,12 @@ public class MAXSwerveModule {
     turningSparkMax.setIdleMode(Module.TURNING_MOTOR_IDLE_MODE);
     drivingSparkMax.setSmartCurrentLimit(Module.DRIVING_MOTOR_CURRENT_LIMIT);
     turningSparkMax.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
+
+    try {
+        Thread.sleep(500);
+    } catch (InterruptedException ignored) {
+
+    }
 
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.

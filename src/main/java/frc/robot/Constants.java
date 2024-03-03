@@ -104,7 +104,7 @@ public final class Constants {
 
     public static final boolean GYRO_REVERSED = true;
 
-    public static final double DEFAULT_DRIVE_SPEED_MULTIPLIER = 0.8;
+    public static final double DEFAULT_DRIVE_SPEED_MULTIPLIER = 0.85;
     public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 1.0;
   }
 
@@ -168,7 +168,7 @@ public final class Constants {
   }
 
   public static final class Auto {
-    public static final PIDGains DRIVING_GAINS = new PIDGains(0.05, 0.0, 0.08);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(2.5, 0.0, 0.08);
 
     public static final PIDGains TURNING_GAINS = new PIDGains(7.5, 0.0, 0);
   }

@@ -16,23 +16,29 @@
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 7.0
+        "x": 2.7196527120326968,
+        "y": 6.884614496501721
       },
       "prevControl": {
-        "x": 2.8499999999999996,
-        "y": 7.0
+        "x": 2.7696527120326966,
+        "y": 6.884614496501721
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 30.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [
     {
       "name": "Near Note",
-      "minWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.7,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -52,7 +58,7 @@
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 30.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,

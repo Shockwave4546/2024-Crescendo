@@ -66,13 +66,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
    * @return whether the arm should stop operating as to not break it.
    */
   private boolean shouldStopArm() {
-    return encoder.getPosition() > 195.0;
+    return encoder.getPosition() > 198.0;
   }
 
   public enum State {
     HOME(5.0),
     MIDDLE(50.0),
-    FLOOR(190.0);
+    FLOOR(195.0);
 
     public final double angle; // degrees
 
