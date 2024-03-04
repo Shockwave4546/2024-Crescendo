@@ -46,7 +46,9 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem(VisionSubsystem vision) {
     this.vision = vision;
 
-    // bottomMotor.restoreFactoryDefaults();
+    bottomMotor.restoreFactoryDefaults();
+    bottomMotor.setCANTimeout(250);
+
     bottomMotor.setSmartCurrentLimit(50);
     bottomMotor.setInverted(true);
     bottomMotor.setIdleMode(IdleMode.kCoast);
@@ -58,11 +60,13 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomPID.setFF(Shooter.FF);
     bottomPID.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
     bottomPID.setFeedbackDevice(bottomEncoder);
+
+    bottomMotor.setCANTimeout(0);
     bottomMotor.burnFlash();
 
-    Timer.delay(1);
+    topMotor.restoreFactoryDefaults();
+    topMotor.setCANTimeout(250);
 
-    // topMotor.restoreFactoryDefaults();
     topMotor.setSmartCurrentLimit(50);
     topMotor.setInverted(true);
     topMotor.setIdleMode(IdleMode.kCoast);
@@ -74,6 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
     topPID.setFF(Shooter.FF);
     topPID.setFeedbackDevice(topEncoder);
     topPID.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
+
+    topMotor.setCANTimeout(0);
     topMotor.burnFlash();
 
     Tabs.MATCH.addBoolean("At Desired RPS", this::atDesiredRPS);

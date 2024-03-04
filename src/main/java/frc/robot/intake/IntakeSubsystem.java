@@ -18,9 +18,12 @@ public class IntakeSubsystem extends SubsystemBase {
   @SuppressWarnings("resource")
   public IntakeSubsystem() {
     motor.restoreFactoryDefaults();
+    motor.setCANTimeout(250);
 
     motor.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+
+    motor.setCANTimeout(0);
     motor.burnFlash();
 
     Tabs.MATCH.addBoolean("Has Note", this::hasNote);

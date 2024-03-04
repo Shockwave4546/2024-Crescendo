@@ -18,6 +18,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   @SuppressWarnings("resource")
   public IntakeArmSubsystem() {
     motor.restoreFactoryDefaults();
+    motor.setCANTimeout(250);
 
     motor.setSmartCurrentLimit(Constants.Module.DRIVING_MOTOR_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
