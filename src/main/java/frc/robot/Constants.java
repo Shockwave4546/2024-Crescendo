@@ -105,7 +105,7 @@ public final class Constants {
     public static final boolean GYRO_REVERSED = true;
 
     public static final double DEFAULT_DRIVE_SPEED_MULTIPLIER = 0.85;
-    public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 1.0;
+    public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 0.85;
   }
 
   public static final class Vision {
