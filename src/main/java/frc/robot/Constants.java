@@ -169,7 +169,6 @@ public final class Constants {
 
   public static final class Auto {
     public static final PIDGains DRIVING_GAINS = new PIDGains(1.5, 0.0, 0.08);
-
     public static final PIDGains TURNING_GAINS = new PIDGains(4.60, 0.0, 0.0);
   }
 

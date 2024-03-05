@@ -2,13 +2,8 @@
 
 ### PWM IDs
 - LED: 0
-- Shooter Flap: 1
 
 ### DIO Ports
-- Left Shooter Encoder A: 0
-- Left Shooter Encoder B: 1
-- Right Shooter Encoder A: 2
-- Right Shooter Encoder B: 3
 - Intake Limit Switch: 4
 
 #### CAN IDs
