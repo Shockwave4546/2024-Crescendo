@@ -1,6 +1,7 @@
 package frc.robot.swerve;
 
 import com.revrobotics.*;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -11,8 +12,6 @@ import frc.robot.Constants.Module;
 import frc.robot.shuffleboard.TunableSparkPIDController;
 
 import static com.revrobotics.CANSparkLowLevel.MotorType;
-
-import java.io.IOException;
 
 public class MAXSwerveModule {
   private static final ShuffleboardTab TAB = Shuffleboard.getTab("Swerve");
@@ -103,12 +102,12 @@ public class MAXSwerveModule {
     TAB.addNumber(prefix + drivingCANId + " Duty Cycle", drivingSpark::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 0);
     TAB.addNumber(prefix + drivingCANId + " Position", drivingEncoder::getPosition).withSize(4, 1).withPosition(colIndex, 1);
     TAB.addNumber(prefix + drivingCANId + " Velocity", drivingEncoder::getVelocity).withSize(4, 1).withPosition(colIndex, 2);
-    TAB.add(prefix + drivingCANId + " PID", new TunableSparkPIDController(drivingPIDController)).withSize(3, 3).withPosition(colIndex + 4, 0);
+    TAB.add(prefix + drivingCANId + " PID", new TunableSparkPIDController(drivingPIDController, () -> desiredState.speedMetersPerSecond, (val) -> setDesiredState(new SwerveModuleState(val, new Rotation2d())))).withSize(3, 3).withPosition(colIndex + 4, 0);
 
     TAB.addNumber(prefix + turningCANId + " Duty Cycle", turningSpark::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 4);
     TAB.addNumber(prefix + turningCANId + " Angle", turningEncoder::getPosition).withSize(4, 1).withPosition(colIndex, 5);
     TAB.addNumber(prefix + turningCANId + " Angular Velocity", turningEncoder::getVelocity).withSize(4, 1).withPosition(colIndex, 6);
-    TAB.add(prefix + turningCANId + " PID", new TunableSparkPIDController(turningPIDController)).withSize(3, 3).withPosition(colIndex + 4, 4);
+    TAB.add(prefix + turningCANId + " PID", new TunableSparkPIDController(turningPIDController, turningEncoder::getVelocity, (val) -> turningPIDController.setReference(val, ControlType.kVelocity))).withSize(3, 3).withPosition(colIndex + 4, 4);
     COUNT++;
   }
 

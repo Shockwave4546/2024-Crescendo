@@ -1,5 +1,8 @@
 package frc.robot.shuffleboard;
 
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -9,14 +12,24 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  */
 public class TunableSparkPIDController implements Sendable {
   private final SparkPIDController child;
+  private final DoubleSupplier setpointGetter;
+  private final DoubleConsumer setpointSetter;
 
   /**
    * Constructs a new instance of the TunableSparkMaxPIDController with the specified child controller.
    *
    * @param child the child controller to use for control operations
    */
+  public TunableSparkPIDController(SparkPIDController child, DoubleSupplier setpointGetter, DoubleConsumer setpointSetter) {
+    this.child = child;
+    this.setpointGetter = setpointGetter;
+    this.setpointSetter = setpointSetter;
+  }
+
   public TunableSparkPIDController(SparkPIDController child) {
     this.child = child;
+    this.setpointGetter = null;
+    this.setpointSetter = null;
   }
 
   /**
@@ -32,7 +45,7 @@ public class TunableSparkPIDController implements Sendable {
     builder.addDoubleProperty("f", child::getFF, child::setFF);
 
     // Ignore these two fields, but it's necessary to satisfy the PIDController SmartDashboard type.
-    builder.addDoubleProperty("setpoint", null, null);
+    builder.addDoubleProperty("setpoint", setpointGetter, setpointSetter);
     builder.addBooleanProperty("enabled", () -> true, null);
   }
 }

@@ -62,13 +62,13 @@ public final class Constants {
   public static final class Swerve {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double MAX_SPEED_METERS_PER_SECOND = 4.8;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 4.65;
     public static final double MAX_ANGULAR_SPEED = 2 * Math.PI; // radians per second
 
     // Distance between centers of right and left wheels on robot
-    public static final double TRACK_WIDTH = Units.inchesToMeters(25);
+    public static final double TRACK_WIDTH = 0.545; // m
     // Distance between front and back wheels on robot
-    public static final double WHEEL_BASE = Units.inchesToMeters(25);
+    public static final double WHEEL_BASE = 0.545; // m
 
     public static final Map<ModulePosition, Translation2d> MODULE_TRANSLATIONS = Map.of(
             ModulePosition.FRONT_LEFT, new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
@@ -131,7 +131,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double DRIVING_MOTOR_FREE_SPEED_RPS = NeoMotor.FREE_SPEED_RPM / 60;
-    public static final double WHEEL_DIAMETER_METERS = 0.0762;
+    public static final double WHEEL_DIAMETER_METERS = 0.071;
     public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
     public static final double DRIVING_MOTOR_REDUCTION = (45.0 * 22) / (DRIVING_MOTOR_PINION_TEETH * 15);
@@ -150,12 +150,12 @@ public final class Constants {
     public static final double TURNING_ENCODER_POSITION_PID_MIN_INPUT = 0; // Radians
     public static final double TURNING_ENCODER_POSITION_PID_MAX_INPUT = 2 * Math.PI; // Radians
 
-    public static final PIDGains DRIVING_GAINS = new PIDGains(0.04);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(0.15, 0.0, 0.02);
     public static final double DRIVING_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS;
     public static final double DRIVING_MIN_OUTPUT = -1;
     public static final double DRIVING_MAX_OUTPUT = 1;
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.25);
+    public static final PIDGains TURNING_GAINS = new PIDGains(0.20, 0.0, 0.00);
     public static final double TURNING_FF = 0;
     public static final double TURNING_MIN_OUTPUT = -1;
     public static final double TURNING_MAX_OUTPUT = 1;
@@ -168,16 +168,15 @@ public final class Constants {
   }
 
   public static final class Auto {
-    public static final PIDGains DRIVING_GAINS = new PIDGains(2.5, 0.0, 0.08);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(1.5, 0.0, 0.08);
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(7.5, 0.0, 0);
+    public static final PIDGains TURNING_GAINS = new PIDGains(4.60, 0.0, 0.0);
   }
 
   public static final class IO {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final double DRIVE_DEADBAND = 0.02;
-
   }
 
   public static final class NeoMotor {

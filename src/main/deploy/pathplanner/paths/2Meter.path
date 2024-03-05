@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.95,
+        "x": 1.9500000000000002,
         "y": 7.0
       },
       "isLocked": false,
@@ -20,7 +20,7 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 3.95,
+        "x": 4.05,
         "y": 7.0
       },
       "nextControl": null,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tuning",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

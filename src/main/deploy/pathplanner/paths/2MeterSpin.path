@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.95,
+        "x": 2.05,
         "y": 7.0
       },
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 15.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tuning",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
