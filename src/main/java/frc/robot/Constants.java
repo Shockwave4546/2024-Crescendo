@@ -106,7 +106,6 @@ public final class Constants {
 
     public static final double DEFAULT_DRIVE_SPEED_MULTIPLIER = 0.85;
     public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 0.85;
-    public static final double DEFAULT_ROT_SPEED_MULTIPLIER = 0.85;
   }
 
   public static final class Vision {
