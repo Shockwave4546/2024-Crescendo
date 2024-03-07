@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -43,6 +43,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeHome"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Double Back"
@@ -52,6 +58,12 @@
           "type": "named",
           "data": {
             "name": "ShootClose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]

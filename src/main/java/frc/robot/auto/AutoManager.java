@@ -15,6 +15,7 @@ import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.FullIntakeCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
+import frc.robot.intakearm.IntakeArmSubsystem.State;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
@@ -51,6 +52,8 @@ public class AutoManager {
     NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER)));
     NamedCommands.registerCommand("IntakeNote", new FullIntakeCommand(arm, intake));
     NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm));
+    NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
+    NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(State.HOME), arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);
