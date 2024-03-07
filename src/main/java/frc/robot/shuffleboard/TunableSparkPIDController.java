@@ -43,9 +43,8 @@ public class TunableSparkPIDController implements Sendable {
     builder.addDoubleProperty("i", child::getI, child::setI);
     builder.addDoubleProperty("d", child::getD, child::setD);
     builder.addDoubleProperty("f", child::getFF, child::setFF);
-
-    // Ignore these two fields, but it's necessary to satisfy the PIDController SmartDashboard type.
     builder.addDoubleProperty("setpoint", setpointGetter, setpointSetter);
+    // SparkPIDController doesn't have an option to disable it, so the controller is always enabled.
     builder.addBooleanProperty("enabled", () -> true, null);
   }
 }
