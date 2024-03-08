@@ -14,6 +14,6 @@ public class FullIntakeCommand extends SequentialCommandGroup {
             new InstantCommand(() -> arm.setDesiredState(State.HOME), arm)
     );
 
-    addRequirements(intake);
+    addRequirements(intake, arm);
   }
 }
