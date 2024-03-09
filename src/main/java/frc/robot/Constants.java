@@ -21,7 +21,7 @@ public final class Constants {
     public static final int RIGHT_CAN_ID = 35;
 
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
-    public static final PIDGains LEFT_GAINS = new PIDGains(0.01F);
+    public static final PIDGains LEFT_GAINS = new PIDGains(0.6F);
     public static final PIDGains RIGHT_GAINS = new PIDGains(0.01F);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;

@@ -71,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
     topMotor.setIdleMode(IdleMode.kCoast);
     Shooter.REV_CONVERSION_FACTOR.apply(topEncoder);
     topEncoder.setVelocityConversionFactor(Shooter.RPS_CONVERSION_FACTOR);
-    topPID.setP((float) Shooter.GAINS.P);
+    topPID.setP(Shooter.GAINS.P);
     topPID.setP(Shooter.GAINS.I);
     topPID.setP(Shooter.GAINS.D);
     topPID.setFF(Shooter.FF);
@@ -137,7 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public enum ShotType {
     NONE(0.0, 0.0),
-    AMP(30.0, 30.0),
+    AMP(20.0, 20.0),
     SUBWOOFER(70.0, 30.0),
     FAR(50.0, 50.0),
     INTERPOLATED(-1.0, -1.0);

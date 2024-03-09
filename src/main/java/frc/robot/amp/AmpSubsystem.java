@@ -20,12 +20,14 @@ public class AmpSubsystem extends SubsystemBase {
   private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
   private final SparkPIDController rightPID = rightMotor.getPIDController();
 
-  private State desiredState;
+  private final boolean manualTuning = false;
+  private State desiredState = State.HOME;
 
   public AmpSubsystem() {
     leftMotor.restoreFactoryDefaults();
     leftMotor.setCANTimeout(250);
 
+    leftMotor.setInverted(true);
     Amp.REV_CONVERSION_FACTOR.apply(leftEncoder);
     leftPID.setP(Amp.LEFT_GAINS.P);
     leftPID.setP(Amp.LEFT_GAINS.I);
@@ -41,6 +43,7 @@ public class AmpSubsystem extends SubsystemBase {
     rightMotor.restoreFactoryDefaults();
     rightMotor.setCANTimeout(250);
 
+    rightMotor.setInverted(false);
     Amp.REV_CONVERSION_FACTOR.apply(rightEncoder);
     rightPID.setP(Amp.RIGHT_GAINS.P);
     rightPID.setP(Amp.RIGHT_GAINS.I);
@@ -57,7 +60,12 @@ public class AmpSubsystem extends SubsystemBase {
 
     final var tab = Shuffleboard.getTab("Amp");
     tab.addNumber("Left Pos", leftEncoder::getPosition);
-    tab.add("Left PID", new TunableSparkPIDController(leftPID));
+    tab.add("Left PID", new TunableSparkPIDController(leftPID, () -> desiredState.position, (newPos) -> {
+      if (!manualTuning) return;
+      this.desiredState = new State("Manual", newPos);
+      leftPID.setReference(newPos, CANSparkBase.ControlType.kPosition);
+      rightPID.setReference(newPos, CANSparkBase.ControlType.kPosition);
+    }));
     tab.addNumber("Right Pos", rightEncoder::getPosition);
     tab.add("Right PID", new TunableSparkPIDController(rightPID));
     tab.addString("State", () -> desiredState.name() + " (" + desiredState.position + "°)");
@@ -87,14 +95,11 @@ public class AmpSubsystem extends SubsystemBase {
     rightMotor.setCANTimeout(0);
   }
 
-  public enum State {
-    HOME(0.0),
-    AMP(0.0);
-
-    public final double position; // rev
-
-    State(double position) {
-      this.position = position;
-    }
+  /**
+   * @param position rev
+   */
+  public record State(String name, double position) {
+    public static final State HOME = new State("Home", 0.0);
+    public static final State AMP = new State("Amp", 19.0);
   }
 }
