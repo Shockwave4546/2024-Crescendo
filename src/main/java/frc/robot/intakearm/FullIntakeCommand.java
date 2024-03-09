@@ -6,16 +6,14 @@ import frc.robot.intake.IntakeNoteCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem.State;
 
-// Todo: make an auto one for this and revert it to add arm as a requirement.
-
 public class FullIntakeCommand extends SequentialCommandGroup {
   public FullIntakeCommand(IntakeArmSubsystem arm, IntakeSubsystem intake) {
     addCommands(
-            new InstantCommand(() -> arm.setDesiredState(State.FLOOR)),
+            new InstantCommand(() -> arm.setDesiredState(State.FLOOR), arm),
             new IntakeNoteCommand(() -> false, intake).until(intake::hasNote),
-            new InstantCommand(() -> arm.setDesiredState(State.HOME))
+            new InstantCommand(() -> arm.setDesiredState(State.HOME), arm)
     );
 
-    addRequirements(intake);
+    addRequirements(intake, arm);
   }
 }

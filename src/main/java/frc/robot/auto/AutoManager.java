@@ -50,7 +50,7 @@ public class AutoManager {
 
     // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER)));
-    NamedCommands.registerCommand("IntakeNote", new FullIntakeCommand(arm, intake));
+    NamedCommands.registerCommand("IntakeNote", new AutoIntakeCommand(arm, intake));
     NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm));
     NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
     NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(State.HOME), arm));
