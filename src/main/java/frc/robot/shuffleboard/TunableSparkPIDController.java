@@ -1,11 +1,11 @@
 package frc.robot.shuffleboard;
 
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleSupplier;
-
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleSupplier;
 
 /**
  * Wraps [SparkMaxPIDController] because it isn't natively supported by Shuffleboard.

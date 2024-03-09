@@ -13,7 +13,6 @@ import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeSubsystem;
-import frc.robot.intakearm.FullIntakeCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.IntakeArmSubsystem.State;
 import frc.robot.led.LEDSubsystem;

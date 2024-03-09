@@ -32,6 +32,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     pidController.setOutputRange(IntakeArm.MIN_OUTPUT, IntakeArm.MAX_OUTPUT);
     pidController.setFeedbackDevice(encoder);
 
+    motor.setCANTimeout(0);
     motor.burnFlash();
 
     final var tab = Shuffleboard.getTab("Intake Arm");

@@ -1,13 +1,13 @@
 package frc.robot;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.Tabs;
+import frc.robot.amp.AmpSubsystem;
 import frc.robot.auto.AutoManager;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.intakearm.FullIntakeCommand;
@@ -31,6 +31,7 @@ public class RobotContainer {
   protected final IntakeSubsystem intake = new IntakeSubsystem();
   protected final ShooterSubsystem shooter = new ShooterSubsystem(vision);
   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
+  protected final AmpSubsystem amp = new AmpSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
   protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
@@ -60,7 +61,7 @@ public class RobotContainer {
 
     operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm));
     operatorController.b().toggleOnTrue(new FullShootInterpolatedCommand(intake, shooter, arm));
-    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm));
+    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, amp));
     operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake));
   }
 }

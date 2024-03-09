@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.util.Color;
@@ -17,10 +16,23 @@ import frc.robot.utils.PositionConversionFactor;
 import java.util.Map;
 
 public final class Constants {
+  public static final class Amp {
+    public static final int LEFT_CAN_ID = 34;
+    public static final int RIGHT_CAN_ID = 35;
+
+    public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
+    public static final PIDGains LEFT_GAINS = new PIDGains(0.01F);
+    public static final PIDGains RIGHT_GAINS = new PIDGains(0.01F);
+    public static final double MIN_OUTPUT = -1.0;
+    public static final double MAX_OUTPUT = 1.0;
+
+    public static final double POSITION_TOLERANCE = 2.0; // rev
+  }
+
   public static final class IntakeArm {
     public static final int MOTOR_CAN_ID = 33;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.01, 0.0, 0.005);
+    public static final PIDGains GAINS = new PIDGains(0.01F, 0.0F, 0.005F);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
@@ -52,7 +64,7 @@ public final class Constants {
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
     public static final float RPS_CONVERSION_FACTOR = 1 / 60F;
 
-    public static final PIDGains GAINS = new PIDGains(0.03);
+    public static final PIDGains GAINS = new PIDGains(0.03F);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final float FF = 0.011F;
@@ -150,12 +162,12 @@ public final class Constants {
     public static final double TURNING_ENCODER_POSITION_PID_MIN_INPUT = 0; // Radians
     public static final double TURNING_ENCODER_POSITION_PID_MAX_INPUT = 2 * Math.PI; // Radians
 
-    public static final PIDGains DRIVING_GAINS = new PIDGains(0.15, 0.0, 0.02);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(0.15F, 0.0F, 0.02F);
     public static final double DRIVING_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS;
     public static final double DRIVING_MIN_OUTPUT = -1;
     public static final double DRIVING_MAX_OUTPUT = 1;
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.20, 0.0, 0.00);
+    public static final PIDGains TURNING_GAINS = new PIDGains(0.2F);
     public static final double TURNING_FF = 0;
     public static final double TURNING_MIN_OUTPUT = -1;
     public static final double TURNING_MAX_OUTPUT = 1;
@@ -168,9 +180,9 @@ public final class Constants {
   }
 
   public static final class Auto {
-    public static final PIDGains DRIVING_GAINS = new PIDGains(1.5, 0.0, 0.08);
+    public static final PIDGains DRIVING_GAINS = new PIDGains(1.5F, 0.0F, 0.08F);
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(9.5, 0.0, 0.0);
+    public static final PIDGains TURNING_GAINS = new PIDGains(9.5F, 0.0F, 0.0F);
   }
 
   public static final class IO {

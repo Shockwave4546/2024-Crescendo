@@ -2,13 +2,12 @@ plugins {
   id "java"
   id "edu.wpi.first.GradleRIO" version "2024.3.1"
   id "idea"
+  id 'org.jetbrains.kotlin.jvm'
 }
 
 def javaVersion = JavaVersion.VERSION_17
 
 java {
-  sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -67,6 +66,7 @@ dependencies {
   nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
   nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
   simulationRelease wpi.sim.enableRelease()
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -105,4 +105,10 @@ idea {
     // Exclude the .vscode directory from indexing and search
     excludeDirs += file(".vscode")
   }
+}
+repositories {
+  mavenCentral()
+}
+kotlin {
+  jvmToolchain(17)
 }
