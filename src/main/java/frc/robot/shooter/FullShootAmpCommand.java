@@ -26,4 +26,5 @@ public class FullShootAmpCommand extends EndActionSequentialCommandGroup {
     );
 
     addRequirements(shooter, intake, arm);
-  }}
+  }
+}
