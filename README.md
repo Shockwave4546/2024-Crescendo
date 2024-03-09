@@ -19,3 +19,5 @@
 - Left Shooter: 31
 - Intake: 32
 - Intake Arm: 33
+- Left Amp Bar: 34
+- Right Amp Bar: 35
