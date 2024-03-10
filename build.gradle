@@ -8,9 +8,11 @@ plugins {
 def javaVersion = JavaVersion.VERSION_17
 
 java {
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
 }
 
-def ROBOT_MAIN_CLASS = "frc.robot.Main"
+def ROBOT_MAIN_CLASS = "org.dovershockwave.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -66,7 +68,6 @@ dependencies {
   nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
   nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
   simulationRelease wpi.sim.enableRelease()
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 // Simulation configuration (e.g. environment variables).
