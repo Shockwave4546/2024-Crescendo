@@ -89,6 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setDesiredState(ShooterState state) {
+    this.desiredState = state;
     bottomPID.setReference(state.bottomRPS(), ControlType.kVelocity);
     topPID.setReference(state.topRPS(), ControlType.kVelocity);
   }

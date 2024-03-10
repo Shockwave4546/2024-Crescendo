@@ -51,7 +51,7 @@
   "eventMarkers": [
     {
       "name": "Get Note",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "sequential",
         "data": {
