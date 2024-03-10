@@ -2,8 +2,10 @@ package org.dovershockwave;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.amp.AmpSubsystem;
 import org.dovershockwave.auto.AutoManager;
@@ -24,6 +26,8 @@ import org.dovershockwave.swerve.SwerveSubsystem;
 import org.dovershockwave.swerve.commands.SetSpeedMaxCommand;
 import org.dovershockwave.swerve.commands.ToggleXCommand;
 
+import java.util.Map;
+
 public class RobotContainer {
   protected final CommandXboxController driverController = new CommandXboxController(Constants.IO.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.IO.OPERATOR_CONTROLLER_PORT);
@@ -39,9 +43,15 @@ public class RobotContainer {
 
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
-    Constants.Tabs.MATCH.add("PDP", new PowerDistribution());
     vision.setPoseEstimator(poseEstimator);
-    CameraServer.startAutomaticCapture();
+    final UsbCamera camera = CameraServer.startAutomaticCapture();
+    camera.setResolution(640, 480);
+    camera.setFPS(30);
+    Constants.Tabs.MATCH.add("Front", camera)
+            .withWidget(BuiltInWidgets.kCameraStream)
+            .withSize(12, 10)
+            .withPosition(0, 0)
+            .withProperties(Map.of("Show Crosshair", false, "Show Controls", false));
 
     configureButtonBindings();
 

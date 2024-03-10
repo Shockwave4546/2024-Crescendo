@@ -44,9 +44,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
       pid.setReference(angle, CANSparkMax.ControlType.kPosition);
     }));
     tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle() + "°)");
-    Tabs.MATCH.addBoolean("Arm At Desired State", this::atDesiredState);
-    Tabs.MATCH.addString("Arm State", () -> desiredState.name() + " (" + desiredState.angle() + "°)");
-    Tabs.MATCH.addBoolean("Arm Valid Encoder", () -> !shouldStopArm());
+    Tabs.MATCH.addBoolean("Arm At Desired State", this::atDesiredState).withSize(3, 3).withPosition(12, 3);
+    Tabs.MATCH.addString("Arm State", () -> desiredState.name() + " (" + desiredState.angle() + "°)").withSize(3, 3).withPosition(12, 6);
+    Tabs.MATCH.addBoolean("Valid Arm Encoder", () -> !shouldStopArm()).withSize(3, 3).withPosition(15, 3);
   }
 
   @Override public void periodic() {

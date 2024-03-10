@@ -7,24 +7,22 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.Constants;
 import org.dovershockwave.shuffleboard.ShuffleboardBoolean;
+import org.dovershockwave.utils.SparkUtils;
 
 public class IntakeSubsystem extends SubsystemBase {
   private final DigitalInput limitSwitch = new DigitalInput(Constants.Intake.LIMIT_SWITCH_DIO_PORT);
   private final CANSparkMax motor = new CANSparkMax(Constants.Intake.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
-  private final ShuffleboardBoolean runIdle = new ShuffleboardBoolean(Shuffleboard.getTab("Intake"), "Idle Speed", true);
+  private final ShuffleboardBoolean runIdle = new ShuffleboardBoolean(Shuffleboard.getTab("Intake"), "Idle Speed", true)
+          .withSize(3, 3);
 
   @SuppressWarnings("resource")
   public IntakeSubsystem() {
-    motor.restoreFactoryDefaults();
-    motor.setCANTimeout(250);
+    SparkUtils.configureAbs(motor, (spark, t, u) -> {
+      spark.setSmartCurrentLimit(Constants.NeoMotor.NEO_550_CURRENT_LIMIT);
+      spark.setIdleMode(CANSparkBase.IdleMode.kBrake);
+    });
 
-    motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_550_CURRENT_LIMIT);
-    motor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-
-    motor.setCANTimeout(0);
-    motor.burnFlash();
-
-    Constants.Tabs.MATCH.addBoolean("Has Note", this::hasNote);
+    Constants.Tabs.MATCH.addBoolean("Has Note", this::hasNote).withSize(3, 3).withPosition(21, 3);
 
     setDefaultCommand(new IdleIntakeCommand(this));
   }

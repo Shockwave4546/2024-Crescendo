@@ -31,6 +31,7 @@ public final class SparkUtils {
 
   public static void configureAbs(CANSparkMax spark, TriConsumer<CANSparkMax, AbsoluteEncoder, SparkPIDController> action) {
     runBlockingAbs(spark, (s, t, u) -> {
+      action.accept(s, t, u);
       spark.burnFlash();
     });
   }

@@ -24,7 +24,7 @@ public class FullShootAmpCommand extends EndActionSequentialCommandGroup {
             new WaitCommand(0.75),
             new FeedShooterCommand(intake).withTimeout(0.25),
             new InstantCommand(shooter::stopMotors, shooter),
-            new WaitCommand(0.50),
+            new WaitCommand(1),
             new SetAmpStateCommand(AmpState.HOME, amp)
     );
 

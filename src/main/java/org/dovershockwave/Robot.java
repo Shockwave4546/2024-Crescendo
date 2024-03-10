@@ -9,6 +9,10 @@ public class Robot extends TimedRobot {
 
   @Override public void robotInit() {
     container = new RobotContainer();
+    container.swerve.zeroGyro();
+    container.swerve.resetEncoders();
+    container.poseEstimator.resetPose();
+    container.amp.resetPosition();
   }
 
   @Override public void robotPeriodic() {

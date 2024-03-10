@@ -55,7 +55,7 @@ public class AutoManager {
     NamedCommands.registerCommand("IntakeHome", new PivotIntakeCommand(ArmState.HOME, arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
-    Constants.Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);
+    Constants.Tabs.MATCH.add("Autonomous", chooser).withSize(3, 3).withPosition(12, 0);
   }
 
   /**

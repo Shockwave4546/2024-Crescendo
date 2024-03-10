@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
@@ -66,8 +67,9 @@ public class AmpSubsystem extends SubsystemBase {
     resetPosition();
 
     tab.addString("State", () -> desiredState.name() + " (" + desiredState.leftPos() + ", " +  desiredState.rightPos() + ")");
-    Constants.Tabs.MATCH.addBoolean("Amp At Desired State", this::atDesiredState);
-    Constants.Tabs.MATCH.addString("Amp State", () -> desiredState.name() + " (" + desiredState.leftPos() + ", " +  desiredState.rightPos() + ")");
+    tab.add("Reset Pos", new InstantCommand(this::resetPosition, this));
+    Constants.Tabs.MATCH.addBoolean("Amp At Desired State", this::atDesiredState).withSize(3, 3).withPosition(18, 3);
+    Constants.Tabs.MATCH.addString("Amp State", () -> desiredState.name() + " (" + desiredState.leftPos() + ", " +  desiredState.rightPos() + ")").withSize(3, 3).withPosition(18, 6);
   }
 
   public void setDesiredState(AmpState desiredState) {

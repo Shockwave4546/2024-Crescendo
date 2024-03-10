@@ -85,7 +85,8 @@ public class ShooterSubsystem extends SubsystemBase {
       bottomPID.setReference(topRPS, ControlType.kVelocity);
     }));
 
-    Constants.Tabs.MATCH.addBoolean("At Desired RPS", this::atDesiredRPS);
+    Constants.Tabs.MATCH.addBoolean("Shooter At Desired State", this::atDesiredRPS).withSize(3, 3).withPosition(24, 3);
+    Constants.Tabs.MATCH.addString("Shooter State", () -> desiredState.name() + " (" + desiredState.bottomRPS() + ", " +  desiredState.topRPS() + ")").withSize(3, 3).withPosition(24, 6);
   }
 
   private void setDesiredState(ShooterState state) {
