@@ -22,7 +22,9 @@ public final class Constants {
 
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
     public static final PIDGains LEFT_GAINS = new PIDGains(0.6F);
+    public static final boolean LEFT_INVERTED = true;
     public static final PIDGains RIGHT_GAINS = new PIDGains(0.01F);
+    public static final boolean RIGHT_INVERTED = false;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
 
@@ -37,6 +39,7 @@ public final class Constants {
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
     public static final double ANGLE_OFFSET = 192.0; // degrees
+    public static final double MAX_ANGLE = 198.0; // degrees
   }
 
   public static final class LED {
@@ -55,6 +58,7 @@ public final class Constants {
 
     public static final double FORWARD_INTAKE_SPEED = -1.0;
     public static final double REVERSE_INTAKE_SPEED = 1.0;
+    public static final double IDLE_SPEED = -0.2;
   }
 
   public static final class Shooter {
@@ -64,10 +68,11 @@ public final class Constants {
     public static final PositionConversionFactor REV_CONVERSION_FACTOR = new PositionConversionFactor(1);
     public static final float RPS_CONVERSION_FACTOR = 1 / 60F;
 
-    public static final PIDGains GAINS = new PIDGains(0.03F);
+    public static final PIDGains GAINS = new PIDGains(0.03F, 0.0F, 0.0F, 0.011F);
+    public static final boolean LEFT_INVERTED = true;
+    public static final boolean RIGHT_INVERTED = true;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final float FF = 0.011F;
     public static final double RPS_TOLERANCE = 7.5;
   }
 
@@ -162,26 +167,20 @@ public final class Constants {
     public static final double TURNING_ENCODER_POSITION_PID_MIN_INPUT = 0; // Radians
     public static final double TURNING_ENCODER_POSITION_PID_MAX_INPUT = 2 * Math.PI; // Radians
 
-    public static final PIDGains DRIVING_GAINS = new PIDGains(0.15F, 0.0F, 0.02F);
-    public static final double DRIVING_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS;
+    public static final PIDGains DRIVING_GAINS = new PIDGains(0.15F, 0.0F, 0.02F, (float) (1 / DRIVE_WHEEL_FREE_SPEED_RPS));
     public static final double DRIVING_MIN_OUTPUT = -1;
     public static final double DRIVING_MAX_OUTPUT = 1;
 
     public static final PIDGains TURNING_GAINS = new PIDGains(0.2F);
-    public static final double TURNING_FF = 0;
     public static final double TURNING_MIN_OUTPUT = -1;
     public static final double TURNING_MAX_OUTPUT = 1;
 
     public static final IdleMode DRIVING_MOTOR_IDLE_MODE = IdleMode.kBrake;
     public static final IdleMode TURNING_MOTOR_IDLE_MODE = IdleMode.kBrake;
-
-    public static final int DRIVING_MOTOR_CURRENT_LIMIT = 50; // Amps
-    public static final int TURNING_MOTOR_CURRENT_LIMIT = 20; // Amps
   }
 
   public static final class Auto {
     public static final PIDGains DRIVING_GAINS = new PIDGains(1.5F, 0.0F, 0.08F);
-
     public static final PIDGains TURNING_GAINS = new PIDGains(9.5F, 0.0F, 0.0F);
   }
 
@@ -193,6 +192,8 @@ public final class Constants {
 
   public static final class NeoMotor {
     public static final double FREE_SPEED_RPM = 5676;
+    public static final int NEO_CURRENT_LIMIT = 50; // Amps
+    public static final int NEO_550_CURRENT_LIMIT = 20; // Amps
   }
 
   public static final class Tabs {

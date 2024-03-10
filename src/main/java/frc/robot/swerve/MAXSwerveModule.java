@@ -4,7 +4,6 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -13,20 +12,22 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.Module;
 import frc.robot.shuffleboard.TunableSparkPIDController;
+import frc.robot.utils.SparkUtils;
 
 import static com.revrobotics.CANSparkLowLevel.MotorType;
+import static frc.robot.Constants.NeoMotor;
 
 public class MAXSwerveModule {
   private static final ShuffleboardTab TAB = Shuffleboard.getTab("Swerve");
   private static int COUNT = 0;
   
-  private final CANSparkMax drivingSpark;
+  private final CANSparkMax drivingMotor;
 
   private final RelativeEncoder drivingEncoder;
   private final AbsoluteEncoder turningEncoder;
 
-  private final SparkPIDController drivingPIDController;
-  private final SparkPIDController turningPIDController;
+  private final SparkPIDController drivingPID;
+  private final SparkPIDController turningPID;
 
   private final double chassisAngularOffset;
   private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
@@ -38,79 +39,65 @@ public class MAXSwerveModule {
    */
   @SuppressWarnings("resource")
   public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset, boolean invertDrivingDirection, String prefix) {
-    this.drivingSpark = new CANSparkMax(drivingCANId, MotorType.kBrushless);
-    final var turningSpark = new CANSparkMax(turningCANId, MotorType.kBrushless);
+    this.drivingMotor = new CANSparkMax(drivingCANId, MotorType.kBrushless);
+    this.drivingEncoder = drivingMotor.getEncoder();
+    this.drivingPID = drivingMotor.getPIDController();
 
-    /*
-     * Driving
-     */
-    drivingSpark.restoreFactoryDefaults();
-    drivingSpark.setCANTimeout(250);
+    SparkUtils.configureRel(drivingMotor, (motor, encoder, pid) -> {
+      motor.setInverted(invertDrivingDirection);
+      pid.setFeedbackDevice(encoder);
 
-    drivingSpark.setInverted(invertDrivingDirection);
-    drivingEncoder = drivingSpark.getEncoder();
-    drivingPIDController = drivingSpark.getPIDController();
-    drivingPIDController.setFeedbackDevice(drivingEncoder);
+      Module.DRIVING_ENCODER_POSITION_FACTOR.apply(encoder);
+      encoder.setVelocityConversionFactor(Module.DRIVING_ENCODER_VELOCITY_FACTOR);
 
-    Module.DRIVING_ENCODER_POSITION_FACTOR.apply(drivingEncoder);
-    drivingEncoder.setVelocityConversionFactor(Module.DRIVING_ENCODER_VELOCITY_FACTOR);
+      pid.setP(Module.DRIVING_GAINS.P());
+      pid.setI(Module.DRIVING_GAINS.I());
+      pid.setD(Module.DRIVING_GAINS.D());
+      pid.setFF(Module.DRIVING_GAINS.FF());
+      pid.setOutputRange(Module.DRIVING_MIN_OUTPUT, Module.DRIVING_MAX_OUTPUT);
 
-    drivingPIDController.setP(Module.DRIVING_GAINS.P);
-    drivingPIDController.setI(Module.DRIVING_GAINS.I);
-    drivingPIDController.setD(Module.DRIVING_GAINS.D);
-    drivingPIDController.setFF(Module.DRIVING_FF);
-    drivingPIDController.setOutputRange(Module.DRIVING_MIN_OUTPUT, Module.DRIVING_MAX_OUTPUT);
+      motor.setIdleMode(Module.DRIVING_MOTOR_IDLE_MODE);
+      motor.setSmartCurrentLimit(NeoMotor.NEO_CURRENT_LIMIT);
+    });
 
-    drivingSpark.setIdleMode(Module.DRIVING_MOTOR_IDLE_MODE);
-    drivingSpark.setSmartCurrentLimit(Module.DRIVING_MOTOR_CURRENT_LIMIT);
+    final var turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
+    this.turningEncoder = turningMotor.getAbsoluteEncoder();
+    this.turningPID = turningMotor.getPIDController();
+    SparkUtils.configureAbs(turningMotor, (motor, encoder, pid) -> {
+      pid.setFeedbackDevice(turningEncoder);
 
-    drivingSpark.setCANTimeout(0);
-    drivingSpark.burnFlash();
+      Module.TURNING_ENCODER_POSITION_FACTOR.apply(encoder);
+      encoder.setVelocityConversionFactor(Module.TURNING_ENCODER_VELOCITY_FACTOR);
+      encoder.setInverted(Module.TURNING_ENCODER_INVERTED);
 
-    /*
-     * Turning
-     */
-    turningSpark.restoreFactoryDefaults();
-    turningSpark.setCANTimeout(250);
+      pid.setPositionPIDWrappingEnabled(true);
+      pid.setPositionPIDWrappingMinInput(Module.TURNING_ENCODER_POSITION_PID_MIN_INPUT);
+      pid.setPositionPIDWrappingMaxInput(Module.TURNING_ENCODER_POSITION_PID_MAX_INPUT);
 
-    turningEncoder = turningSpark.getAbsoluteEncoder(Type.kDutyCycle);
-    turningPIDController = turningSpark.getPIDController();
-    turningPIDController.setFeedbackDevice(turningEncoder);
+      pid.setP(Module.TURNING_GAINS.P());
+      pid.setI(Module.TURNING_GAINS.I());
+      pid.setD(Module.TURNING_GAINS.D());
+      pid.setFF(Module.TURNING_GAINS.FF());
+      pid.setOutputRange(Module.TURNING_MIN_OUTPUT, Module.TURNING_MAX_OUTPUT);
 
-    Module.TURNING_ENCODER_POSITION_FACTOR.apply(turningEncoder);
-    turningEncoder.setVelocityConversionFactor(Module.TURNING_ENCODER_VELOCITY_FACTOR);
-    turningEncoder.setInverted(Module.TURNING_ENCODER_INVERTED);
-
-    turningPIDController.setPositionPIDWrappingEnabled(true);
-    turningPIDController.setPositionPIDWrappingMinInput(Module.TURNING_ENCODER_POSITION_PID_MIN_INPUT);
-    turningPIDController.setPositionPIDWrappingMaxInput(Module.TURNING_ENCODER_POSITION_PID_MAX_INPUT);
-
-    turningPIDController.setP(Module.TURNING_GAINS.P);
-    turningPIDController.setI(Module.TURNING_GAINS.I);
-    turningPIDController.setD(Module.TURNING_GAINS.D);
-    turningPIDController.setFF(Module.TURNING_FF);
-    turningPIDController.setOutputRange(Module.TURNING_MIN_OUTPUT, Module.TURNING_MAX_OUTPUT);
-
-    turningSpark.setIdleMode(Module.TURNING_MOTOR_IDLE_MODE);
-    turningSpark.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
-
-    turningSpark.setCANTimeout(0);
-    turningSpark.burnFlash();
+      motor.setIdleMode(Module.TURNING_MOTOR_IDLE_MODE);
+      motor.setSmartCurrentLimit(NeoMotor.NEO_550_CURRENT_LIMIT);
+    });
 
     this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(turningEncoder.getPosition());
     drivingEncoder.setPosition(0.0);
 
     final var colIndex = COUNT * 7;
-    TAB.addNumber(prefix + drivingCANId + " Duty Cycle", drivingSpark::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 0);
+    TAB.addNumber(prefix + drivingCANId + " Duty Cycle", drivingMotor::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 0);
     TAB.addNumber(prefix + drivingCANId + " Position", drivingEncoder::getPosition).withSize(4, 1).withPosition(colIndex, 1);
     TAB.addNumber(prefix + drivingCANId + " Velocity", drivingEncoder::getVelocity).withSize(4, 1).withPosition(colIndex, 2);
-    TAB.add(prefix + drivingCANId + " PID", new TunableSparkPIDController(drivingPIDController, () -> desiredState.speedMetersPerSecond, (val) -> setDesiredState(new SwerveModuleState(val, new Rotation2d())))).withSize(3, 3).withPosition(colIndex + 4, 0);
+    TAB.add(prefix + drivingCANId + " PID", new TunableSparkPIDController(drivingPID, () -> desiredState.speedMetersPerSecond, (val) -> setDesiredState(new SwerveModuleState(val, new Rotation2d())))).withSize(3, 3).withPosition(colIndex + 4, 0);
 
-    TAB.addNumber(prefix + turningCANId + " Duty Cycle", turningSpark::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 4);
+    TAB.addNumber(prefix + turningCANId + " Duty Cycle", turningMotor::getAppliedOutput).withSize(4, 1).withPosition(colIndex, 4);
     TAB.addNumber(prefix + turningCANId + " Angle", turningEncoder::getPosition).withSize(4, 1).withPosition(colIndex, 5);
     TAB.addNumber(prefix + turningCANId + " Angular Velocity", turningEncoder::getVelocity).withSize(4, 1).withPosition(colIndex, 6);
-    TAB.add(prefix + turningCANId + " PID", new TunableSparkPIDController(turningPIDController, turningEncoder::getVelocity, (val) -> turningPIDController.setReference(val, ControlType.kVelocity))).withSize(3, 3).withPosition(colIndex + 4, 4);
+    TAB.add(prefix + turningCANId + " PID", new TunableSparkPIDController(turningPID, turningEncoder::getVelocity, (val) -> turningPID.setReference(val, ControlType.kVelocity))).withSize(3, 3).withPosition(colIndex + 4, 4);
     COUNT++;
   }
 
@@ -153,8 +140,8 @@ public class MAXSwerveModule {
     final var optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState, new Rotation2d(turningEncoder.getPosition()));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
-    drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
+    drivingPID.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    turningPID.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
     this.desiredState = desiredState;
   }
@@ -163,8 +150,8 @@ public class MAXSwerveModule {
    * Zeroes the SwerveModule encoder.
    */
   public void resetEncoders() {
-    drivingSpark.setCANTimeout(250);
-    drivingEncoder.setPosition(0.0);
-    drivingSpark.setCANTimeout(0);
+    SparkUtils.runBlockingRel(drivingMotor, (a, encoder, b) -> {
+      encoder.setPosition(0.0);
+    });
   }
 }

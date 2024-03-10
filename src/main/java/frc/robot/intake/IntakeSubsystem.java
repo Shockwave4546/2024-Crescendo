@@ -5,8 +5,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.Intake;
-import frc.robot.Constants.Module;
 import frc.robot.Constants.Tabs;
 import frc.robot.shuffleboard.ShuffleboardBoolean;
 
@@ -20,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setCANTimeout(250);
 
-    motor.setSmartCurrentLimit(Module.TURNING_MOTOR_CURRENT_LIMIT);
+    motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_550_CURRENT_LIMIT);
     motor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
     motor.setCANTimeout(0);
@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void runIdle() {
-    motor.set(-0.2);
+    motor.set(Intake.IDLE_SPEED);
   }
 
   public void stopIntake() {

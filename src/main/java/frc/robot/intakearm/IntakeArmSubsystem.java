@@ -1,47 +1,51 @@
 package frc.robot.intakearm;
 
 import com.revrobotics.*;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeArm;
 import frc.robot.Constants.Tabs;
+import frc.robot.RobotContainer;
 import frc.robot.shuffleboard.TunableSparkPIDController;
+import frc.robot.utils.SparkUtils;
 
 public class IntakeArmSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(IntakeArm.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
-  private final SparkPIDController pidController = motor.getPIDController();
+  private final SparkPIDController pid = motor.getPIDController();
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-  private State desiredState = State.HOME;
+  private final boolean manualTuning = false;
+  private ArmState desiredState = ArmState.HOME;
 
   @SuppressWarnings("resource")
   public IntakeArmSubsystem() {
-    motor.restoreFactoryDefaults();
-    motor.setCANTimeout(250);
+    SparkUtils.configureAbs(motor, (motor, encoder, pid) -> {
+      motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_CURRENT_LIMIT);
+      motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+      IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
+      encoder.setInverted(false);
+      encoder.setZeroOffset(IntakeArm.ANGLE_OFFSET);
 
-    motor.setSmartCurrentLimit(Constants.Module.DRIVING_MOTOR_CURRENT_LIMIT);
-    motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
-    encoder.setInverted(false);
-    encoder.setZeroOffset(IntakeArm.ANGLE_OFFSET);
-
-    pidController.setP(IntakeArm.GAINS.P);
-    pidController.setI(IntakeArm.GAINS.I);
-    pidController.setD(IntakeArm.GAINS.D);
-    pidController.setOutputRange(IntakeArm.MIN_OUTPUT, IntakeArm.MAX_OUTPUT);
-    pidController.setFeedbackDevice(encoder);
-
-    motor.setCANTimeout(0);
-    motor.burnFlash();
+      pid.setP(IntakeArm.GAINS.P());
+      pid.setI(IntakeArm.GAINS.I());
+      pid.setD(IntakeArm.GAINS.D());
+      pid.setOutputRange(IntakeArm.MIN_OUTPUT, IntakeArm.MAX_OUTPUT);
+      pid.setFeedbackDevice(encoder);
+    });
 
     final var tab = Shuffleboard.getTab("Intake Arm");
     tab.addNumber("Duty Cycle", motor::getAppliedOutput);
     tab.addNumber("Current Angle", encoder::getPosition);
-    tab.add("PID Controller", new TunableSparkPIDController(pidController));
-    tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle + "°)");
+    tab.add("PID", new TunableSparkPIDController(pid, () -> desiredState.angle(), (angle) -> {
+      if (!manualTuning || RobotContainer.isCompetition()) return;
+      this.desiredState = new ArmState("Manual", angle);
+      pid.setReference(angle, CANSparkMax.ControlType.kPosition);
+    }));
+    tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle() + "°)");
     Tabs.MATCH.addBoolean("Arm At Desired State", this::atDesiredState);
-    Tabs.MATCH.addString("Arm State", () -> desiredState.name() + " (" + desiredState.angle + "°)");
+    Tabs.MATCH.addString("Arm State", () -> desiredState.name() + " (" + desiredState.angle() + "°)");
     Tabs.MATCH.addBoolean("Arm Valid Encoder", () -> !shouldStopArm());
   }
 
@@ -51,35 +55,23 @@ public class IntakeArmSubsystem extends SubsystemBase {
      }
   }
 
-  public void setDesiredState(State desiredState) {
+  public void setDesiredState(ArmState desiredState) {
     if (shouldStopArm()) return;
     this.desiredState = desiredState;
-    pidController.setReference(desiredState.angle, CANSparkBase.ControlType.kPosition);
+    pid.setReference(desiredState.angle(), CANSparkBase.ControlType.kPosition);
   }
 
   public boolean atDesiredState() {
-    return Math.abs(encoder.getPosition() - desiredState.angle) < IntakeArm.ANGLE_TOLERANCE;
+    return MathUtil.isNear(encoder.getPosition(), desiredState.angle(), IntakeArm.ANGLE_TOLERANCE);
   }
 
   /**
    * If the Encoder is reading an angle that causes the arm to go into the robot, it should stop.
-   * These angles include [195, 360].
+   * These angles include [198, 360].
    *
    * @return whether the arm should stop operating as to not break it.
    */
   private boolean shouldStopArm() {
-    return encoder.getPosition() > 198.0;
-  }
-
-  public enum State {
-    HOME(5.0),
-    MIDDLE(50.0),
-    FLOOR(195.0);
-
-    public final double angle; // degrees
-
-    State(double angle) {
-      this.angle = angle;
-    }
+    return encoder.getPosition() > IntakeArm.MAX_ANGLE;
   }
 }

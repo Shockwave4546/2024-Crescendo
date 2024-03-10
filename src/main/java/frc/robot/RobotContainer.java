@@ -10,6 +10,7 @@ import frc.robot.Constants.Tabs;
 import frc.robot.amp.AmpSubsystem;
 import frc.robot.auto.AutoManager;
 import frc.robot.intake.IntakeSubsystem;
+import frc.robot.intakearm.ArmState;
 import frc.robot.intakearm.FullIntakeCommand;
 import frc.robot.intakearm.IntakeArmSubsystem;
 import frc.robot.intakearm.PivotIntakeCommand;
@@ -17,7 +18,10 @@ import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.ResetPoseCommand;
 import frc.robot.pose.VisionSubsystem;
-import frc.robot.shooter.*;
+import frc.robot.shooter.FullShootAmpCommand;
+import frc.robot.shooter.FullShootCloseCommand;
+import frc.robot.shooter.ResetRobotStateCommand;
+import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 import frc.robot.swerve.commands.SetSpeedMaxCommand;
 import frc.robot.swerve.commands.ToggleXCommand;
@@ -43,9 +47,13 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-     if (DriverStation.getMatchType() != DriverStation.MatchType.None) {
+     if (isCompetition()) {
        PPLibTelemetry.enableCompetitionMode();
      }
+  }
+
+  public static boolean isCompetition() {
+    return DriverStation.getMatchType() != DriverStation.MatchType.None;
   }
 
   private void configureButtonBindings() {
@@ -54,13 +62,12 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.2, 0.2));
     driverController.rightBumper().whileTrue(new SetSpeedMaxCommand(swerve, 0.4, 0.4));
 
-    operatorController.povUp().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.HOME, arm));
-    operatorController.povDown().onTrue(new PivotIntakeCommand(IntakeArmSubsystem.State.FLOOR, arm));
+    operatorController.povUp().onTrue(new PivotIntakeCommand(ArmState.HOME, arm));
+    operatorController.povDown().onTrue(new PivotIntakeCommand(ArmState.FLOOR, arm));
 
-    operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm));
+    operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, amp));
 
-    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm));
-    operatorController.b().toggleOnTrue(new FullShootInterpolatedCommand(intake, shooter, arm));
+    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, amp));
     operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, amp));
     operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake));
   }

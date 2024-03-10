@@ -13,11 +13,13 @@ import frc.robot.Constants.Auto;
 import frc.robot.Constants.Swerve;
 import frc.robot.Constants.Tabs;
 import frc.robot.intake.IntakeSubsystem;
+import frc.robot.intakearm.ArmState;
 import frc.robot.intakearm.IntakeArmSubsystem;
-import frc.robot.intakearm.IntakeArmSubsystem.State;
+import frc.robot.intakearm.PivotIntakeCommand;
 import frc.robot.led.LEDSubsystem;
 import frc.robot.pose.PoseEstimatorSubsystem;
 import frc.robot.pose.VisionSubsystem;
+import frc.robot.shooter.ShooterState;
 import frc.robot.shooter.ShooterSubsystem;
 import frc.robot.swerve.SwerveSubsystem;
 
@@ -37,8 +39,8 @@ public class AutoManager {
             swerve::getRelativeChassisSpeed,
             swerve::driveAutonomous,
             new HolonomicPathFollowerConfig(
-                    new PIDConstants(Auto.DRIVING_GAINS.P, Auto.DRIVING_GAINS.I, Auto.DRIVING_GAINS.D),
-                    new PIDConstants(Auto.TURNING_GAINS.P, Auto.TURNING_GAINS.I, Auto.TURNING_GAINS.D),
+                    new PIDConstants(Auto.DRIVING_GAINS.P(), Auto.DRIVING_GAINS.I(), Auto.DRIVING_GAINS.D()),
+                    new PIDConstants(Auto.TURNING_GAINS.P(), Auto.TURNING_GAINS.I(), Auto.TURNING_GAINS.D()),
                     Swerve.MAX_SPEED_METERS_PER_SECOND,
                     Swerve.WHEEL_BASE / 2,
                     new ReplanningConfig()
@@ -48,11 +50,11 @@ public class AutoManager {
     );
 
     // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterSubsystem.ShotType.SUBWOOFER)));
+    NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterState.SUBWOOFER)));
     NamedCommands.registerCommand("IntakeNote", new AutoIntakeCommand(arm, intake));
     NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm));
     NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
-    NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(State.HOME), arm));
+    NamedCommands.registerCommand("IntakeHome", new PivotIntakeCommand(ArmState.HOME, arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Tabs.MATCH.add("Autonomous", chooser).withSize(3, 2).withPosition(3, 0);
