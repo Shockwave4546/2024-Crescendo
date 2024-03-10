@@ -150,8 +150,6 @@ public class MAXSwerveModule {
    * Zeroes the SwerveModule encoder.
    */
   public void resetEncoders() {
-    SparkUtils.runBlockingRel(drivingMotor, (a, encoder, b) -> {
-      encoder.setPosition(0.0);
-    });
+    SparkUtils.runBlockingRel(drivingMotor, (a, encoder, b) -> encoder.setPosition(0.0));
   }
 }

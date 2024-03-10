@@ -85,12 +85,7 @@ public class AmpSubsystem extends SubsystemBase {
   }
 
   public void resetPosition() {
-    SparkUtils.runBlockingRel(leftMotor, (a, encoder, b) -> {
-      encoder.setPosition(0.0);
-    });
-
-    SparkUtils.runBlockingRel(rightMotor, (a, encoder, b) -> {
-      encoder.setPosition(0.0);
-    });
+    SparkUtils.runBlockingRel(leftMotor, (a, encoder, b) -> encoder.setPosition(0.0));
+    SparkUtils.runBlockingRel(rightMotor, (a, encoder, b) -> encoder.setPosition(0.0));
   }
 }
