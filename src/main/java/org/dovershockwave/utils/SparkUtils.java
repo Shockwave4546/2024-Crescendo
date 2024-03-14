@@ -18,8 +18,9 @@ public final class SparkUtils {
 
   public static void configureRel(CANSparkMax spark, TriConsumer<CANSparkMax, RelativeEncoder, SparkPIDController> action) {
     runBlockingRel(spark, (s, t, u) -> {
+      s.restoreFactoryDefaults();
       action.accept(s, t, u);
-      spark.burnFlash();
+      s.burnFlash();
     });
   }
 
@@ -31,8 +32,9 @@ public final class SparkUtils {
 
   public static void configureAbs(CANSparkMax spark, TriConsumer<CANSparkMax, AbsoluteEncoder, SparkPIDController> action) {
     runBlockingAbs(spark, (s, t, u) -> {
+      s.restoreFactoryDefaults();
       action.accept(s, t, u);
-      spark.burnFlash();
+      s.burnFlash();
     });
   }
 }
