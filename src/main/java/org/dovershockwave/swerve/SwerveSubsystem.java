@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.shuffleboard.ShuffleboardBoolean;
 import org.dovershockwave.shuffleboard.ShuffleboardSpeed;
-import org.dovershockwave.Constants;
 
 import static org.dovershockwave.Constants.*;
 

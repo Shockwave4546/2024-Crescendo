@@ -32,8 +32,8 @@ public class AmpSubsystem extends SubsystemBase {
       spark.setInverted(Constants.Amp.LEFT_INVERTED);
       Constants.Amp.REV_CONVERSION_FACTOR.apply(encoder);
       pid.setP(Constants.Amp.LEFT_GAINS.P());
-      pid.setP(Constants.Amp.LEFT_GAINS.I());
-      pid.setP(Constants.Amp.LEFT_GAINS.D());
+      pid.setI(Constants.Amp.LEFT_GAINS.I());
+      pid.setD(Constants.Amp.LEFT_GAINS.D());
       pid.setOutputRange(Constants.Amp.MIN_OUTPUT, Constants.Amp.MAX_OUTPUT);
       pid.setFeedbackDevice(encoder);
       spark.setSmartCurrentLimit(Constants.NeoMotor.NEO_550_CURRENT_LIMIT);
@@ -50,8 +50,8 @@ public class AmpSubsystem extends SubsystemBase {
       spark.setInverted(Constants.Amp.RIGHT_INVERTED);
       Constants.Amp.REV_CONVERSION_FACTOR.apply(encoder);
       pid.setP(Constants.Amp.RIGHT_GAINS.P());
-      pid.setP(Constants.Amp.RIGHT_GAINS.I());
-      pid.setP(Constants.Amp.RIGHT_GAINS.D());
+      pid.setI(Constants.Amp.RIGHT_GAINS.I());
+      pid.setD(Constants.Amp.RIGHT_GAINS.D());
       pid.setOutputRange(Constants.Amp.MIN_OUTPUT, Constants.Amp.MAX_OUTPUT);
       pid.setFeedbackDevice(encoder);
       spark.setSmartCurrentLimit(Constants.NeoMotor.NEO_550_CURRENT_LIMIT);

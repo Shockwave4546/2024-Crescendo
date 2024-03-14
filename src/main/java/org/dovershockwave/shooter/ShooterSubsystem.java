@@ -52,8 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Constants.Shooter.REV_CONVERSION_FACTOR.apply(encoder);
       encoder.setVelocityConversionFactor(Constants.Shooter.RPS_CONVERSION_FACTOR);
       pid.setP(Constants.Shooter.GAINS.P());
-      pid.setP(Constants.Shooter.GAINS.I());
-      pid.setP(Constants.Shooter.GAINS.D());
+      pid.setI(Constants.Shooter.GAINS.I());
+      pid.setD(Constants.Shooter.GAINS.D());
       pid.setFF(Constants.Shooter.GAINS.FF());
       pid.setOutputRange(Constants.Shooter.MIN_OUTPUT, Constants.Shooter.MAX_OUTPUT);
       pid.setFeedbackDevice(encoder);
@@ -72,8 +72,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Constants.Shooter.REV_CONVERSION_FACTOR.apply(encoder);
       encoder.setVelocityConversionFactor(Constants.Shooter.RPS_CONVERSION_FACTOR);
       pid.setP(Constants.Shooter.GAINS.P());
-      pid.setP(Constants.Shooter.GAINS.I());
-      pid.setP(Constants.Shooter.GAINS.D());
+      pid.setI(Constants.Shooter.GAINS.I());
+      pid.setD(Constants.Shooter.GAINS.D());
       pid.setFF(Constants.Shooter.GAINS.FF());
       pid.setFeedbackDevice(encoder);
       pid.setOutputRange(Constants.Shooter.MIN_OUTPUT, Constants.Shooter.MAX_OUTPUT);
