@@ -10,9 +10,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import org.dovershockwave.Constants;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.SparkUtils;
-import org.dovershockwave.Constants;
 
 import static com.revrobotics.CANSparkLowLevel.MotorType;
 

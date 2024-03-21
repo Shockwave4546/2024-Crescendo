@@ -8,10 +8,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.SparkUtils;
-import org.dovershockwave.Constants;
 
 public class AmpSubsystem extends SubsystemBase {
   private final CANSparkMax leftMotor = new CANSparkMax(Constants.Amp.LEFT_CAN_ID, CANSparkMax.MotorType.kBrushless);
