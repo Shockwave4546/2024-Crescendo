@@ -1,11 +1,10 @@
 package org.dovershockwave.swerve.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import org.dovershockwave.swerve.SwerveSubsystem;
 import org.dovershockwave.Constants;
+import org.dovershockwave.swerve.SwerveSubsystem;
 
 public class SwerveDriveCommand extends Command {
   private final CommandXboxController controller;

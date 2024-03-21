@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import org.dovershockwave.Constants;
 import org.dovershockwave.intake.IntakeSubsystem;
 import org.dovershockwave.intakearm.ArmState;
 import org.dovershockwave.intakearm.IntakeArmSubsystem;
@@ -19,7 +20,6 @@ import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shooter.ShooterState;
 import org.dovershockwave.shooter.ShooterSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
-import org.dovershockwave.Constants;
 
 public class AutoManager {
   /**

@@ -16,7 +16,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(IntakeArm.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
   private final SparkPIDController pid = motor.getPIDController();
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-  private final boolean manualTuning = false;
+  private final boolean manualTuning = true;
   private ArmState desiredState = ArmState.HOME;
 
   @SuppressWarnings("resource")

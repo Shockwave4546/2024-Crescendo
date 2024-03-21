@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.shuffleboard.ShuffleboardBoolean;
 import org.dovershockwave.shuffleboard.ShuffleboardSpeed;
 
-import static org.dovershockwave.Constants.*;
+import static org.dovershockwave.Constants.Swerve;
+import static org.dovershockwave.Constants.Tabs;
 
 public class SwerveSubsystem extends SubsystemBase {
   private final MAXSwerveModule frontLeft = new MAXSwerveModule(

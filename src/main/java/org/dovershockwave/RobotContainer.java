@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.amp.AmpSubsystem;
 import org.dovershockwave.auto.AutoManager;
+import org.dovershockwave.intake.FeedShooterCommand;
 import org.dovershockwave.intake.IntakeSubsystem;
 import org.dovershockwave.intakearm.ArmState;
 import org.dovershockwave.intakearm.FullIntakeCommand;
@@ -71,6 +72,7 @@ public class RobotContainer {
 
     operatorController.povUp().onTrue(new PivotIntakeCommand(ArmState.HOME, arm));
     operatorController.povDown().onTrue(new PivotIntakeCommand(ArmState.FLOOR, arm));
+    operatorController.povRight().onTrue(new FeedShooterCommand(intake).withTimeout(0.25));
 
     operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, amp));
 

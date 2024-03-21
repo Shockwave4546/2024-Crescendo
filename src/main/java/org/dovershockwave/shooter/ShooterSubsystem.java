@@ -9,12 +9,12 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.LinearInterpolator;
 import org.dovershockwave.utils.SparkUtils;
-import org.dovershockwave.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax bottomMotor = new CANSparkMax(Constants.Shooter.BOTTOM_CAN_ID, MotorType.kBrushless);
@@ -26,7 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SparkPIDController bottomPID = bottomMotor.getPIDController();
   private final SparkPIDController topPID = topMotor.getPIDController();
 
-  private final boolean manualTuning = false;
+  private final boolean manualTuning = true;
   private ShooterState desiredState = ShooterState.STOPPED;
 
   private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
