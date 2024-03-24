@@ -20,9 +20,12 @@ import org.dovershockwave.pose.ResetPoseCommand;
 import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shooter.FullShootAmpCommand;
 import org.dovershockwave.shooter.FullShootCloseCommand;
+import org.dovershockwave.shooter.FullShootInterpolatedCommand;
 import org.dovershockwave.shooter.ResetRobotStateCommand;
 import org.dovershockwave.shooter.ShooterSubsystem;
+import org.dovershockwave.shooterwrist.ShooterWristSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
+import org.dovershockwave.swerve.commands.ChaseTagCommand;
 import org.dovershockwave.swerve.commands.SetSpeedMaxCommand;
 import org.dovershockwave.swerve.commands.ToggleXCommand;
 
@@ -39,6 +42,7 @@ public class RobotContainer {
   protected final IntakeArmSubsystem arm = new IntakeArmSubsystem();
   protected final AmpSubsystem amp = new AmpSubsystem();
   protected final LEDSubsystem led = new LEDSubsystem();
+  protected final ShooterWristSubsystem wrist = new ShooterWristSubsystem(vision);
   protected final AutoManager auto = new AutoManager(swerve, poseEstimator, led, shooter, vision, intake, arm);
 
   public RobotContainer() {
@@ -74,10 +78,11 @@ public class RobotContainer {
     operatorController.povDown().onTrue(new PivotIntakeCommand(ArmState.FLOOR, arm));
     operatorController.povRight().onTrue(new FeedShooterCommand(intake).withTimeout(0.25));
 
-    operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, amp));
+    operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, wrist));
 
-    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, amp));
-    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, amp));
+    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, wrist));
+    operatorController.b().toggleOnFalse(new FullShootInterpolatedCommand(intake, shooter, arm, wrist));
+    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, wrist));
     operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake));
   }
 }

@@ -39,7 +39,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     tab.addNumber("Duty Cycle", motor::getAppliedOutput);
     tab.addNumber("Current Angle", encoder::getPosition);
     tab.add("PID", new TunableSparkPIDController(pid, () -> desiredState.angle(), (angle) -> {
-      if (!manualTuning || RobotContainer.isCompetition()) return;
+      if (!manualTuning || RobotContainer.isCompetition() || shouldStopArm()) return;
       this.desiredState = new ArmState("Manual", angle);
       pid.setReference(angle, CANSparkMax.ControlType.kPosition);
     }));

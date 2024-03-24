@@ -9,11 +9,12 @@ import org.dovershockwave.intake.IntakeSubsystem;
 import org.dovershockwave.intakearm.ArmState;
 import org.dovershockwave.intakearm.IntakeArmSubsystem;
 import org.dovershockwave.intakearm.PivotIntakeCommand;
+import org.dovershockwave.shooterwrist.ShooterWristSubsystem;
 import org.dovershockwave.utils.EndActionSequentialCommandGroup;
 
 public class FullShootCloseCommand extends EndActionSequentialCommandGroup {
-  public FullShootCloseCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm, AmpSubsystem amp) {
-    super(new ResetRobotStateCommand(shooter, intake, arm, amp));
+  public FullShootCloseCommand(IntakeSubsystem intake, ShooterSubsystem shooter, IntakeArmSubsystem arm, ShooterWristSubsystem wrist) {
+    super(new ResetRobotStateCommand(shooter, intake, arm, wrist));
     addCommands(
             new PivotIntakeCommand(ArmState.HOME, arm),
             new InstantCommand(() -> shooter.rampUp(ShooterState.SUBWOOFER), shooter),
@@ -23,6 +24,6 @@ public class FullShootCloseCommand extends EndActionSequentialCommandGroup {
             new InstantCommand(shooter::stopMotors, shooter)
     );
 
-    addRequirements(shooter, intake, arm, amp);
+    addRequirements(shooter, intake, arm, wrist);
   }
 }

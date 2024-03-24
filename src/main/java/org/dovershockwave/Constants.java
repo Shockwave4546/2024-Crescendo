@@ -45,13 +45,14 @@ public final class Constants {
   public static final class ShooterWrist {
     public static final int MOTOR_CAN_ID = 36;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.01F, 0.0F, 0.005F);
+    public static final PIDGains GAINS = new PIDGains(0.02F, 0.0F, 0.005F);
     public static final boolean INVERTED = false;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final double ANGLE_TOLERANCE = 2.0; // degrees
-    public static final double ANGLE_OFFSET = 0.0; // degrees
-    public static final double MAX_ANGLE = 20.0; // degrees
+    public static final double ANGLE_TOLERANCE = 1.0; // degrees
+    public static final double ANGLE_OFFSET = 113.5; // degrees
+    public static final double MIN_ANGLE = 2.5; // degrees
+    public static final double MAX_ANGLE = 80.0; // degrees
   }
 
   public static final class LED {

@@ -29,13 +29,20 @@ public class ShooterSubsystem extends SubsystemBase {
   private final boolean manualTuning = true;
   private ShooterState desiredState = ShooterState.STOPPED;
 
-  private final LinearInterpolator RPSInterpolator = new LinearInterpolator(
-    new LinearInterpolator.LinearPair(2.5, 28.0),
-    new LinearInterpolator.LinearPair(2.3, 28.0),
-    new LinearInterpolator.LinearPair(2.1, 29.0),
-    new LinearInterpolator.LinearPair(2.0, 33.0),
-    new LinearInterpolator.LinearPair(1.6, 45.0),
-    new LinearInterpolator.LinearPair(1.55, 50.0)
+  private final LinearInterpolator bottomRPSInterpolator = new LinearInterpolator(
+    new LinearInterpolator.LinearPair(1.40, 70),
+    new LinearInterpolator.LinearPair(2.00, 40),
+    new LinearInterpolator.LinearPair(2.65, 40),
+    new LinearInterpolator.LinearPair(3.04, 40),
+    new LinearInterpolator.LinearPair(4.00, 55)
+  );
+
+  private final LinearInterpolator topRPSInterpolator = new LinearInterpolator(
+    new LinearInterpolator.LinearPair(1.40, 30),
+    new LinearInterpolator.LinearPair(2.00, 45),
+    new LinearInterpolator.LinearPair(2.65, 60),
+    new LinearInterpolator.LinearPair(3.04, 60),
+    new LinearInterpolator.LinearPair(4.00, 70)
   );
 
   private final VisionSubsystem vision;
@@ -82,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
     tab.add("Top PID", new TunableSparkPIDController(topPID, () -> desiredState.topRPS(), (topRPS) -> {
       if (!manualTuning || RobotContainer.isCompetition()) return;
       this.desiredState = new ShooterState("Manual", desiredState.bottomRPS(), topRPS);
-      bottomPID.setReference(topRPS, ControlType.kVelocity);
+      topPID.setReference(topRPS, ControlType.kVelocity);
     }));
 
     Constants.Tabs.MATCH.addBoolean("Shooter At Desired State", this::atDesiredRPS).withSize(3, 3).withPosition(24, 3);
@@ -103,13 +110,12 @@ public class ShooterSubsystem extends SubsystemBase {
     if (type == ShooterState.INTERPOLATED) {
       if (!vision.hasViableTarget()) return;
       final var distance = vision.getCameraToTagTransform().getX();
-      if (distance <= 1.5) {
-        setDesiredState(ShooterState.SUBWOOFER);
-        return;
-      }
+      // if (distance <= 1.5) {
+      //   setDesiredState(ShooterState.SUBWOOFER);
+      //   return;
+      // }
 
-      final var rps = RPSInterpolator.interpolate(distance);
-      setDesiredState(new ShooterState("Interpolated", rps, rps));
+      setDesiredState(new ShooterState("Interpolated", bottomRPSInterpolator.interpolate(distance), topRPSInterpolator.interpolate(distance)));
     } else {
       setDesiredState(type);
     }
