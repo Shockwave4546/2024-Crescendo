@@ -2,9 +2,7 @@ package org.dovershockwave;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import org.dovershockwave.swerve.commands.ChaseTagCommand;
-import org.dovershockwave.swerve.commands.SwerveDriveCommand;
 
 public class Robot extends TimedRobot {
   private RobotContainer container;
@@ -14,7 +12,6 @@ public class Robot extends TimedRobot {
     container.swerve.zeroGyro();
     container.swerve.resetEncoders();
     container.poseEstimator.resetPose();
-    container.amp.resetPosition();
   }
 
   @Override public void robotPeriodic() {
@@ -26,11 +23,6 @@ public class Robot extends TimedRobot {
     container.swerve.zeroGyro();
     container.swerve.resetEncoders();
     container.poseEstimator.resetPose();
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException ignored) {
-      
-    }
     container.auto.executeRoutine();
   }
 

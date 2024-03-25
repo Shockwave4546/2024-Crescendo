@@ -13,12 +13,12 @@ import org.dovershockwave.Constants;
 import org.dovershockwave.intake.IntakeSubsystem;
 import org.dovershockwave.intakearm.ArmState;
 import org.dovershockwave.intakearm.IntakeArmSubsystem;
-import org.dovershockwave.intakearm.PivotIntakeCommand;
 import org.dovershockwave.led.LEDSubsystem;
 import org.dovershockwave.pose.PoseEstimatorSubsystem;
 import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shooter.ShooterState;
 import org.dovershockwave.shooter.ShooterSubsystem;
+import org.dovershockwave.shooterwrist.ShooterWristSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
 
 public class AutoManager {
@@ -30,7 +30,7 @@ public class AutoManager {
   /**
    * Registers all Commands into NamedCommands.
    */
-  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator, LEDSubsystem led, ShooterSubsystem shooter, VisionSubsystem vision, IntakeSubsystem intake, IntakeArmSubsystem arm) {
+  public AutoManager(SwerveSubsystem swerve, PoseEstimatorSubsystem poseEstimator, LEDSubsystem led, ShooterSubsystem shooter, VisionSubsystem vision, IntakeSubsystem intake, IntakeArmSubsystem arm, ShooterWristSubsystem wrist) {
     AutoBuilder.configureHolonomic(
             poseEstimator::getPose2d,
             poseEstimator::resetOdometry,
@@ -48,11 +48,11 @@ public class AutoManager {
     );
 
     // Note: Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.rampUp(ShooterState.SUBWOOFER)));
+    NamedCommands.registerCommand("RampClose", new InstantCommand(() -> shooter.setDesiredState(ShooterState.SUBWOOFER), shooter));
     NamedCommands.registerCommand("IntakeNote", new AutoIntakeCommand(arm, intake));
-    NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm));
+    NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm, wrist));
     NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
-    NamedCommands.registerCommand("IntakeHome", new PivotIntakeCommand(ArmState.HOME, arm));
+    NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(ArmState.HOME), arm));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Constants.Tabs.MATCH.add("Autonomous", chooser).withSize(3, 3).withPosition(12, 0);

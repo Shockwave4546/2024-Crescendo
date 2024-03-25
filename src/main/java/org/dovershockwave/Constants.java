@@ -16,6 +16,10 @@ import org.dovershockwave.utils.PositionConversionFactor;
 import java.util.Map;
 
 public final class Constants {
+  public static final class Debug {
+    public static final boolean MANUAL_TUNING = false;
+  }
+
   public static final class Amp {
     public static final int LEFT_CAN_ID = 34;
     public static final int RIGHT_CAN_ID = 35;
@@ -39,6 +43,7 @@ public final class Constants {
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
     public static final double ANGLE_OFFSET = 192.0; // degrees
+    public static final double MIN_ANGLE = 5.0; // degrees
     public static final double MAX_ANGLE = 198.0; // degrees
   }
 
@@ -145,7 +150,7 @@ public final class Constants {
     public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d());
     public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
 
-    public static final double MAXIMUM_AMBIGUITY = 0.2;
+    public static final double MAXIMUM_AMBIGUITY = 0.5;
     public static final String FRONT_CAMERA_NAME = "OV9281";
   }
 

@@ -8,17 +8,20 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.pose.VisionSubsystem;
+import org.dovershockwave.shuffleboard.ShuffleboardBoolean;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.LinearInterpolator;
 import org.dovershockwave.utils.SparkUtils;
 
+import static org.dovershockwave.Constants.*;
+
 public class ShooterSubsystem extends SubsystemBase {
-  private final CANSparkMax bottomMotor = new CANSparkMax(Constants.Shooter.BOTTOM_CAN_ID, MotorType.kBrushless);
-  private final CANSparkMax topMotor = new CANSparkMax(Constants.Shooter.TOP_CAN_ID, MotorType.kBrushless);
+  private final CANSparkMax bottomMotor = new CANSparkMax(Shooter.BOTTOM_CAN_ID, MotorType.kBrushless);
+  private final CANSparkMax topMotor = new CANSparkMax(Shooter.TOP_CAN_ID, MotorType.kBrushless);
 
   private final RelativeEncoder bottomEncoder = bottomMotor.getEncoder();
   private final RelativeEncoder topEncoder = topMotor.getEncoder();
@@ -26,7 +29,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SparkPIDController bottomPID = bottomMotor.getPIDController();
   private final SparkPIDController topPID = topMotor.getPIDController();
 
-  private final boolean manualTuning = true;
+  private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+  private final ShuffleboardBoolean runIdle = new ShuffleboardBoolean(tab, "Idle Speed", true).withSize(3, 3);
+
   private ShooterState desiredState = ShooterState.STOPPED;
 
   private final LinearInterpolator bottomRPSInterpolator = new LinearInterpolator(
@@ -51,74 +56,71 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem(VisionSubsystem vision) {
     this.vision = vision;
 
-    final var tab = Shuffleboard.getTab("Shooter");
     SparkUtils.configureRel(bottomMotor, (motor, encoder, pid) -> {
-      motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_CURRENT_LIMIT);
-      motor.setInverted(Constants.Shooter.LEFT_INVERTED);
+      motor.setSmartCurrentLimit(NeoMotor.NEO_CURRENT_LIMIT);
+      motor.setInverted(Shooter.LEFT_INVERTED);
       motor.setIdleMode(IdleMode.kCoast);
-      Constants.Shooter.REV_CONVERSION_FACTOR.apply(encoder);
-      encoder.setVelocityConversionFactor(Constants.Shooter.RPS_CONVERSION_FACTOR);
-      pid.setP(Constants.Shooter.GAINS.P());
-      pid.setI(Constants.Shooter.GAINS.I());
-      pid.setD(Constants.Shooter.GAINS.D());
-      pid.setFF(Constants.Shooter.GAINS.FF());
-      pid.setOutputRange(Constants.Shooter.MIN_OUTPUT, Constants.Shooter.MAX_OUTPUT);
+      Shooter.REV_CONVERSION_FACTOR.apply(encoder);
+      encoder.setVelocityConversionFactor(Shooter.RPS_CONVERSION_FACTOR);
+      pid.setP(Shooter.GAINS.P());
+      pid.setI(Shooter.GAINS.I());
+      pid.setD(Shooter.GAINS.D());
+      pid.setFF(Shooter.GAINS.FF());
+      pid.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
       pid.setFeedbackDevice(encoder);
     });
     tab.addNumber("Bottom RPS", bottomEncoder::getVelocity);
     tab.add("Bottom PID", new TunableSparkPIDController(bottomPID, () -> desiredState.bottomRPS(), (bottomRPS) -> {
-      if (!manualTuning || RobotContainer.isCompetition()) return;
+      if (!Debug.MANUAL_TUNING || RobotContainer.isCompetition()) return;
       this.desiredState = new ShooterState("Manual", bottomRPS, desiredState.topRPS());
       bottomPID.setReference(bottomRPS, ControlType.kVelocity);
     }));
 
     SparkUtils.configureRel(topMotor, (motor, encoder, pid) -> {
-      motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_CURRENT_LIMIT);
-      motor.setInverted(Constants.Shooter.RIGHT_INVERTED);
+      motor.setSmartCurrentLimit(NeoMotor.NEO_CURRENT_LIMIT);
+      motor.setInverted(Shooter.RIGHT_INVERTED);
       motor.setIdleMode(IdleMode.kCoast);
-      Constants.Shooter.REV_CONVERSION_FACTOR.apply(encoder);
-      encoder.setVelocityConversionFactor(Constants.Shooter.RPS_CONVERSION_FACTOR);
-      pid.setP(Constants.Shooter.GAINS.P());
-      pid.setI(Constants.Shooter.GAINS.I());
-      pid.setD(Constants.Shooter.GAINS.D());
-      pid.setFF(Constants.Shooter.GAINS.FF());
+      Shooter.REV_CONVERSION_FACTOR.apply(encoder);
+      encoder.setVelocityConversionFactor(Shooter.RPS_CONVERSION_FACTOR);
+      pid.setP(Shooter.GAINS.P());
+      pid.setI(Shooter.GAINS.I());
+      pid.setD(Shooter.GAINS.D());
+      pid.setFF(Shooter.GAINS.FF());
       pid.setFeedbackDevice(encoder);
-      pid.setOutputRange(Constants.Shooter.MIN_OUTPUT, Constants.Shooter.MAX_OUTPUT);
+      pid.setOutputRange(Shooter.MIN_OUTPUT, Shooter.MAX_OUTPUT);
     });
     tab.addNumber("Top RPS", topEncoder::getVelocity);
     tab.add("Top PID", new TunableSparkPIDController(topPID, () -> desiredState.topRPS(), (topRPS) -> {
-      if (!manualTuning || RobotContainer.isCompetition()) return;
+      if (!Debug.MANUAL_TUNING || RobotContainer.isCompetition()) return;
       this.desiredState = new ShooterState("Manual", desiredState.bottomRPS(), topRPS);
       topPID.setReference(topRPS, ControlType.kVelocity);
     }));
 
-    Constants.Tabs.MATCH.addBoolean("Shooter At Desired State", this::atDesiredRPS).withSize(3, 3).withPosition(24, 3);
-    Constants.Tabs.MATCH.addString("Shooter State", () -> desiredState.name() + " (" + desiredState.bottomRPS() + ", " +  desiredState.topRPS() + ")").withSize(3, 3).withPosition(24, 6);
+    Tabs.MATCH.addBoolean("Shooter At Desired State", this::atDesiredState).withSize(3, 3).withPosition(24, 3);
+    Tabs.MATCH.addString("Shooter State", () -> desiredState.name() + " (" + desiredState.bottomRPS() + ", " +  desiredState.topRPS() + ")").withSize(3, 3).withPosition(24, 6);
+
+    setDefaultCommand(new IdleShooterCommand(this));
   }
 
-  private void setDesiredState(ShooterState state) {
-    this.desiredState = state;
+  public void setDesiredState(ShooterState state) {
+    if (state == ShooterState.INTERPOLATED) {
+      if (!vision.hasViableTarget()) return;
+      final var distance = vision.getCameraToTagTransform().getX();
+      this.desiredState = new ShooterState("Interpolated", bottomRPSInterpolator.interpolate(distance), topRPSInterpolator.interpolate(distance));
+    } else {
+      this.desiredState = state;
+    }
+
     bottomPID.setReference(state.bottomRPS(), ControlType.kVelocity);
     topPID.setReference(state.topRPS(), ControlType.kVelocity);
   }
 
-  public boolean atDesiredRPS() {
-    return MathUtil.isNear(bottomEncoder.getVelocity(), desiredState.bottomRPS(), Constants.Shooter.RPS_TOLERANCE) && MathUtil.isNear(topEncoder.getVelocity(), desiredState.topRPS(), Constants.Shooter.RPS_TOLERANCE);
+  public boolean atDesiredState() {
+    return MathUtil.isNear(bottomEncoder.getVelocity(), desiredState.bottomRPS(), Shooter.RPS_TOLERANCE) && MathUtil.isNear(topEncoder.getVelocity(), desiredState.topRPS(), Shooter.RPS_TOLERANCE);
   }
 
-  public void rampUp(ShooterState type) {
-    if (type == ShooterState.INTERPOLATED) {
-      if (!vision.hasViableTarget()) return;
-      final var distance = vision.getCameraToTagTransform().getX();
-      // if (distance <= 1.5) {
-      //   setDesiredState(ShooterState.SUBWOOFER);
-      //   return;
-      // }
-
-      setDesiredState(new ShooterState("Interpolated", bottomRPSInterpolator.interpolate(distance), topRPSInterpolator.interpolate(distance)));
-    } else {
-      setDesiredState(type);
-    }
+  public boolean isRunIdle() {
+    return runIdle.get();
   }
 
   public void stopMotors() {

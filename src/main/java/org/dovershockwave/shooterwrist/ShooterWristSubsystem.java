@@ -5,23 +5,22 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import org.dovershockwave.Constants.NeoMotor;
+import org.dovershockwave.Constants.ShooterWrist;
+import org.dovershockwave.Constants.Tabs;
 import org.dovershockwave.RobotContainer;
+import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.LinearInterpolator;
 import org.dovershockwave.utils.SparkUtils;
 
-import org.dovershockwave.Constants.NeoMotor;
-import org.dovershockwave.Constants.ShooterWrist;
-import org.dovershockwave.Constants.Tabs;
-import org.dovershockwave.pose.VisionSubsystem;
+import static org.dovershockwave.Constants.Debug;
 
 public class ShooterWristSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(ShooterWrist.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
   private final SparkPIDController pid = motor.getPIDController();
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-  private final boolean manualTuning = true;
-  private WristState desiredState = WristState.STARTNG;
+  private WristState desiredState = WristState.STARTING;
 
   private final LinearInterpolator angleInterpolator = new LinearInterpolator(
     new LinearInterpolator.LinearPair(1.43, 30),
@@ -54,7 +53,7 @@ public class ShooterWristSubsystem extends SubsystemBase {
     tab.addNumber("Duty Cycle", motor::getAppliedOutput);
     tab.addNumber("Current Angle", encoder::getPosition);
     tab.add("PID", new TunableSparkPIDController(pid, () -> desiredState.angle(), (angle) -> {
-      if (!manualTuning || RobotContainer.isCompetition() || shouldStopWrist()) return;
+      if (!Debug.MANUAL_TUNING || RobotContainer.isCompetition() || shouldStopWrist()) return;
       final var clamped = clampAngle(angle);
       this.desiredState = new WristState("Manual", clamped);
       pid.setReference(clamped, CANSparkMax.ControlType.kPosition);
@@ -74,21 +73,24 @@ public class ShooterWristSubsystem extends SubsystemBase {
     return MathUtil.clamp(angle, ShooterWrist.MIN_ANGLE, ShooterWrist.MAX_ANGLE);
   }
 
-  public void setDesiredState(WristState desiredState) {
+  public void setDesiredState(WristState state) {
     if (shouldStopWrist()) return;
-    this.desiredState = desiredState;
-    pid.setReference(desiredState.angle(), CANSparkBase.ControlType.kPosition);
+    if (state == WristState.INTERPOLATED) {
+      if (!vision.hasViableTarget()) return;
+      final var distance = vision.getCameraToTagTransform().getX();
+      this.desiredState = new WristState("Interpolated", angleInterpolator.interpolate(distance));
+    } else {
+      this.desiredState = state;
+    }
+
+    pid.setReference(clampAngle(desiredState.angle()), CANSparkBase.ControlType.kPosition);
   }
 
   public boolean atDesiredState() {
     return MathUtil.isNear(encoder.getPosition(), desiredState.angle(), ShooterWrist.ANGLE_TOLERANCE);
   }
 
-  public void interpolate() {
-    setDesiredState(new WristState("Interpolated", angleInterpolator.interpolate(vision.getCameraToTagTransform().getX())));
-  }
-
-    /**
+  /**
    * If the Encoder is reading an angle that causes the wrist to go into the robot, it should stop.
    * These angles include [81, 360].
    *

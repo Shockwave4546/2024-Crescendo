@@ -9,15 +9,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import org.dovershockwave.Constants;
+import org.dovershockwave.Constants.Swerve;
 import org.dovershockwave.pose.PoseEstimatorSubsystem;
 import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
-
-import static org.dovershockwave.Constants.Swerve;
-
-import org.dovershockwave.Constants;
-import org.dovershockwave.Constants.Swerve;
 
 public class ChaseTagCommand extends Command {
   private static final int TAG_TO_CHASE = 1;

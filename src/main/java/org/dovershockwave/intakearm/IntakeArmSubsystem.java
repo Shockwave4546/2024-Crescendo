@@ -12,17 +12,19 @@ import org.dovershockwave.RobotContainer;
 import org.dovershockwave.shuffleboard.TunableSparkPIDController;
 import org.dovershockwave.utils.SparkUtils;
 
+import static org.dovershockwave.Constants.Debug;
+import static org.dovershockwave.Constants.NeoMotor;
+
 public class IntakeArmSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(IntakeArm.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
   private final SparkPIDController pid = motor.getPIDController();
   private final AbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-  private final boolean manualTuning = true;
   private ArmState desiredState = ArmState.HOME;
 
   @SuppressWarnings("resource")
   public IntakeArmSubsystem() {
     SparkUtils.configureAbs(motor, (motor, encoder, pid) -> {
-      motor.setSmartCurrentLimit(Constants.NeoMotor.NEO_CURRENT_LIMIT);
+      motor.setSmartCurrentLimit(NeoMotor.NEO_CURRENT_LIMIT);
       motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
       IntakeArm.ANGLE_CONVERSION_FACTOR.apply(encoder);
       encoder.setInverted(false);
@@ -39,9 +41,10 @@ public class IntakeArmSubsystem extends SubsystemBase {
     tab.addNumber("Duty Cycle", motor::getAppliedOutput);
     tab.addNumber("Current Angle", encoder::getPosition);
     tab.add("PID", new TunableSparkPIDController(pid, () -> desiredState.angle(), (angle) -> {
-      if (!manualTuning || RobotContainer.isCompetition() || shouldStopArm()) return;
-      this.desiredState = new ArmState("Manual", angle);
-      pid.setReference(angle, CANSparkMax.ControlType.kPosition);
+      if (!Debug.MANUAL_TUNING || RobotContainer.isCompetition() || shouldStopArm()) return;
+      final var clamped = clampAngle(angle);
+      this.desiredState = new ArmState("Manual", clamped);
+      pid.setReference(clamped, CANSparkMax.ControlType.kPosition);
     }));
     tab.addString("State", () -> desiredState.name() + " (" + desiredState.angle() + "°)");
     Tabs.MATCH.addBoolean("Arm At Desired State", this::atDesiredState).withSize(3, 3).withPosition(12, 3);
@@ -58,11 +61,15 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public void setDesiredState(ArmState desiredState) {
     if (shouldStopArm()) return;
     this.desiredState = desiredState;
-    pid.setReference(desiredState.angle(), CANSparkBase.ControlType.kPosition);
+    pid.setReference(clampAngle(desiredState.angle()), CANSparkBase.ControlType.kPosition);
   }
 
   public boolean atDesiredState() {
     return MathUtil.isNear(encoder.getPosition(), desiredState.angle(), IntakeArm.ANGLE_TOLERANCE);
+  }
+
+  public double clampAngle(double angle) {
+    return MathUtil.clamp(angle, IntakeArm.MIN_ANGLE, IntakeArm.MAX_ANGLE);
   }
 
   /**
