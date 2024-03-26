@@ -7,6 +7,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.Constants;
@@ -16,8 +18,6 @@ import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
 
 public class ChaseTagCommand extends Command {
-  private static final int TAG_TO_CHASE = 1;
-  private static final Transform3d TAG_TO_GOAL = new Transform3d(new Translation3d(2, 0.0, 0.0), new Rotation3d());
   private final ProfiledPIDController omegaController = new ProfiledPIDController(0.1, 0.0, 0.0, new TrapezoidProfile.Constraints(Swerve.MAX_ANGULAR_SPEED, 4));
   private final VisionSubsystem vision;
   private final PoseEstimatorSubsystem poseEstimator;
@@ -53,7 +53,8 @@ public class ChaseTagCommand extends Command {
       return;
     }
 
-    if (vision.hasViableTarget() && vision.getTag().getFiducialId() != TAG_TO_CHASE) return;
+    final var tag = vision.getTag(getTagToChase());
+    if (tag == null) return;
     final var tagAngle = vision.getTagRelativeToCenterPose().toPose2d().getRotation().getRadians();
     final var robotAngle = swerve.getHeadingRotation2d().getRadians();
 
@@ -80,7 +81,7 @@ public class ChaseTagCommand extends Command {
 //    );
   }
 
-  @Override public void end(boolean interrupted) {
-    swerve.stop();
+  private int getTagToChase() {
+    return (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) ? 7 : 4;
   }
 }

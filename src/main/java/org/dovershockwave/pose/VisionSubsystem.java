@@ -55,6 +55,22 @@ public class VisionSubsystem extends SubsystemBase {
     return pipeline.getBestTarget();
   }
 
+  public PhotonTrackedTarget getTag(int id) {
+    final var pipeline = camera.getLatestResult();
+    if (!hasViableTarget()) {
+      DriverStation.reportError("No targets found!", false);
+      return null;
+    }
+
+    for (final var target : pipeline.getTargets()) {
+      if (target.getFiducialId() == id) {
+        return target;
+      }
+    }
+
+    return null;
+  }
+
   /**
    * Note: please call #hasViableTarget() before calling this method.
    * @return the physical location of the tag, relative to the center of the robot.
