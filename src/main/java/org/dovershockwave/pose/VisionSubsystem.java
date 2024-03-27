@@ -111,7 +111,8 @@ public class VisionSubsystem extends SubsystemBase {
    */
   public boolean hasViableTarget() {
     final var pipeline = camera.getLatestResult();
-    return pipeline.hasTargets() && pipeline.getBestTarget().getPoseAmbiguity() < Vision.MAXIMUM_AMBIGUITY;
+    return pipeline.hasTargets(); // The ambiguity thing doesn't work too well.
+    // return pipeline.hasTargets() && pipeline.getBestTarget().getPoseAmbiguity() < Vision.MAXIMUM_AMBIGUITY;
   }
 
   /**

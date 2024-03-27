@@ -46,7 +46,7 @@ public class RobotContainer {
     vision.setPoseEstimator(poseEstimator);
     final UsbCamera camera = CameraServer.startAutomaticCapture();
     camera.setResolution(640, 480);
-    camera.setFPS(30);
+    camera.setFPS(15);
     Constants.Tabs.MATCH.add("Front", camera)
             .withWidget(BuiltInWidgets.kCameraStream)
             .withSize(12, 10)
