@@ -4,6 +4,7 @@ import com.pathplanner.lib.util.PPLibTelemetry;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -57,10 +58,16 @@ public class RobotContainer {
      if (isCompetition()) {
        PPLibTelemetry.enableCompetitionMode();
      }
+
+    shooter.setDefaultCommand(new IdleShooterCommand(shooter, intake));
   }
 
   public static boolean isCompetition() {
     return DriverStation.getMatchType() != DriverStation.MatchType.None;
+  }
+
+  public static int getSubwooferTagID() {
+    return (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) ? 7 : 4;
   }
 
   private void configureButtonBindings() {

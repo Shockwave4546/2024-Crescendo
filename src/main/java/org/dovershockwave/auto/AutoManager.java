@@ -53,6 +53,7 @@ public class AutoManager {
     NamedCommands.registerCommand("ShootClose", new AutoShootCloseCommand(intake, shooter, arm, wrist));
     NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
     NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(ArmState.HOME), arm));
+    NamedCommands.registerCommand("ShootInterpolated", new InstantCommand(() -> shooter.setDesiredState(ShooterState.INTERPOLATED), shooter));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Constants.Tabs.MATCH.add("Autonomous", chooser).withSize(3, 3).withPosition(12, 0);

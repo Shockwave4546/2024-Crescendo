@@ -189,7 +189,7 @@ public final class Constants {
     public static final double DRIVING_MIN_OUTPUT = -1;
     public static final double DRIVING_MAX_OUTPUT = 1;
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.2F);
+    public static final PIDGains TURNING_GAINS = new PIDGains(0.5F);
     public static final double TURNING_MIN_OUTPUT = -1;
     public static final double TURNING_MAX_OUTPUT = 1;
 

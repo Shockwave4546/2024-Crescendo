@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.Constants;
+import org.dovershockwave.RobotContainer;
 import org.dovershockwave.Constants.Swerve;
 import org.dovershockwave.pose.PoseEstimatorSubsystem;
 import org.dovershockwave.pose.VisionSubsystem;
@@ -53,7 +54,7 @@ public class ChaseTagCommand extends Command {
       return;
     }
 
-    final var tag = vision.getTag(getTagToChase());
+    final var tag = vision.getTag(RobotContainer.getSubwooferTagID());
     if (tag == null) return;
     final var tagAngle = vision.getTagRelativeToCenterPose().toPose2d().getRotation().getRadians();
     final var robotAngle = swerve.getHeadingRotation2d().getRadians();
@@ -79,9 +80,5 @@ public class ChaseTagCommand extends Command {
 //            swerve.isFieldRelative(),
 //            false
 //    );
-  }
-
-  private int getTagToChase() {
-    return (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) ? 7 : 4;
   }
 }

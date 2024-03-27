@@ -16,6 +16,8 @@ import org.dovershockwave.utils.SparkUtils;
 
 import static org.dovershockwave.Constants.Debug;
 
+import org.dovershockwave.Constants.Debug;
+
 public class ShooterWristSubsystem extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(ShooterWrist.MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushless);
   private final SparkPIDController pid = motor.getPIDController();
@@ -77,7 +79,9 @@ public class ShooterWristSubsystem extends SubsystemBase {
     if (shouldStopWrist()) return;
     if (state == WristState.INTERPOLATED) {
       if (!vision.hasViableTarget()) return;
-      final var distance = vision.getCameraToTagTransform().getX();
+      final var transform = vision.getCameraToTagTransform(RobotContainer.getSubwooferTagID());
+      if (transform == null) return;
+      final var distance = transform.getX();
       this.desiredState = new WristState("Interpolated", angleInterpolator.interpolate(distance));
     } else {
       this.desiredState = state;

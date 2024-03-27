@@ -102,6 +102,10 @@ public class VisionSubsystem extends SubsystemBase {
     return getTag().getBestCameraToTarget();
   }
 
+  public Transform3d getCameraToTagTransform(int id) {
+    return getTag(id).getBestCameraToTarget();
+  }
+
   /**
    * @return true if the camera has found targets, which have an ambiguity of less than 0.2.
    */

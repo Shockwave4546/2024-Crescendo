@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -98,21 +99,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
     Tabs.MATCH.addBoolean("Shooter At Desired State", this::atDesiredState).withSize(3, 3).withPosition(24, 3);
     Tabs.MATCH.addString("Shooter State", () -> desiredState.name() + " (" + desiredState.bottomRPS() + ", " +  desiredState.topRPS() + ")").withSize(3, 3).withPosition(24, 6);
-
-    setDefaultCommand(new IdleShooterCommand(this));
   }
 
   public void setDesiredState(ShooterState state) {
     if (state == ShooterState.INTERPOLATED) {
       if (!vision.hasViableTarget()) return;
-      final var distance = vision.getCameraToTagTransform().getX();
+      final var transform = vision.getCameraToTagTransform(RobotContainer.getSubwooferTagID());
+      if (transform == null) return;
+      final var distance = transform.getX();
       this.desiredState = new ShooterState("Interpolated", bottomRPSInterpolator.interpolate(distance), topRPSInterpolator.interpolate(distance));
     } else {
       this.desiredState = state;
     }
 
-    bottomPID.setReference(state.bottomRPS(), ControlType.kVelocity);
-    topPID.setReference(state.topRPS(), ControlType.kVelocity);
+    bottomPID.setReference(desiredState.bottomRPS(), ControlType.kVelocity);
+    topPID.setReference(desiredState.topRPS(), ControlType.kVelocity);
   }
 
   public boolean atDesiredState() {
