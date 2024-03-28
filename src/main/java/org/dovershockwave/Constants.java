@@ -17,7 +17,7 @@ import java.util.Map;
 
 public final class Constants {
   public static final class Debug {
-    public static final boolean MANUAL_TUNING = false;
+    public static final boolean MANUAL_TUNING = true;
   }
 
   public static final class Amp {
@@ -91,7 +91,7 @@ public final class Constants {
     public static final boolean RIGHT_INVERTED = true;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final double RPS_TOLERANCE = 7.5;
+    public static final double RPS_TOLERANCE = 10.0;
   }
 
   public static final class Swerve {

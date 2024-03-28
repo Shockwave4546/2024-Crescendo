@@ -99,11 +99,15 @@ public class VisionSubsystem extends SubsystemBase {
    *         null if no targets are found.
    */
   public Transform3d getCameraToTagTransform() {
-    return getTag().getBestCameraToTarget();
+    final var tag = getTag();
+    if (tag == null) return null;
+    return tag.getBestCameraToTarget();
   }
 
   public Transform3d getCameraToTagTransform(int id) {
-    return getTag(id).getBestCameraToTarget();
+    final var tag = getTag(id);
+    if (tag == null) return null;
+    return tag.getBestCameraToTarget();
   }
 
   /**

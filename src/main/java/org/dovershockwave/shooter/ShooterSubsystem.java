@@ -36,18 +36,32 @@ public class ShooterSubsystem extends SubsystemBase {
   private ShooterState desiredState = ShooterState.STOPPED;
 
   private final LinearInterpolator bottomRPSInterpolator = new LinearInterpolator(
-    new LinearInterpolator.LinearPair(1.40, 70),
-    new LinearInterpolator.LinearPair(2.00, 40),
-    new LinearInterpolator.LinearPair(2.65, 40),
-    new LinearInterpolator.LinearPair(3.04, 40),
-    new LinearInterpolator.LinearPair(4.00, 55)
+    new LinearInterpolator.LinearPair(1.40, 60),
+    new LinearInterpolator.LinearPair(1.60, 60),
+    new LinearInterpolator.LinearPair(1.80, 60),
+    new LinearInterpolator.LinearPair(2.00, 50),
+    new LinearInterpolator.LinearPair(2.20, 50),
+    new LinearInterpolator.LinearPair(2.40, 50),
+    new LinearInterpolator.LinearPair(2.60, 50),
+    new LinearInterpolator.LinearPair(2.80, 45),
+    new LinearInterpolator.LinearPair(3.00, 50),
+    new LinearInterpolator.LinearPair(3.20, 45),
+    new LinearInterpolator.LinearPair(3.40, 45),
+    new LinearInterpolator.LinearPair(3.40, 50)
   );
 
   private final LinearInterpolator topRPSInterpolator = new LinearInterpolator(
-    new LinearInterpolator.LinearPair(1.40, 30),
-    new LinearInterpolator.LinearPair(2.00, 45),
-    new LinearInterpolator.LinearPair(2.65, 60),
-    new LinearInterpolator.LinearPair(3.04, 60),
+    new LinearInterpolator.LinearPair(1.40, 35),
+    new LinearInterpolator.LinearPair(1.60, 35),
+    new LinearInterpolator.LinearPair(1.80, 40),
+    new LinearInterpolator.LinearPair(2.00, 55),
+    new LinearInterpolator.LinearPair(2.20, 60),
+    new LinearInterpolator.LinearPair(2.40, 65),
+    new LinearInterpolator.LinearPair(2.60, 65),
+    new LinearInterpolator.LinearPair(2.80, 75),
+    new LinearInterpolator.LinearPair(3.00, 80),
+    new LinearInterpolator.LinearPair(3.20, 70),
+    new LinearInterpolator.LinearPair(3.40, 65),
     new LinearInterpolator.LinearPair(4.00, 70)
   );
 

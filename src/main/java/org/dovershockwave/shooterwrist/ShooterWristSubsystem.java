@@ -25,11 +25,18 @@ public class ShooterWristSubsystem extends SubsystemBase {
   private WristState desiredState = WristState.STARTING;
 
   private final LinearInterpolator angleInterpolator = new LinearInterpolator(
-    new LinearInterpolator.LinearPair(1.43, 30),
-    new LinearInterpolator.LinearPair(2.00, 30),
-    new LinearInterpolator.LinearPair(2.65, 38),
-    new LinearInterpolator.LinearPair(3.04, 40),
-    new LinearInterpolator.LinearPair(4.06, 55)
+    new LinearInterpolator.LinearPair(1.40, 30),
+    new LinearInterpolator.LinearPair(1.60, 30),
+    new LinearInterpolator.LinearPair(1.80, 32),
+    new LinearInterpolator.LinearPair(2.00, 32),
+    new LinearInterpolator.LinearPair(2.20, 33),
+    new LinearInterpolator.LinearPair(2.40, 35),
+    new LinearInterpolator.LinearPair(2.60, 36),
+    new LinearInterpolator.LinearPair(2.80, 40),
+    new LinearInterpolator.LinearPair(3.00, 43),
+    new LinearInterpolator.LinearPair(3.20, 45),
+    new LinearInterpolator.LinearPair(3.40, 45),
+    new LinearInterpolator.LinearPair(3.40, 45)
   );
 
   private final VisionSubsystem vision;

@@ -20,7 +20,7 @@ public class LEDSubsystem extends SubsystemBase {
   private final ShuffleboardDouble B = new ShuffleboardDouble(tab, "B", 0.0);
   private final AddressableLED led = new AddressableLED(LED.PWM_ID);
   private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(LED.BUFFER_LENGTH);
-  private Pattern pattern = Pattern.RAINBOW;
+  private Pattern pattern = Pattern.WHITE;
 
   public LEDSubsystem() {
     led.setLength(buffer.getLength());

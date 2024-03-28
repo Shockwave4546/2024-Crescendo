@@ -19,7 +19,7 @@ import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.swerve.SwerveSubsystem;
 
 public class ChaseTagCommand extends Command {
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(0.1, 0.0, 0.0, new TrapezoidProfile.Constraints(Swerve.MAX_ANGULAR_SPEED, 4));
+  private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0.0, 0.0, new TrapezoidProfile.Constraints(Swerve.MAX_ANGULAR_SPEED, 4));
   private final VisionSubsystem vision;
   private final PoseEstimatorSubsystem poseEstimator;
   private final SwerveSubsystem swerve;
@@ -31,8 +31,8 @@ public class ChaseTagCommand extends Command {
     this.swerve = swerve;
     this.controller = controller;
 
-    omegaController.setTolerance(Units.degreesToRadians(10));
-    omegaController.enableContinuousInput(-Math.PI, Math.PI);
+    omegaController.setTolerance(5);
+    omegaController.enableContinuousInput(-180, 180);
 
     addRequirements(vision, poseEstimator, swerve);
   }
@@ -43,7 +43,9 @@ public class ChaseTagCommand extends Command {
 
   @Override public void execute() {
     System.out.println(omegaController.atGoal());
-    if (!vision.hasViableTarget()) {
+    final var tag = vision.getTag(RobotContainer.getSubwooferTagID());
+    if (tag == null) {
+      System.out.println("Debug 2");
       swerve.drive(
               -MathUtil.applyDeadband(controller.getLeftY(), Constants.IO.DRIVE_DEADBAND),
               -MathUtil.applyDeadband(controller.getLeftX(), Constants.IO.DRIVE_DEADBAND),
@@ -54,31 +56,39 @@ public class ChaseTagCommand extends Command {
       return;
     }
 
-    final var tag = vision.getTag(RobotContainer.getSubwooferTagID());
-    if (tag == null) return;
-    final var tagAngle = vision.getTagRelativeToCenterPose().toPose2d().getRotation().getRadians();
-    final var robotAngle = swerve.getHeadingRotation2d().getRadians();
+    final var tagAngle = 10 - -(180 - Math.abs(tag.getBestCameraToTarget().getRotation().toRotation2d().getDegrees()));
+    final var robotAngle = swerve.getHeadingRotation2d().getDegrees();
 
-    System.out.println("Tag Rad: " + tagAngle);
-    System.out.println("Robot Rad: " + robotAngle);
+    System.out.println("Tag Degree: " + tagAngle);
+    System.out.println("Robot Degree: " + robotAngle);
     omegaController.setGoal(tagAngle);
 
-    final var rotSpeed = omegaController.atGoal() ? 0 : -omegaController.calculate(robotAngle);
+     var rotSpeed = omegaController.atGoal() ? 0 : Math.toRadians(-omegaController.calculate(robotAngle));
 
-    swerve.drive(
-            -MathUtil.applyDeadband(controller.getLeftY(), Constants.IO.DRIVE_DEADBAND),
-            -MathUtil.applyDeadband(controller.getLeftX(), Constants.IO.DRIVE_DEADBAND),
-            -MathUtil.applyDeadband(controller.getRightX(), Constants.IO.DRIVE_DEADBAND),
-            swerve.isFieldRelative(),
-            false
-    );
+    // swerve.drive(
+    //         -MathUtil.applyDeadband(controller.getLeftY(), Constants.IO.DRIVE_DEADBAND),
+    //         -MathUtil.applyDeadband(controller.getLeftX(), Constants.IO.DRIVE_DEADBAND),
+    //         -MathUtil.applyDeadband(controller.getRightX(), Constants.IO.DRIVE_DEADBAND),
+    //         swerve.isFieldRelative(),
+    //         false
+    // );
 
-//    swerve.drive(
-//            -MathUtil.applyDeadband(controller.getLeftY(), Constants.IO.DRIVE_DEADBAND),
-//            -MathUtil.applyDeadband(controller.getLeftX(), Constants.IO.DRIVE_DEADBAND),
-//            -rotSpeed,
-//            swerve.isFieldRelative(),
-//            false
-//    );
+    if (omegaController.atGoal() || tag == null) {
+      rotSpeed = 0.0;
+      return;
+    }
+
+    System.out.println("Rot Speed: " + rotSpeed);
+   swerve.drive(
+           -MathUtil.applyDeadband(controller.getLeftY(), Constants.IO.DRIVE_DEADBAND),
+           -MathUtil.applyDeadband(controller.getLeftX(), Constants.IO.DRIVE_DEADBAND),
+           -rotSpeed,
+           swerve.isFieldRelative(),
+           false
+   );
+  }
+
+  public double normalize(double degrees) {
+    return (degrees + 450.0) % 360.0;
   }
 }

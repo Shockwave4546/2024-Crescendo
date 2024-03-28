@@ -82,9 +82,9 @@ public class RobotContainer {
 
     operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, wrist));
 
-    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, wrist).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
-    operatorController.b().toggleOnFalse(new FullShootInterpolatedCommand(intake, shooter, arm, wrist).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
-    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, wrist).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
-    operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming));
+    operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, wrist));
+    operatorController.b().toggleOnTrue(new FullShootInterpolatedCommand(intake, shooter, arm, wrist));
+    operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, wrist));
+    operatorController.y().toggleOnTrue(new FullIntakeCommand(arm, intake));
   }
 }
