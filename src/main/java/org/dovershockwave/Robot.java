@@ -24,6 +24,11 @@ public class Robot extends TimedRobot {
     container.swerve.zeroGyro();
     container.swerve.resetEncoders();
     container.poseEstimator.resetPose();
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+    }
+
     container.auto.executeRoutine();
   }
 

@@ -29,14 +29,15 @@ public class ShooterWristSubsystem extends SubsystemBase {
     new LinearInterpolator.LinearPair(1.60, 30),
     new LinearInterpolator.LinearPair(1.80, 32),
     new LinearInterpolator.LinearPair(2.00, 32),
-    new LinearInterpolator.LinearPair(2.20, 33),
-    new LinearInterpolator.LinearPair(2.40, 35),
-    new LinearInterpolator.LinearPair(2.60, 36),
-    new LinearInterpolator.LinearPair(2.80, 40),
-    new LinearInterpolator.LinearPair(3.00, 43),
-    new LinearInterpolator.LinearPair(3.20, 45),
-    new LinearInterpolator.LinearPair(3.40, 45),
-    new LinearInterpolator.LinearPair(3.40, 45)
+    new LinearInterpolator.LinearPair(2.20, 34),
+    new LinearInterpolator.LinearPair(2.40, 40),
+    new LinearInterpolator.LinearPair(2.60, 42),
+    new LinearInterpolator.LinearPair(2.70, 45),
+    new LinearInterpolator.LinearPair(2.80, 47),
+    new LinearInterpolator.LinearPair(3.00, 47),
+    new LinearInterpolator.LinearPair(3.20, 47),
+    new LinearInterpolator.LinearPair(3.40, 47),
+    new LinearInterpolator.LinearPair(4.00, 47)
   );
 
   private final VisionSubsystem vision;
@@ -89,6 +90,7 @@ public class ShooterWristSubsystem extends SubsystemBase {
       final var transform = vision.getCameraToTagTransform(RobotContainer.getSubwooferTagID());
       if (transform == null) return;
       final var distance = transform.getX();
+      if (distance > 3.90) return;
       this.desiredState = new WristState("Interpolated", angleInterpolator.interpolate(distance));
     } else {
       this.desiredState = state;

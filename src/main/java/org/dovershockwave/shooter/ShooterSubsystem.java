@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,6 +20,11 @@ import org.dovershockwave.utils.LinearInterpolator;
 import org.dovershockwave.utils.SparkUtils;
 
 import static org.dovershockwave.Constants.*;
+
+import org.dovershockwave.Constants.Debug;
+import org.dovershockwave.Constants.NeoMotor;
+import org.dovershockwave.Constants.Shooter;
+import org.dovershockwave.Constants.Tabs;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax bottomMotor = new CANSparkMax(Shooter.BOTTOM_CAN_ID, MotorType.kBrushless);
@@ -43,10 +49,10 @@ public class ShooterSubsystem extends SubsystemBase {
     new LinearInterpolator.LinearPair(2.20, 50),
     new LinearInterpolator.LinearPair(2.40, 50),
     new LinearInterpolator.LinearPair(2.60, 50),
-    new LinearInterpolator.LinearPair(2.80, 45),
+    new LinearInterpolator.LinearPair(2.80, 50),
     new LinearInterpolator.LinearPair(3.00, 50),
-    new LinearInterpolator.LinearPair(3.20, 45),
-    new LinearInterpolator.LinearPair(3.40, 45),
+    new LinearInterpolator.LinearPair(3.20, 50),
+    new LinearInterpolator.LinearPair(3.40, 50),
     new LinearInterpolator.LinearPair(3.40, 50)
   );
 
@@ -55,14 +61,14 @@ public class ShooterSubsystem extends SubsystemBase {
     new LinearInterpolator.LinearPair(1.60, 35),
     new LinearInterpolator.LinearPair(1.80, 40),
     new LinearInterpolator.LinearPair(2.00, 55),
-    new LinearInterpolator.LinearPair(2.20, 60),
+    new LinearInterpolator.LinearPair(2.20, 63),
     new LinearInterpolator.LinearPair(2.40, 65),
     new LinearInterpolator.LinearPair(2.60, 65),
-    new LinearInterpolator.LinearPair(2.80, 75),
-    new LinearInterpolator.LinearPair(3.00, 80),
-    new LinearInterpolator.LinearPair(3.20, 70),
+    new LinearInterpolator.LinearPair(2.80, 65),
+    new LinearInterpolator.LinearPair(3.00, 65),
+    new LinearInterpolator.LinearPair(3.20, 65),
     new LinearInterpolator.LinearPair(3.40, 65),
-    new LinearInterpolator.LinearPair(4.00, 70)
+    new LinearInterpolator.LinearPair(4.00, 65)
   );
 
   private final VisionSubsystem vision;
@@ -121,6 +127,7 @@ public class ShooterSubsystem extends SubsystemBase {
       final var transform = vision.getCameraToTagTransform(RobotContainer.getSubwooferTagID());
       if (transform == null) return;
       final var distance = transform.getX();
+      if (distance > 3.90) return;
       this.desiredState = new ShooterState("Interpolated", bottomRPSInterpolator.interpolate(distance), topRPSInterpolator.interpolate(distance));
     } else {
       this.desiredState = state;

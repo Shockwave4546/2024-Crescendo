@@ -19,6 +19,7 @@ import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shooter.ShooterState;
 import org.dovershockwave.shooter.ShooterSubsystem;
 import org.dovershockwave.shooterwrist.ShooterWristSubsystem;
+import org.dovershockwave.shooterwrist.WristState;
 import org.dovershockwave.swerve.SwerveSubsystem;
 
 public class AutoManager {
@@ -54,6 +55,7 @@ public class AutoManager {
     NamedCommands.registerCommand("StopShooter", new InstantCommand(shooter::stopMotors, shooter));
     NamedCommands.registerCommand("IntakeHome", new InstantCommand(() -> arm.setDesiredState(ArmState.HOME), arm));
     NamedCommands.registerCommand("ShootInterpolated", new InstantCommand(() -> shooter.setDesiredState(ShooterState.INTERPOLATED), shooter));
+    NamedCommands.registerCommand("WristHome", new InstantCommand(() -> wrist.setDesiredState(WristState.HOME), wrist));
 
     this.chooser = AutoBuilder.buildAutoChooser("Do nothing.");
     Constants.Tabs.MATCH.add("Autonomous", chooser).withSize(3, 3).withPosition(12, 0);

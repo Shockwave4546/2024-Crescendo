@@ -1,5 +1,6 @@
 package org.dovershockwave.shooter;
 
+import org.dovershockwave.Constants;
 import org.dovershockwave.intake.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;

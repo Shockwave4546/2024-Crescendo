@@ -91,7 +91,7 @@ public final class Constants {
     public static final boolean RIGHT_INVERTED = true;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final double RPS_TOLERANCE = 10.0;
+    public static final double RPS_TOLERANCE = 5.0;
   }
 
   public static final class Swerve {

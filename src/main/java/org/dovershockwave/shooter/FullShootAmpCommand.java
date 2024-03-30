@@ -20,7 +20,6 @@ public class FullShootAmpCommand extends EndActionSequentialCommandGroup {
             new InstantCommand(() -> wrist.setDesiredState(WristState.AMP), wrist),
             new WaitUntilCommand(shooter::atDesiredState),
             new WaitUntilCommand(wrist::atDesiredState),
-            new WaitCommand(0.5),
             new FeedShooterCommand(intake).withTimeout(0.25)
     );
 

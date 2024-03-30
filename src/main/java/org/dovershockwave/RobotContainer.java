@@ -22,6 +22,7 @@ import org.dovershockwave.pose.ResetPoseCommand;
 import org.dovershockwave.pose.VisionSubsystem;
 import org.dovershockwave.shooter.*;
 import org.dovershockwave.shooterwrist.ShooterWristSubsystem;
+import org.dovershockwave.shooterwrist.WristState;
 import org.dovershockwave.swerve.SwerveSubsystem;
 import org.dovershockwave.swerve.commands.SetSpeedMaxCommand;
 import org.dovershockwave.swerve.commands.ToggleXCommand;
@@ -82,6 +83,8 @@ public class RobotContainer {
 
     operatorController.leftBumper().onTrue(new ResetRobotStateCommand(shooter, intake, arm, wrist));
 
+    operatorController.rightTrigger().onTrue(new InstantCommand(() -> wrist.setDesiredState(WristState.SPIT), wrist));
+    operatorController.rightBumper().onTrue(new FullSpitCommand(intake, shooter, arm, wrist));
     operatorController.a().toggleOnTrue(new FullShootCloseCommand(intake, shooter, arm, wrist));
     operatorController.b().toggleOnTrue(new FullShootInterpolatedCommand(intake, shooter, arm, wrist));
     operatorController.x().toggleOnTrue(new FullShootAmpCommand(intake, shooter, arm, wrist));

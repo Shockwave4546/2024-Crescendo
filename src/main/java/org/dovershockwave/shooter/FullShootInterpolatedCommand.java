@@ -20,7 +20,6 @@ public class FullShootInterpolatedCommand extends EndActionSequentialCommandGrou
             new InstantCommand(() -> wrist.setDesiredState(WristState.INTERPOLATED), wrist),
             new WaitUntilCommand(shooter::atDesiredState),
             new WaitUntilCommand(wrist::atDesiredState),
-            new WaitCommand(0.5),
             new FeedShooterCommand(intake).withTimeout(0.25)
     );
 
