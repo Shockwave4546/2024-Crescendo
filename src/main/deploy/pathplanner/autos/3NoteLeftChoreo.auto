@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2581710815429688,
+      "y": 5.563757419586182
+    },
+    "rotation": -4.6463854254994284e-26
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5Note.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5Note.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5Note.3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
