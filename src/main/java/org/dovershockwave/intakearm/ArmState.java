@@ -6,5 +6,5 @@ package org.dovershockwave.intakearm;
  */
 public record ArmState(String name, double angle) {
   public static final ArmState HOME = new ArmState("Home", 5.0);
-  public static final ArmState FLOOR = new ArmState("Floor", 195.0);
+  public static final ArmState FLOOR = new ArmState("Floor", 190.0);
 }

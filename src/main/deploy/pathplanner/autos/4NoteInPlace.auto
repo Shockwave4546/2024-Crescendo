@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2581710815429688,
-      "y": 5.563757419586182
+      "x": 1.2535009384155271,
+      "y": 5.5443878173828125
     },
-    "rotation": -4.6463854254994284e-26
+    "rotation": 7.188966902698047e-21
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5Note.1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5Note.2"
+            "pathName": "5NoteNew"
           }
         }
       ]

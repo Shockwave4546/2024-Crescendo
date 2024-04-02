@@ -38,11 +38,11 @@ public final class Constants {
   public static final class IntakeArm {
     public static final int MOTOR_CAN_ID = 33;
     public static final PositionConversionFactor ANGLE_CONVERSION_FACTOR = new PositionConversionFactor(PositionConversionFactor.ConversionType.DEGREES);
-    public static final PIDGains GAINS = new PIDGains(0.01F, 0.0F, 0.005F);
+    public static final PIDGains GAINS = new PIDGains(0.006F, 0.0F, 0.005F);
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
-    public static final double ANGLE_OFFSET = 192.0; // degrees
+    public static final double ANGLE_OFFSET = 10.0; // degrees
     public static final double MIN_ANGLE = 5.0; // degrees
     public static final double MAX_ANGLE = 198.0; // degrees
   }
@@ -91,7 +91,7 @@ public final class Constants {
     public static final boolean RIGHT_INVERTED = true;
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
-    public static final double RPS_TOLERANCE = 5.0;
+    public static final double RPS_TOLERANCE = 2.5;
   }
 
   public static final class Swerve {
@@ -189,7 +189,7 @@ public final class Constants {
     public static final double DRIVING_MIN_OUTPUT = -1;
     public static final double DRIVING_MAX_OUTPUT = 1;
 
-    public static final PIDGains TURNING_GAINS = new PIDGains(0.5F);
+    public static final PIDGains TURNING_GAINS = new PIDGains(0.8F);
     public static final double TURNING_MIN_OUTPUT = -1;
     public static final double TURNING_MAX_OUTPUT = 1;
 

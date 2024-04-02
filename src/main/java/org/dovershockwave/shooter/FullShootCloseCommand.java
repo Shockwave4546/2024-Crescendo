@@ -20,7 +20,7 @@ public class FullShootCloseCommand extends EndActionSequentialCommandGroup {
             new InstantCommand(() -> wrist.setDesiredState(WristState.SUBWOOFER), wrist),
             new WaitUntilCommand(shooter::atDesiredState),
             new WaitUntilCommand(wrist::atDesiredState),
-            new FeedShooterCommand(intake).withTimeout(0.25)
+            new FeedShooterCommand(intake).withTimeout(0.5)
     );
 
     addRequirements(shooter, intake, arm, wrist);
