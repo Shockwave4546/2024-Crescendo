@@ -5,7 +5,7 @@
       "x": 1.2581710815429688,
       "y": 5.563757419586182
     },
-    "rotation": 6.622684437657942e-26
+    "rotation": -2.713239811108624e-26
   },
   "command": {
     "type": "sequential",
@@ -15,6 +15,12 @@
           "type": "named",
           "data": {
             "name": "WristHome"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -52,6 +58,12 @@
           "type": "named",
           "data": {
             "name": "WristHome"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -98,6 +110,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "IntakeHome"
@@ -138,6 +156,12 @@
           "type": "named",
           "data": {
             "name": "WristHome"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {

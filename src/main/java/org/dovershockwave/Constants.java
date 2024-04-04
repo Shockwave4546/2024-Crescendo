@@ -42,7 +42,7 @@ public final class Constants {
     public static final double MIN_OUTPUT = -1.0;
     public static final double MAX_OUTPUT = 1.0;
     public static final double ANGLE_TOLERANCE = 5.0; // degrees
-    public static final double ANGLE_OFFSET = 10.0; // degrees
+    public static final double ANGLE_OFFSET = 5.0; // degrees
     public static final double MIN_ANGLE = 5.0; // degrees
     public static final double MAX_ANGLE = 198.0; // degrees
   }
@@ -76,7 +76,7 @@ public final class Constants {
 
     public static final double FORWARD_INTAKE_SPEED = -1.0;
     public static final double REVERSE_INTAKE_SPEED = 1.0;
-    public static final double IDLE_SPEED = -0.2;
+    public static final double IDLE_SPEED = -0.3;
   }
 
   public static final class Shooter {
